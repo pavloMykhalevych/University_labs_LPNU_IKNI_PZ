@@ -1,4 +1,8 @@
-ak
+#Proteus
+proteus
+*.pdsprj
+*.pdsbak
+*.workspace
 
 # C++ objects and libs
 *.slo
