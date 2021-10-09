@@ -118,10 +118,21 @@ void MainWindow::MySlot(){
 
         //quicksort
 
+
         std::string city_arr[city.size()];
         for (std::size_t i = 0;i < city.size(); i++) {
             city_arr[i] = city[i].toStdString();
         }
+
+        ui->textEdit_steps->append("");
+        std::string res1 = "";
+        for (std::size_t i = 0;i < city.size(); i++) {
+            res1 += city_arr[i];
+            if(i < city.size()-1){
+                res1 += ", ";
+            }
+        }
+        ui->textEdit_steps->append(QString::fromStdString(res1));
 
         quickSort(city_arr,0,city.size()-1,ui->textEdit_steps,city.size());
 
