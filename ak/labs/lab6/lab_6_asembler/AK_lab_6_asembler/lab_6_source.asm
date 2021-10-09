@@ -22,12 +22,12 @@ START:
 		cmp EAX, 78
 		jg L2
 		add SUM, EAX
-		add EBX, 4 
 		inc EDX
 	L2:
+		add EBX, 4 
 		loop M1 
-
-		mov EAX, EDX
+		mov Count, EDX
+		mov EAX, SUM
 		RET 
 _TEXT ENDS 
 END START
