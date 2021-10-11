@@ -29,6 +29,7 @@ int main() {
 	std::thread t2(shop);
 	t1.join();
 	t2.join();*/
+	
 	HANDLE myhandle{};
 	HANDLE myhandle2{};
 	DWORD mythreadid{};
@@ -39,6 +40,6 @@ int main() {
 	CloseHandle(myhandle);
 	CloseHandle(myhandle2);
 	std::cout << sum;
-	
+	system("pause");
 	return 0;
 }
