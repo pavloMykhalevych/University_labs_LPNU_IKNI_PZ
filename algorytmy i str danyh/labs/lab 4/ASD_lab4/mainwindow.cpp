@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 
-void merge(int* array,const int left,const int mid,const int right,QTextEdit* textEdit)
+void merge(int* array,const int left,const int mid,const int right,QTextEdit* textEdit, int count)
 {
     const int  subArrayOneCount = mid - left + 1;
     const int subArrayTwoCount = right - mid;
@@ -36,7 +36,7 @@ void merge(int* array,const int left,const int mid,const int right,QTextEdit* te
 
     // Merge
     while (indexOfSubArrayOne < subArrayOneCount && indexOfSubArrayTwo < subArrayTwoCount) {
-        if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) {
+        if (leftArray[indexOfSubArrayOne] >= rightArray[indexOfSubArrayTwo]) {
             array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
             indexOfSubArrayOne++;
         }
@@ -63,9 +63,9 @@ void merge(int* array,const int left,const int mid,const int right,QTextEdit* te
 
     QString result = "";
     if(array){
-        for (int i = left; i < right; i++ ) {
+        for (int i = 0; i < count; i++ ) {
             result += QString::number(array[i]);
-            if(i != right-1){
+            if(i != count-1){
                 result += ", ";
             }
         }
@@ -77,15 +77,15 @@ void merge(int* array,const int left,const int mid,const int right,QTextEdit* te
 }
 
 
-void mergeSort(int* array, const int begin,const int  end, QTextEdit* textEdit)
+void mergeSort(int* array, const int begin,const int  end, QTextEdit* textEdit, int count)
 {
     if (begin >= end)
         return;
 
     int mid = begin + (end - begin) / 2;
-    mergeSort(array, begin, mid, textEdit);
-    mergeSort(array, mid + 1, end, textEdit);
-    merge(array, begin, mid, end, textEdit);
+    mergeSort(array, begin, mid, textEdit, count);
+    mergeSort(array, mid + 1, end, textEdit, count);
+    merge(array, begin, mid, end, textEdit, count);
 }
 
 
@@ -108,7 +108,7 @@ void MainWindow::MySlot(){
         QString str_enter = "";
         int count = (rand() % 10) + 5;
         for (int i = 0; i < count; i++) {
-            int rand_val = (rand() % 30);
+            int rand_val = (rand() % 20);
 
             str_enter += QString::number(rand_val);
             if(i != count-1){
@@ -148,7 +148,6 @@ void MainWindow::MySlot(){
             if(array[i] % 3 == 0) count_mod3++;
         }
         int count_2 = count_1 - count_mod3;
-
         int* array_2 = new int[count_2];
 
 
@@ -172,7 +171,7 @@ void MainWindow::MySlot(){
         ui->lineEdit_task->setText(result);
 
         //Merge sort
-        mergeSort(array_2,0,count_2, ui->textEdit_steps);
+        mergeSort(array_2,0,count_2-1, ui->textEdit_steps,count_2);
 
         result = "";
         if(array_2){
