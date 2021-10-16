@@ -77,9 +77,9 @@ START:
  ;===================================================================
  ;calculating sum of 9th row
  lea ebx, Arr1
- add ebx, 4*8*6
+ add ebx, 4*48
  mov ecx, 0
- mov cl, RowCount
+ mov cl, ColCount
  mov eax, 0
  sum:
   add eax, [ebx]
