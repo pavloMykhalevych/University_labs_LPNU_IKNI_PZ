@@ -36,7 +36,7 @@ void merge(int* array,const int left,const int mid,const int right,QTextEdit* te
 
     // Merge
     while (indexOfSubArrayOne < subArrayOneCount && indexOfSubArrayTwo < subArrayTwoCount) {
-        if (leftArray[indexOfSubArrayOne] <= rightArray[indexOfSubArrayTwo]) {
+        if (leftArray[indexOfSubArrayOne] >= rightArray[indexOfSubArrayTwo]) {
             array[indexOfMergedArray] = leftArray[indexOfSubArrayOne];
             indexOfSubArrayOne++;
         }
@@ -108,7 +108,7 @@ void MainWindow::MySlot(){
         QString str_enter = "";
         int count = (rand() % 10) + 5;
         for (int i = 0; i < count; i++) {
-            int rand_val = (rand() % 30);
+            int rand_val = (rand() % 20);
 
             str_enter += QString::number(rand_val);
             if(i != count-1){
@@ -148,7 +148,6 @@ void MainWindow::MySlot(){
             if(array[i] % 3 == 0) count_mod3++;
         }
         int count_2 = count_1 - count_mod3;
-
         int* array_2 = new int[count_2];
 
 
