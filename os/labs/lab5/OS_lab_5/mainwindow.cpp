@@ -33,7 +33,7 @@ double GetCpuTime(HANDLE &pi){
 
 std::mutex mu;
 int sum = 0;
-//int index = 0;
+int index = 0;
 std::vector<int> array(10000,0);
 //std::vector<std::thread> mythreads;
 HANDLE myhandle[N];
@@ -94,9 +94,9 @@ void MainWindow::MyTimer(){
 }
 
 
-void ArraySum(int* param){
-
-    Sleep(10000);
+void ArraySum(int* param)
+{
+    Sleep(1000);
     system("pause");
     for(int i = param[0]; i< param[1]; i++){
         if(i == 0){
@@ -105,10 +105,31 @@ void ArraySum(int* param){
             continue;
         }
         array[i] = array[i-1]*i + exp(i);
-        sum+=array[i];
-        //std::cout<<index++<<std::endl;
+        //sum+=array[i];
+        sum+=1;
+        std::cout<<index++<< " / " << std::endl;
     }
-    std::cout<<"In current thread: sum =" << sum << std::endl;
+    std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
+}
+
+void MutexArraySum(int* param)
+{
+    mu.lock();
+    Sleep(1000);
+    system("pause");
+    for(int i = param[0]; i< param[1]; i++){
+        if(i == 0){
+            array[i] = 2;
+            sum+=array[i];
+            continue;
+        }
+        array[i] = array[i-1]*i + exp(i);
+        //sum+=array[i];
+        sum+=1;
+        std::cout<<index++<< " // " << std::endl;
+    }
+    std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
+    mu.unlock();
 }
 
 void MainWindow::MySlot(){
@@ -153,7 +174,11 @@ QPushButton* btn = (QPushButton*) sender();
             int* param = new int[2];
             param[0] = (i)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
             param[1] = (i+1)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
-            myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
+            if(ui->checkBox->isChecked()){
+                myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&MutexArraySum, param, 0, &mythreadid[i]);
+            }else{
+                myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
+            }
             std::stringstream ss;
             ss << mythreadid[i];
             std::string mystring = ss.str();
