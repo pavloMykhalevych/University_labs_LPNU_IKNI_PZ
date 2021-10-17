@@ -325,7 +325,7 @@
      <set>QAbstractItemView::NoEditTriggers</set>
     </property>
     <property name="rowCount">
-     <number>2</number>
+     <number>16</number>
     </property>
     <property name="columnCount">
      <number>4</number>
@@ -345,6 +345,20 @@
     <attribute name="verticalHeaderDefaultSectionSize">
      <number>34</number>
     </attribute>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
+    <row/>
     <row/>
     <row/>
     <column>

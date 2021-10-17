@@ -33,11 +33,11 @@ double GetCpuTime(HANDLE &pi){
 
 std::mutex mu;
 int sum = 0;
-int index = 0;
+int myindex = 0;
 std::vector<int> array(10000,0);
 //std::vector<std::thread> mythreads;
-HANDLE myhandle[N];
-DWORD mythreadid[N];
+std::vector<HANDLE> myhandle(N, 0);
+std::vector<DWORD> mythreadid(N, 0);
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -81,7 +81,7 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::MyTimer(){
-    for(int i = 0; i<ui->tableWidget->rowCount();i++){
+    for(int i = 0; i<ui->comboBox_thread_count->currentText().toInt();i++){
         if(ui->tableWidget->item(i,0)->text()!=""){
             ui->tableWidget->item(i,3)->setText(QString::number(GetCpuTime(myhandle[i])));
             DWORD dwCode;
@@ -107,7 +107,7 @@ void ArraySum(int* param)
         array[i] = array[i-1]*i + exp(i);
         //sum+=array[i];
         sum+=1;
-        std::cout<<index++<< " / " << std::endl;
+        std::cout<<myindex++<< " / " << std::endl;
     }
     std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
 }
@@ -126,7 +126,7 @@ void MutexArraySum(int* param)
         array[i] = array[i-1]*i + exp(i);
         //sum+=array[i];
         sum+=1;
-        std::cout<<index++<< " // " << std::endl;
+        std::cout<<myindex++<< " // " << std::endl;
     }
     std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
     mu.unlock();
@@ -137,11 +137,13 @@ QPushButton* btn = (QPushButton*) sender();
     if(btn->text() == "Start"){
 
         for(size_t i = 0; i < std::size(myhandle); i++){
+            if(myhandle[i] != 0){
             DWORD dwCode;
             GetExitCodeThread(myhandle[i],&dwCode);
             if(dwCode == STILL_ACTIVE){
                 WaitForSingleObject(myhandle[i], INFINITE);
                 CloseHandle(myhandle[i]);
+            }
             }
         }
 
@@ -150,7 +152,7 @@ QPushButton* btn = (QPushButton*) sender();
             for(int j = 0; j < ui->tableWidget->columnCount(); j++)
             {
                 QTableWidgetItem* item = new QTableWidgetItem;
-                item->setText("0");
+                item->setText("");
                 item->setTextAlignment(Qt::AlignCenter);
                 ui->tableWidget->setItem(i,j,item);
             }
@@ -187,6 +189,7 @@ QPushButton* btn = (QPushButton*) sender();
             ui->tableWidget->item(i,2)->setText("Normal");
         }
     }else if(btn->text() == "Suspend"){
+        if(myhandle[ui->tableWidget->currentRow()] != 0){
         DWORD dwCode;
         GetExitCodeThread(myhandle[ui->tableWidget->currentRow()],&dwCode);
         if(ui->tableWidget->item(ui->tableWidget->currentRow(),1)->text() != "Suspended" &&
@@ -202,7 +205,9 @@ QPushButton* btn = (QPushButton*) sender();
             }
             QMessageBox::information(this,"Info","You can't suspend the process!");
         }
+        }
     }else if(btn->text() == "Resume"){
+        if(myhandle[ui->tableWidget->currentRow()] != 0){
         DWORD dwCode;
         GetExitCodeThread(myhandle[ui->tableWidget->currentRow()],&dwCode);
         if(ui->tableWidget->item(ui->tableWidget->currentRow(),1)->text() != "Running" &&
@@ -218,7 +223,9 @@ QPushButton* btn = (QPushButton*) sender();
             }
             QMessageBox::information(this,"Info","You can't resume the process!");
         }
+        }
     }else if(btn->text() == "Kill"){
+        if(myhandle[ui->tableWidget->currentRow()] != 0){
         DWORD dwCode;
         GetExitCodeThread(myhandle[ui->tableWidget->currentRow()],&dwCode);
         if(ui->tableWidget->item(ui->tableWidget->currentRow(),1)->text() != "Killed" &&
@@ -233,8 +240,11 @@ QPushButton* btn = (QPushButton*) sender();
             }
             QMessageBox::information(this,"Info","The process has been killed yet!");
         }
+        }
     }else if(btn->text() == "Kill all"){
+
         for(int i = 0; i < ui->tableWidget->rowCount(); i++){
+            if(myhandle[i] != 0){
             DWORD dwCode;
             GetExitCodeThread(myhandle[i],&dwCode);
             if(ui->tableWidget->item(i,1)->text() != "Killed" &&
@@ -248,19 +258,23 @@ QPushButton* btn = (QPushButton*) sender();
                     ui->tableWidget->item(i,3)->setText(QString::number(GetCpuTime(myhandle[i])));
                 }
             }
+
+        }
         }
     }
 }
 
 void MainWindow::on_comboBox_thread_count_currentTextChanged(const QString &arg1)
 {
-    ui->tableWidget->setRowCount(arg1.toInt());
+    //ui->tableWidget->setRowCount(arg1.toInt());
     for(size_t i = 0; i < std::size(myhandle); i++){
+        if(myhandle[i] != 0){
         DWORD dwCode;
         GetExitCodeThread(myhandle[i],&dwCode);
         if(dwCode == STILL_ACTIVE){
             WaitForSingleObject(myhandle[i], INFINITE);
             CloseHandle(myhandle[i]);
+        }
         }
     }
 }

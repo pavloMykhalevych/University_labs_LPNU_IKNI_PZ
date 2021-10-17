@@ -5,7 +5,7 @@
 
 _DATA SEGMENT
 
-Arr1 dd 17, 3, -51, 2, 3, -43
+Arr1 dd 17, 3, -51, 2, -3, -43
   dd 78, 50, 100, 10, 4, 8
   dd 15, 32, 34, 1, 5, 4
   dd 5, 6, 7, 8, 9, 10
@@ -103,7 +103,7 @@ START:
 	mov eax, [ebx]
 	add ebx, 4
 	mov edx, [ebx]
-	mul edx
+	imul edx
 
 	add SkalarMultof5and4Column, eax
 
