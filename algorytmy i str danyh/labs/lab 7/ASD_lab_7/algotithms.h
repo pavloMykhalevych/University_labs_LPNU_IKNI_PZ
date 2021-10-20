@@ -2,10 +2,8 @@
 #define ALGOTITHMS_H
 
 #include <vector>
-#include <iostream>
-#include <fstream>
-#include <map>
-#include <algorithm>
+#include <string>
+
 
 void BubbleSort(const std::vector<int>& inputVector);
 
@@ -22,5 +20,7 @@ void merge(std::vector<int>& inputVector,const int left,const int mid,const int 
 void mergeSort(std::vector<int>& inputVector, const int begin,const int  end);
 
 void CountingSort(const std::vector<int>& inputVector);
+
+void WriteInFile(std::string path, std::vector<int> outputVecor);
 
 #endif // ALGOTITHMS_H

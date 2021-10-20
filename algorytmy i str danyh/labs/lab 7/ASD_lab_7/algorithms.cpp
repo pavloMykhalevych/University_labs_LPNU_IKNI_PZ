@@ -1,4 +1,9 @@
 #include "algotithms.h"
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <algorithm>
+#include <sstream>
 
 void BubbleSort(const std::vector<int>& inputVector)
 {
@@ -14,6 +19,7 @@ void BubbleSort(const std::vector<int>& inputVector)
         if(F == false) break;
 
     }
+    WriteInFile("outputBubbleSort",bubbleSortedVector);
 }
 
 void SelectionSort(const std::vector<int>& inputVector)
@@ -28,6 +34,7 @@ void SelectionSort(const std::vector<int>& inputVector)
                 min_idx = j;
             std::swap(selectionSortedVector[min_idx], selectionSortedVector[i]);
         }
+        WriteInFile("outputSelectionSort",selectionSortedVector);
 }
 
 void ShellSort(const std::vector<int>& inputVector)
@@ -46,7 +53,7 @@ void ShellSort(const std::vector<int>& inputVector)
                     }
                 }
                 if(min_Index != j){
-                    double tmp = shellSortedVector[min_Index];
+                    int tmp = shellSortedVector[min_Index];
                     shellSortedVector[min_Index] = shellSortedVector[j];
                     shellSortedVector[j] = tmp;
                 }
@@ -56,12 +63,14 @@ void ShellSort(const std::vector<int>& inputVector)
 
         d /= 2;
     }
+    WriteInFile("outputShellSort",shellSortedVector);
 }
 
 void QuickSort(const std::vector<int>& inputVector)
 {
     std::vector<int> quickSortedVector = inputVector;
     quickSort(quickSortedVector,0,quickSortedVector.size()-1);
+    WriteInFile("outputQuickSort",quickSortedVector);
 }
 
 int partition (std::vector<int>& inputVector, int low, int high)
@@ -107,6 +116,7 @@ void MergeSort(const std::vector<int>& inputVector)
 {
     std::vector<int> mergeSortedVector = inputVector;
     mergeSort(mergeSortedVector,0,mergeSortedVector.size()-1);
+    WriteInFile("outputMergeSort",mergeSortedVector);
 }
 
 void merge(std::vector<int>& inputVector,const int left,const int mid,const int right)
@@ -181,11 +191,31 @@ void CountingSort(const std::vector<int>& inputVector)
 
     int ind = 0;
     for(auto it : keys_values){
-        double val = it.first;
+        int val = it.first;
         int freq = it.second;
         for (int j = 0;j < freq ;j++ ) {
             countingSortedVector[ind] = val;
             ind++;
         }
+    }
+    WriteInFile("outputCountingSort",countingSortedVector);
+}
+
+void WriteInFile(std::string path, const std::vector<int> outputVecor){
+    std::ofstream file;
+    file.open(path);
+    std::string newstr;
+    file << "/n/n/n" <<"Vector of " << outputVecor.size() << "elements" << "/n/n" << std::endl;
+    int myIndex = 0;
+    for(const auto& i : outputVecor){
+        if(myIndex != 0 && myIndex % 8 == 0){
+            file << std::endl;
+            myIndex = -1;
+        }
+        file.width(15);
+        file << i;
+        file.width(0);
+        file << "//";
+        myIndex++;
     }
 }
