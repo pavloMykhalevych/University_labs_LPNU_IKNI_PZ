@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTableWidget>
 #include "algotithms.h"
 
 QT_BEGIN_NAMESPACE
@@ -17,7 +18,7 @@ public:
     ~MainWindow();
 
 private:
-    void SortVector(int size);
+    void SortVector(int size, QTableWidget* tableWidget);
 
 private slots:
     void MySlot();
