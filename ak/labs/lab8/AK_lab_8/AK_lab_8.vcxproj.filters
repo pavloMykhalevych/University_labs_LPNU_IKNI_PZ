@@ -15,7 +15,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="AK_lab8_source.asm">
+    <Text Include="Source.txt">
+      <Filter>Source Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="AK_lab_8.asm">
       <Filter>Source Files</Filter>
     </MASM>
   </ItemGroup>

@@ -2,6 +2,8 @@
 
 .model FLAT, STDCALL
 
+.stack
+
 .data
 
 const1  DD  7.0
@@ -15,7 +17,7 @@ varA    DD  7.1
 varC    DD  5.2
 varD    DD  1.6
 
-answer  DD  7.0
+answer  DD  0.0
 
 .code
 START:

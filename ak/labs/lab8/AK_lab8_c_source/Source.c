@@ -12,7 +12,7 @@ int main() {
 
 	double res = chyselnik / znamennyk;
 
-	printf("%lf", res);
+	printf("%.9f", res);
 
 	return 0;
 }

@@ -140,7 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <MASM Include="AK_lab8_source.asm" />
+    <Text Include="Source.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="AK_lab_8.asm" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
