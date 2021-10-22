@@ -11,7 +11,6 @@ void university() {
 		sum++;
 		mu.unlock();
 	}
-	
 }
 
 void shop() {
@@ -20,16 +19,13 @@ void shop() {
 		sum--;
 		mu.unlock();
 	}
-	
 }
 
 int main() {
-	//int sum = 1000;
 	/*std::thread t1(university);
 	std::thread t2(shop);
 	t1.join();
 	t2.join();*/
-	
 	HANDLE myhandle{};
 	HANDLE myhandle2{};
 	DWORD mythreadid{};
@@ -43,3 +39,64 @@ int main() {
 	system("pause");
 	return 0;
 }
+
+/*#include <iostream>
+#include <thread>
+#include <mutex>
+#include <Windows.h>
+int sum = 1000;
+
+std::mutex mut;
+HANDLE mutex;
+HANDLE semaphore;
+void univer()
+{
+    DWORD dwCode;
+  for (int i = 0; i < 1000000; i++)
+  {
+    //WaitForSingleObject(mutex, INFINITE);
+    //mut.lock();
+    dwCode = WaitForSingleObject(semaphore, INFINITE);
+    Sleep(1);
+    ++sum;
+    ReleaseSemaphore(semaphore, 1, nullptr);
+    //ReleaseMutex(mutex);
+    //mut.unlock();
+  }
+}void shop()
+{
+  for (int i = 0; i < 800000; ++i)
+  {
+    WaitForSingleObject(semaphore, INFINITE);
+    Sleep(1);
+    //WaitForSingleObject(mutex, INFINITE);
+    //mut.lock();
+    --sum;
+    ReleaseSemaphore(semaphore, 1, nullptr);
+    //ReleaseMutex(mutex);
+    //mut.unlock();
+  }
+}
+
+void Bank() {
+
+  //ReleaseMutex(mutex);
+  ReleaseSemaphore(semaphore, 1, nullptr);
+  Sleep(1);
+}
+int main()
+{
+
+  mutex = CreateMutex(nullptr, FALSE, nullptr);
+  semaphore = CreateSemaphore(0, 1, 1, nullptr);
+  std::thread th1(&univer);
+  std::thread th2(&shop);
+  std::thread th3(&Bank);
+  th1.join();
+  th2.join();
+  th3.join();
+  std::cout << sum;
+  CloseHandle(mutex);
+  CloseHandle(semaphore);
+  return 0;
+}*/

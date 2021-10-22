@@ -23,10 +23,10 @@ double GetCpuTime(HANDLE &pi){
     {
         SYSTEMTIME userSystemTime;
         if ( FileTimeToSystemTime( &userTime, &userSystemTime ) != -1 )
-            return (double)userSystemTime.wHour * 3600.0 +
+            return ((double)userSystemTime.wHour * 3600.0 +
             (double)userSystemTime.wMinute * 60.0 +
             (double)userSystemTime.wSecond +
-            (double)userSystemTime.wMilliseconds / 1000.0;
+            (double)userSystemTime.wMilliseconds / 1000.0)*1000;
         else return -2;
     } else return -1;
 }
@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_resume,SIGNAL(clicked()),this,SLOT(MySlot()));
     connect(ui->pushButton_kill,SIGNAL(clicked()),this,SLOT(MySlot()));
     connect(ui->pushButton_killall,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_get_sum,SIGNAL(clicked()),this,SLOT(MySlot()));
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()),this,SLOT(MyTimer()));
     timer->start(100);
@@ -91,13 +93,14 @@ void MainWindow::MyTimer(){
             }
         }
     }
+
 }
 
 
 void ArraySum(int* param)
 {
-    Sleep(1000);
-    system("pause");
+    //Sleep(1000);
+    //system("pause");
     for(int i = param[0]; i< param[1]; i++){
         if(i == 0){
             array[i] = 2;
@@ -115,8 +118,8 @@ void ArraySum(int* param)
 void MutexArraySum(int* param)
 {
     mu.lock();
-    Sleep(1000);
-    system("pause");
+    //Sleep(1000);
+    //system("pause");
     for(int i = param[0]; i< param[1]; i++){
         if(i == 0){
             array[i] = 2;
@@ -128,14 +131,15 @@ void MutexArraySum(int* param)
         sum+=1;
         std::cout<<myindex++<< " // " << std::endl;
     }
-    std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
+    std::cout<<"In current thread ("<<GetCurrentThreadId()<<")(mutex): sum =" << sum << std::endl;
     mu.unlock();
 }
 
 void MainWindow::MySlot(){
 QPushButton* btn = (QPushButton*) sender();
     if(btn->text() == "Start"){
-
+        sum = 0;
+        myindex = 0;
         for(size_t i = 0; i < std::size(myhandle); i++){
             if(myhandle[i] != 0){
             DWORD dwCode;
@@ -174,6 +178,7 @@ QPushButton* btn = (QPushButton*) sender();
 
         for(int i = 0; i<ui->comboBox_thread_count->currentText().toInt(); i++){
             int* param = new int[2];
+            array.resize(ui->spinBox_array_size->value());
             param[0] = (i)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
             param[1] = (i+1)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
             if(ui->checkBox->isChecked()){
@@ -261,6 +266,16 @@ QPushButton* btn = (QPushButton*) sender();
 
         }
         }
+    }else if(btn->text() == "Clear"){
+        for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+        {
+            for(int j = 0; j < ui->tableWidget->columnCount(); j++)
+            {
+                ui->tableWidget->item(i,j)->setText("");
+            }
+        }
+    }else if(btn->text() == "Get Sum"){
+        std::cout << "\nGeneral sum = " << sum << std::endl;
     }
 }
 
