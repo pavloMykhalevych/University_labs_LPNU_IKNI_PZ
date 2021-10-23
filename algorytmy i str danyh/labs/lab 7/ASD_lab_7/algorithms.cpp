@@ -9,6 +9,7 @@
 double BubbleSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
+    std::cout << "Bubble sort for " << inputVector.size() << " elements starts."<< std::endl;
     std::vector<int> bubbleSortedVector = inputVector;
     for (size_t i = 0; i < bubbleSortedVector.size()-1; i++){
         bool F = false;
@@ -19,18 +20,23 @@ double BubbleSort(const std::vector<int>& inputVector)
             }
         }
         if(F == false) break;
+        auto end_loop = std::chrono::high_resolution_clock::now();
+        auto elapsed_loop = std::chrono::duration_cast<std::chrono::microseconds>(end_loop - begin);
+        if(elapsed_loop.count() * 1e-6 > 120){
+            break;
+        }
 
     }
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputBubbleSort",bubbleSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputBubbleSort",bubbleSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 double SelectionSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
-
+    std::cout << "Selection sort for " << inputVector.size() << " elements starts."<< std::endl;
     std::vector<int> selectionSortedVector = inputVector;
     int min_idx;
         for (size_t i = 0; i < selectionSortedVector.size()-1; i++)
@@ -40,18 +46,23 @@ double SelectionSort(const std::vector<int>& inputVector)
             if (selectionSortedVector[j] < selectionSortedVector[min_idx])
                 min_idx = j;
             std::swap(selectionSortedVector[min_idx], selectionSortedVector[i]);
+            auto end_loop = std::chrono::high_resolution_clock::now();
+            auto elapsed_loop = std::chrono::duration_cast<std::chrono::microseconds>(end_loop - begin);
+            if(elapsed_loop.count() * 1e-6 > 120){
+                break;
+            }
         }
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputSelectionSort",selectionSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputSelectionSort",selectionSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 double ShellSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
-
+    std::cout << "Shell sort for " << inputVector.size() << " elements starts."<< std::endl;
 
     std::vector<int> shellSortedVector = inputVector;
 
@@ -64,6 +75,11 @@ double ShellSort(const std::vector<int>& inputVector)
                 for (int k = j-d; k >= 0; k -= d ) {
                     if(shellSortedVector[k]<shellSortedVector[min_Index]){
                         min_Index = k;
+                    }
+                    auto end_loop = std::chrono::high_resolution_clock::now();
+                    auto elapsed_loop = std::chrono::duration_cast<std::chrono::milliseconds>(end_loop - begin);
+                    if((elapsed_loop.count() * 1e-3) > std::chrono::seconds{10}.count()){
+                        return elapsed_loop.count() * 1e-3;
                     }
                 }
                 if(min_Index != j){
@@ -79,22 +95,22 @@ double ShellSort(const std::vector<int>& inputVector)
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputShellSort",shellSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputShellSort",shellSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 double QuickSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
-
+    std::cout << "Quick sort for " << inputVector.size() << " elements starts."<< std::endl;
     std::vector<int> quickSortedVector = inputVector;
     quickSort(quickSortedVector,0,quickSortedVector.size()-1);
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputQuickSort",quickSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputQuickSort",quickSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 int partition (std::vector<int>& inputVector, int low, int high)
@@ -139,14 +155,14 @@ void quickSort(std::vector<int>& inputVector, int low, int high)
 double MergeSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
-
+    std::cout << "Merge sort for " << inputVector.size() << " elements starts."<< std::endl;
     std::vector<int> mergeSortedVector = inputVector;
     mergeSort(mergeSortedVector,0,mergeSortedVector.size()-1);
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputMergeSort",mergeSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputMergeSort",mergeSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 void merge(std::vector<int>& inputVector,const int left,const int mid,const int right)
@@ -213,7 +229,7 @@ void mergeSort(std::vector<int>& inputVector, const int begin,const int  end)
 double CountingSort(const std::vector<int>& inputVector)
 {
     auto begin = std::chrono::high_resolution_clock::now();
-
+    std::cout << "Counting sort for " << inputVector.size() << " elements starts."<< std::endl;
     std::vector<int> countingSortedVector = inputVector;
     std::map<int,int> keys_values;
     for(size_t i = 0; i < countingSortedVector.size(); i++)
@@ -232,9 +248,9 @@ double CountingSort(const std::vector<int>& inputVector)
     }
 
     auto end = std::chrono::high_resolution_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin);
-    WriteInFile("outputCountingSort",countingSortedVector);
-    return elapsed.count();
+    auto elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - begin);
+    //WriteInFile("outputCountingSort",countingSortedVector);
+    return elapsed.count() * 1e-6;
 }
 
 void WriteInFile(std::string path, const std::vector<int> outputVecor){

@@ -20,6 +20,14 @@ MainWindow::MainWindow(QWidget *parent)
         }
 
     connect(ui->pushButton_start,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_2,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_3,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_4,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_5,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_6,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_7,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_start_8,SIGNAL(clicked()),this,SLOT(MySlot()));
+    connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(MySlot()));
 }
 
 void MainWindow::SortVector(int size, QTableWidget* tableWidget)
@@ -54,23 +62,65 @@ void MainWindow::SortVector(int size, QTableWidget* tableWidget)
         break;
     }
 
-    tableWidget->item(i,0)->setText(QString::number(BubbleSort(startVect)));
-    tableWidget->item(i,1)->setText(QString::number(SelectionSort(startVect)));
-    tableWidget->item(i,2)->setText(QString::number(ShellSort(startVect)));
-    tableWidget->item(i,3)->setText(QString::number(QuickSort(startVect)));
-    tableWidget->item(i,4)->setText(QString::number(MergeSort(startVect)));
-    tableWidget->item(i,5)->setText(QString::number(CountingSort(startVect)));
+    tableWidget->item(i,0)->setText(QString::number(BubbleSort(startVect),'f',6));
+    tableWidget->item(i,1)->setText(QString::number(SelectionSort(startVect),'f',6));
+    tableWidget->item(i,2)->setText(QString::number(ShellSort(startVect),'f',6));
+    tableWidget->item(i,3)->setText(QString::number(QuickSort(startVect),'f',6));
+    tableWidget->item(i,4)->setText(QString::number(MergeSort(startVect),'f',6));
+    tableWidget->item(i,5)->setText(QString::number(CountingSort(startVect),'f',6));
 }
 
 void MainWindow::MySlot()
 {
+    std::vector<int> sizes = {1024, 4096, 16384,65546, 262144, 1048576, 4194304};
     QPushButton* btn = (QPushButton*)sender();
-    if(btn->text() == "Start")
+    if(btn->text() == "Start 1024")
     {
-        std::vector<int> sizes = {1024, 4096, 16384,65546, 262144, 1048576, 4194304};
-        for(const auto& i : sizes){
-            SortVector(i,ui->tableWidget);
-        }
+        SortVector(sizes[0],ui->tableWidget);
+
+    }else if(btn->text() == "Start 4096")
+    {
+        SortVector(sizes[1],ui->tableWidget);
+
+    }else if(btn->text() == "Start 16384")
+    {
+        SortVector(sizes[2],ui->tableWidget);
+
+    }else if(btn->text() == "Start 65546")
+    {
+        SortVector(sizes[3],ui->tableWidget);
+
+    }else if(btn->text() == "Start 262144")
+    {
+        SortVector(sizes[4],ui->tableWidget);
+
+    }else if(btn->text() == "Start 1048576")
+    {
+        SortVector(sizes[5],ui->tableWidget);
+
+    }else if(btn->text() == "Start 4194304")
+    {
+        SortVector(sizes[6],ui->tableWidget);
+
+    }else if(btn->text() == "Start")
+    {
+        SortVector(sizes[0],ui->tableWidget);
+        SortVector(sizes[1],ui->tableWidget);
+        SortVector(sizes[2],ui->tableWidget);
+        SortVector(sizes[3],ui->tableWidget);
+        SortVector(sizes[4],ui->tableWidget);
+        SortVector(sizes[5],ui->tableWidget);
+        SortVector(sizes[6],ui->tableWidget);
+
+    }else if(btn->text() == "Clear")
+    {
+        for(int i = 0; i < ui->tableWidget->rowCount(); i++)
+            {
+                for(int j = 0; j < ui->tableWidget->columnCount(); j++)
+                {
+                    ui->tableWidget->item(i,j)->setText("");
+                }
+            }
     }
 
 }
