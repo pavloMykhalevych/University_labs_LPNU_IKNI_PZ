@@ -48,7 +48,7 @@ void MainWindow::SortVector(int size, QTableWidget* tableWidget)
     case 16384:
         i = 2;
         break;
-    case 65546:
+    case 65536:
         i = 3;
         break;
     case 262144:
@@ -72,7 +72,7 @@ void MainWindow::SortVector(int size, QTableWidget* tableWidget)
 
 void MainWindow::MySlot()
 {
-    std::vector<int> sizes = {1024, 4096, 16384,65546, 262144, 1048576, 4194304};
+    std::vector<int> sizes = {1024, 4096, 16384,65536, 262144, 1048576, 4194304};
     QPushButton* btn = (QPushButton*)sender();
     if(btn->text() == "Start 1024")
     {
@@ -86,7 +86,7 @@ void MainWindow::MySlot()
     {
         SortVector(sizes[2],ui->tableWidget);
 
-    }else if(btn->text() == "Start 65546")
+    }else if(btn->text() == "Start 65536")
     {
         SortVector(sizes[3],ui->tableWidget);
 
