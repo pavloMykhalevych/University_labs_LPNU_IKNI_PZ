@@ -32,6 +32,7 @@ double GetCpuTime(HANDLE &pi){
 }
 
 std::mutex mu;
+HANDLE semaphore;
 int sum = 0;
 int myindex = 0;
 std::vector<int> array(10000,0);
@@ -79,6 +80,7 @@ MainWindow::~MainWindow()
             CloseHandle(myhandle[i]);
         }
     }
+    CloseHandle(semaphore);
     delete ui;
 }
 
@@ -135,6 +137,26 @@ void MutexArraySum(int* param)
     mu.unlock();
 }
 
+void SemaphorArraySum(int* param)
+{
+    WaitForSingleObject(semaphore, INFINITE);
+    //Sleep(1000);
+    //system("pause");
+    for(int i = param[0]; i< param[1]; i++){
+        if(i == 0){
+            array[i] = 2;
+            sum+=array[i];
+            continue;
+        }
+        array[i] = array[i-1]*i + exp(i);
+        //sum+=array[i];
+        sum+=1;
+        std::cout<<myindex++<< " // " << std::endl;
+    }
+    std::cout<<"In current thread ("<<GetCurrentThreadId()<<")(semaphor): sum =" << sum << std::endl;
+    ReleaseSemaphore(semaphore, 1, nullptr);
+}
+
 void MainWindow::MySlot(){
 QPushButton* btn = (QPushButton*) sender();
     if(btn->text() == "Start"){
@@ -176,13 +198,17 @@ QPushButton* btn = (QPushButton*) sender();
         }
         std::cout << sum << std::endl;*/
 
+        semaphore = CreateSemaphore(0, 1, 1, nullptr);
+
         for(int i = 0; i<ui->comboBox_thread_count->currentText().toInt(); i++){
             int* param = new int[2];
             array.resize(ui->spinBox_array_size->value());
             param[0] = (i)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
             param[1] = (i+1)*(ui->spinBox_array_size->value()/ui->comboBox_thread_count->currentText().toInt());
-            if(ui->checkBox->isChecked()){
+            if(ui->radioButton->isChecked()){
                 myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&MutexArraySum, param, 0, &mythreadid[i]);
+            }else if(ui->radioButton_semaphor->isChecked()){
+                myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&SemaphorArraySum, param, 0, &mythreadid[i]);
             }else{
                 myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
             }
