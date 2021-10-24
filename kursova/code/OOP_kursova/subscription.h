@@ -11,21 +11,23 @@ public:
     friend void operator<<(std::string filePath,const Subscription& mySubscription);
 
     Subscription();
-    Subscription(std::string surname, std::string name, std::string phoneNumber,
-                 SubscriptionType type, std::string duration, uint64_t number);
-    Subscription(Subscription& otherSubscription);
+    Subscription(const Person& person, const SubscriptionType& type, const std::string& duration, const uint64_t& number);
+    Subscription(const std::string& surname, const std::string& name, const std::string& phoneNumber,
+                 const SubscriptionType& type, const std::string& duration, const uint64_t& number);
+    Subscription(const Subscription& otherSubscription);
 
     Person GetPersonInfo() const;
-    void SetPersonInfo(std::string surname, std::string name, std::string phoneNumber);
+    void SetPersonInfo(const std::string& surname, const std::string& name, const std::string& phoneNumber);
+    void SetPersonInfo(const Person& person);
 
     uint64_t GetNumber() const;
-    void SetNumber(uint64_t newNumber);
+    void SetNumber(const uint64_t& newNumber);
 
     std::string GetDuration() const;
-    void SetDuration(std::string newDuration);
+    void SetDuration(const std::string& newDuration);
 
     SubscriptionType GetSubscriptionType() const;
-    void SetSubscriptionType(SubscriptionType newSubscriptionType);
+    void SetSubscriptionType(const SubscriptionType& newSubscriptionType);
 
     ~Subscription();
 
