@@ -1,4 +1,7 @@
 #include "subscription.h"
+#include "fstream"
+#include "iostream"
+#include "iomanip"
 
 Subscription::Subscription()
 {
@@ -74,4 +77,38 @@ Subscription::~Subscription()
 
 }
 
+void operator>>(std::string filePath,Subscription& mySubscription){
 
+}
+
+void operator<<(std::string filePath,const Subscription& mySubscription){
+    std::ofstream file;
+    file.open(filePath);
+    std::string myType;
+    switch(mySubscription.m_subscriptionType){
+    case SubscriptionType::LuxFullDay:{
+        myType = "Lux type full day";
+        break;
+    }
+    case SubscriptionType::SimpleFirstHalfDay:{
+        myType = "Simple type first half day";
+        break;
+    }
+    case SubscriptionType::SimpleFullDay:{
+        myType = "Simple type full day";
+        break;
+    }
+    case SubscriptionType::SuperLuxFullDay:{
+        myType = "Super Lux type full day";
+        break;
+    }
+    }
+
+    file << std::setw(10) << std::left << mySubscription.m_number << std::setw(1) << "|"
+         << std::setw(50) << mySubscription.m_person.m_surname << std::setw(1) << "|"
+         << std::setw(50) << mySubscription.m_person.m_name << std::setw(1) << "|"
+         << std::setw(20) << mySubscription.m_person.m_phoneNumber << std::setw(1) << "|"
+         << std::setw(40) << myType<< std::setw(1) << "|"
+         << std::setw(20) << mySubscription.m_duration << std::setw(1) << "|" << std::endl;
+
+}

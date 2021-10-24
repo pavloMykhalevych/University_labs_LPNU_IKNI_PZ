@@ -9,25 +9,25 @@ MainWindow::MainWindow(QWidget *parent)
 
     setCentralWidget(ui->tableWidget);
     ui->tableWidget->setColumnWidth(0,50);
-    int widthToSet = this->width() / 5;
-    if(widthToSet < 150 || widthToSet > 300){
-        ui->tableWidget->setColumnWidth(3,widthToSet);
+    int widthToSet = (this->width() - 290) / 3;
+    if(widthToSet < 150){
+        widthToSet = 150;
     }
-    ui->tableWidget->setColumnWidth(1,150);
-    ui->tableWidget->setColumnWidth(2,150);
-    ui->tableWidget->setColumnWidth(3,150);
-    ui->tableWidget->setColumnWidth(4,150);
-    ui->tableWidget->setColumnWidth(5,150);
-    /*std::vector<QString> columnHeaders = {"№","Surname","Name","Phone number","Subscription type","Duration"};
-    for (size_t i = 0;i < columnHeaders.size(); i++) {
-        QTableWidgetItem* item = new QTableWidgetItem();
-        item->setText(columnHeaders[i]);
-        item->setTextAlignment(Qt::AlignCenter);
-        ui->tableWidget->setHorizontalHeaderItem(i,item);
-    }*/
-    //ui->tableWidget->header
-    //int widthToSet = this->width() / 5;
-    //if(widthToSet < 150)
+    ui->tableWidget->setColumnWidth(1,widthToSet);
+    ui->tableWidget->setColumnWidth(2,widthToSet);
+    ui->tableWidget->setColumnWidth(3,120);
+    ui->tableWidget->setColumnWidth(4,widthToSet);
+    ui->tableWidget->setColumnWidth(5,120-3);
+
+    for (auto i = 0; i < ui->tableWidget->rowCount(); i++) {
+        for (auto j = 0; j < ui->tableWidget->columnCount(); j++) {
+            QTableWidgetItem* item = new QTableWidgetItem();
+            item->setText("");
+            item->setTextAlignment(Qt::AlignCenter);
+            ui->tableWidget->setItem(i,j,item);
+        }
+    }
+
 }
 
 MainWindow::~MainWindow()

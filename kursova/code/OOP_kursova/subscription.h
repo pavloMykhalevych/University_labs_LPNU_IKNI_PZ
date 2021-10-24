@@ -7,6 +7,9 @@
 class Subscription
 {
 public:
+    friend void operator>>(std::string filePath,Subscription& mySubscription);
+    friend void operator<<(std::string filePath,const Subscription& mySubscription);
+
     Subscription();
     Subscription(std::string surname, std::string name, std::string phoneNumber,
                  SubscriptionType type, std::string duration, uint64_t number);
@@ -23,9 +26,6 @@ public:
 
     SubscriptionType GetSubscriptionType() const;
     void SetSubscriptionType(SubscriptionType newSubscriptionType);
-
-    friend Subscription& operator>>(std::string filePath,Subscription& mySubscription);
-    friend Subscription& operator<<(std::string filePath,const Subscription& mySubscription);
 
     ~Subscription();
 
