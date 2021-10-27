@@ -1,8 +1,11 @@
 #ifndef SUBSCRIPTION_H
 #define SUBSCRIPTION_H
+
 #include <vector>
+
 #include "Person.h"
 #include "SubscriptionType.h"
+#include "Functions.h"
 
 class Subscription
 {

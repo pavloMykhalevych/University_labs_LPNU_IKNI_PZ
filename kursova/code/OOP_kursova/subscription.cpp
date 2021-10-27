@@ -106,16 +106,47 @@ void operator>>(std::string filePath,Subscription& mySubscription){
     std::stringstream strstream(line);
     std::vector<std::string> tokenVect;
     std::string token;
+    int count = 0;
     while(std::getline(strstream, token, '|')){
+        RemoveSpaces(token);
         tokenVect.push_back(token);
+        ++count;
+    }
+    if(count != 6){
+        throw std::runtime_error("The input data isn't correct!");
+        return;
     }
     if(!tokenVect.empty()){
+        if(tokenVect[5].size() > 22 || tokenVect[5].size() < 6){
+            throw std::runtime_error("The duration is incorrect!");
+            return;
+        }
         mySubscription.SetDuration(tokenVect[5]);
+        if(tokenVect[0].empty()){
+            throw std::runtime_error("There is no number!");
+            return;
+        }
         mySubscription.SetNumber(std::stoi(tokenVect[0]));
+        if(tokenVect[1].size() > 50 || tokenVect[5].size() < 3){
+            throw std::runtime_error("The surname is incorrect!");
+            return;
+        }
         person.m_surname = tokenVect[1];
+        if(tokenVect[2].size() > 50 || tokenVect[5].size() < 3){
+            throw std::runtime_error("The name is incorrect!");
+            return;
+        }
         person.m_name = tokenVect[2];
+        if(tokenVect[3].size() > 30 || tokenVect[5].size() < 10){
+            throw std::runtime_error("The phone number is incorrect!");
+            return;
+        }
         person.m_phoneNumber = tokenVect[3];
         mySubscription.SetPersonInfo(person);
+        if(tokenVect[4].empty()){
+            throw std::runtime_error("There is no subscription type!");
+            return;
+        }
         subscriptionType = tokenVect[4];
         if(subscriptionType.find("Lux type full day") != std::string::npos){
             mySubscription.SetSubscriptionType(SubscriptionType::LuxFullDay);
@@ -125,9 +156,13 @@ void operator>>(std::string filePath,Subscription& mySubscription){
             mySubscription.SetSubscriptionType(SubscriptionType::SimpleFullDay);
         }else if(subscriptionType.find("Super Lux type full day") != std::string::npos){
             mySubscription.SetSubscriptionType(SubscriptionType::SuperLuxFullDay);
+        }else{
+            throw std::runtime_error("There isn't such a subscription type!");
+            return;
         }
     }else{
-        throw std::runtime_error("The input file is empty");
+        throw std::runtime_error("The input file is empty!");
+        return;
     }
     /*QString text_line = QString::fromStdString(line);
     if(!text_line.isEmpty()){
