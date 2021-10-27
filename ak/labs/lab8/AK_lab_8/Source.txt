@@ -17,7 +17,7 @@ varA    DD  7.1
 varC    DD  5.2
 varD    DD  1.6
 
-answer  DD  0.0
+answer  DD  ?
 
 .code
 START:
@@ -26,19 +26,20 @@ START:
     fld     [varC]
     fmul    [const1]    ; 7 * c
 
-    fld     [varA]
-    fmul    [varC]      ; a * c
-
-    fsincos
-    fdivp               ; tg(a * c)
-
     fld     [const2]    ; 39
     fmul    [varD]      ; 39 * d
     fld     [const3]    ; 3.4
     fsubp               ;
     fsqrt               ; sqrt (39 * d - 3.4)
 
-    faddp
+    fsubp               ; 7 * c - sqrt (39 * d - 3.4)
+
+    fld     [varA]
+    fmul    [varC]      ; a * c
+
+    fsincos
+    fdivp               ; tg(a * c)
+
     faddp               ; numerator on top
 
     fld     [varC]

@@ -6,59 +6,22 @@
 
 .data
 
-const1  DD  7.0
-const2  DD  39.0
-const3  DD  3.4
-const4  DD  8.5
-const5  DD  9.4
-const6  DD  3.8
+Line BYTE "Mykhalevych Pavlo   07.07.2003  Lviv  PZ-23 00"
+Surname BYTE 23 DUP(?)
+Name BYTE 23 DUP(?)
+date BYTE 23 DUP(?)
+City BYTE 23 DUP(?)
+Group BYTE 23 DUP(?)
 
-varA    DD  7.1
-varC    DD  5.2
-varD    DD  1.6
-
-answer  DD  ?
+Surname_length EQU $- Surname
+Name_length EQU $- Name
+date_length EQU $- date
+City_length EQU $- City
+Group_length EQU $- Group
 
 .code
 START:
-    finit               ; initialize the FPU
 
-    fld     [varC]
-    fmul    [const1]    ; 7 * c
-
-    fld     [const2]    ; 39
-    fmul    [varD]      ; 39 * d
-    fld     [const3]    ; 3.4
-    fsubp               ;
-    fsqrt               ; sqrt (39 * d - 3.4)
-
-    fsubp               ; 7 * c - sqrt (39 * d - 3.4)
-
-    fld     [varA]
-    fmul    [varC]      ; a * c
-
-    fsincos
-    fdivp               ; tg(a * c)
-
-    faddp               ; numerator on top
-
-    fld     [varC]
-    fmul    [const4]    ; c * 8.5
-
-    fld     [varC]
-    fdiv    [const5]    ; c / 9.4
-
-    fsubp               ; c * 8.5 - c / 9.4
-
-    fld     [varD]
-    fmul    [const6]    ; 3.8 * d
-
-    faddp               ; denominator on top
-
-    fdivp
-    fst     [answer]
-
-    lea EBX, answer
 
     RET
 
