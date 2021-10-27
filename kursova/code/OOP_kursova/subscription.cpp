@@ -95,7 +95,8 @@ Subscription::~Subscription()
 
 }
 
-void operator>>(std::string filePath,Subscription& mySubscription){
+void operator>>(std::string filePath,std::vector<Subscription>& mySubscriptionVect){
+    Subscription mySubscription;
     Person person;
     std::string subscriptionType;
 
@@ -164,6 +165,7 @@ void operator>>(std::string filePath,Subscription& mySubscription){
         throw std::runtime_error("The input file is empty!");
         return;
     }
+    mySubscriptionVect.push_back(mySubscription);
     /*QString text_line = QString::fromStdString(line);
     if(!text_line.isEmpty()){
         QStringList valuestr = text_line.split('|');
@@ -179,10 +181,11 @@ void operator>>(std::string filePath,Subscription& mySubscription){
     } */
 }
 
-void operator<<(std::string filePath,const Subscription& mySubscription){
+void operator<<(std::string filePath,const std::vector<Subscription>& mySubscriptionVect){
     std::ofstream file;
     file.open(filePath);
     std::string myType;
+    for(const auto& mySubscription : mySubscriptionVect){
     switch(mySubscription.m_subscriptionType){
     case SubscriptionType::LuxFullDay:{
         myType = "Lux type full day";
@@ -208,5 +211,64 @@ void operator<<(std::string filePath,const Subscription& mySubscription){
          << std::setw(20) << mySubscription.m_person.m_phoneNumber << std::setw(1) << "|"
          << std::setw(40) << myType<< std::setw(1) << "|"
          << std::setw(20) << mySubscription.m_duration << std::setw(1) << "|" << std::endl;
+    }
+}
+
+void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscriptionVect){
+    Subscription mySubscription;
+    Person person;
+    std::string subscriptionType;
+
+    std::vector<std::string> tokenVect{6};
+    for(auto i = 0; i < 6; ++i){
+        tokenVect[i] = tableWidget->item(0,i)->text().toStdString();
+    }
+    if(tokenVect[5].size() > 22 || tokenVect[5].size() < 6){
+        throw std::runtime_error("The duration is incorrect!");
+        return;
+    }
+    mySubscription.SetDuration(tokenVect[5]);
+    if(tokenVect[0].empty()){
+        throw std::runtime_error("There is no number!");
+        return;
+    }
+    mySubscription.SetNumber(std::stoi(tokenVect[0]));
+    if(tokenVect[1].size() > 50 || tokenVect[5].size() < 3){
+        throw std::runtime_error("The surname is incorrect!");
+        return;
+    }
+    person.m_surname = tokenVect[1];
+    if(tokenVect[2].size() > 50 || tokenVect[5].size() < 3){
+        throw std::runtime_error("The name is incorrect!");
+        return;
+    }
+    person.m_name = tokenVect[2];
+    if(tokenVect[3].size() > 30 || tokenVect[5].size() < 10){
+        throw std::runtime_error("The phone number is incorrect!");
+        return;
+    }
+    person.m_phoneNumber = tokenVect[3];
+    mySubscription.SetPersonInfo(person);
+    if(tokenVect[4].empty()){
+        throw std::runtime_error("There is no subscription type!");
+        return;
+    }
+    subscriptionType = tokenVect[4];
+    if(subscriptionType.find("Lux type full day") != std::string::npos){
+        mySubscription.SetSubscriptionType(SubscriptionType::LuxFullDay);
+    }else if(subscriptionType.find("Simple type first half day") != std::string::npos){
+        mySubscription.SetSubscriptionType(SubscriptionType::SimpleFirstHalfDay);
+    }else if(subscriptionType.find("Simple type full day") != std::string::npos){
+        mySubscription.SetSubscriptionType(SubscriptionType::SimpleFullDay);
+    }else if(subscriptionType.find("Super Lux type full day") != std::string::npos){
+        mySubscription.SetSubscriptionType(SubscriptionType::SuperLuxFullDay);
+    }else{
+        throw std::runtime_error("There isn't such a subscription type!");
+        return;
+    }
+    mySubscriptionVect.push_back(mySubscription);
+}
+
+void operator<<(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect){
 
 }
