@@ -5,6 +5,7 @@
 #include <thread>
 #include <math.h>
 #include <ctime>
+#include <chrono>
 #include <windows.h>
 #include <mutex>
 #include <sstream>
@@ -33,6 +34,7 @@ double GetCpuTime(HANDLE &pi){
 
 std::mutex mu;
 HANDLE semaphore;
+double time_threads = 0;
 int sum = 0;
 int myindex = 0;
 std::vector<int> array(10000,0);
@@ -95,7 +97,7 @@ void MainWindow::MyTimer(){
             }
         }
     }
-
+    ui->lineEdit->setText(QString::number(time_threads,'f',6)+ " ms" );
 }
 
 
@@ -103,6 +105,7 @@ void ArraySum(int* param)
 {
     //Sleep(1000);
     //system("pause");
+    const auto start = std::chrono::high_resolution_clock::now();
     for(int i = param[0]; i< param[1]; i++){
         if(i == 0){
             array[i] = 2;
@@ -115,11 +118,14 @@ void ArraySum(int* param)
         std::cout<<myindex++<< " / " << std::endl;
     }
     std::cout<<"In current thread ("<<GetCurrentThreadId()<<"): sum =" << sum << std::endl;
+    const auto end = std::chrono::high_resolution_clock::now();
+    time_threads += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 1e-6;
 }
 
 void MutexArraySum(int* param)
 {
     mu.lock();
+    const auto start = std::chrono::high_resolution_clock::now();
     //Sleep(1000);
     //system("pause");
     for(int i = param[0]; i< param[1]; i++){
@@ -134,12 +140,15 @@ void MutexArraySum(int* param)
         std::cout<<myindex++<< " // " << std::endl;
     }
     std::cout<<"In current thread ("<<GetCurrentThreadId()<<")(mutex): sum =" << sum << std::endl;
+    const auto end = std::chrono::high_resolution_clock::now();
+    time_threads += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 1e-6;
     mu.unlock();
 }
 
 void SemaphorArraySum(int* param)
 {
     WaitForSingleObject(semaphore, INFINITE);
+    const auto start = std::chrono::high_resolution_clock::now();
     //Sleep(1000);
     //system("pause");
     for(int i = param[0]; i< param[1]; i++){
@@ -154,6 +163,8 @@ void SemaphorArraySum(int* param)
         std::cout<<myindex++<< " // " << std::endl;
     }
     std::cout<<"In current thread ("<<GetCurrentThreadId()<<")(semaphor): sum =" << sum << std::endl;
+    const auto end = std::chrono::high_resolution_clock::now();
+    time_threads += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 1e-6;
     ReleaseSemaphore(semaphore, 1, nullptr);
 }
 
@@ -162,6 +173,7 @@ QPushButton* btn = (QPushButton*) sender();
     if(btn->text() == "Start"){
         sum = 0;
         myindex = 0;
+        time_threads = 0;
         for(size_t i = 0; i < std::size(myhandle); i++){
             if(myhandle[i] != 0){
             DWORD dwCode;
