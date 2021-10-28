@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include <QTableWidget>
+
 #include "Person.h"
 #include "SubscriptionType.h"
 #include "Functions.h"
@@ -10,8 +12,10 @@
 class Subscription
 {
 public:
-    friend void operator>>(std::string filePath,Subscription& mySubscription);
-    friend void operator<<(std::string filePath,const Subscription& mySubscription);
+    friend void operator>>(std::string filePath,std::vector<Subscription>& mySubscription);
+    friend void operator<<(std::string filePath,const std::vector<Subscription>& mySubscription);
+    friend void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscription);
+    friend void operator<<(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscription);
 
     Subscription();
     Subscription(const Person& person, const SubscriptionType& type, const std::string& duration, const uint64_t& number);

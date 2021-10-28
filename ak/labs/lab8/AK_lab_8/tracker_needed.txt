@@ -1,0 +1,7 @@
+const auto imageRect = cv::Rect({}, imageSize);
+    const auto intersection = cv::Rect({}, imageSize) & boundingBox;
+    std::cout << "\nImage: " << imageRect.x << " , " << imageRect.y << " , " << imageRect.width << " , " << imageRect.height << std::endl;
+    std::cout << "\nBoundingBox: " << boundingBox.x << " , " << boundingBox.y << " , " << boundingBox.width << " , " << boundingBox.height
+              << std::endl;
+    std::cout << "\nIntersection: " << intersection.x << " , " << intersection.y << " , " << intersection.width << " , "
+              << intersection.height << std::endl;

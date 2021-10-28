@@ -140,7 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <Text Include="lab9.txt" />
     <Text Include="Source.txt" />
+    <Text Include="tracker_needed.txt" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="AK_lab_8.asm" />
