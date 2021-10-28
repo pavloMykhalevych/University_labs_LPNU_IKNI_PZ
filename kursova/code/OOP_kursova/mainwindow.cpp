@@ -38,16 +38,15 @@ MainWindow::MainWindow(QWidget *parent)
             ui->tableWidget->setItem(i,j,item);
         }
     }
-    ui->tableWidget_2->setColumnWidth(0,50);
-    int widthToSet_2 = (this->width() - 340) / 3;
+    int widthToSet_2 = (this->width() - 290) / 3;
     if(widthToSet_2 < 150){
         widthToSet_2 = 150;
     }
+    ui->tableWidget_2->setColumnWidth(0,widthToSet_2);
     ui->tableWidget_2->setColumnWidth(1,widthToSet_2);
-    ui->tableWidget_2->setColumnWidth(2,widthToSet_2);
-    ui->tableWidget_2->setColumnWidth(3,150);
-    ui->tableWidget_2->setColumnWidth(4,widthToSet_2);
-    ui->tableWidget_2->setColumnWidth(5,140-3);
+    ui->tableWidget_2->setColumnWidth(2,150);
+    ui->tableWidget_2->setColumnWidth(3,widthToSet_2);
+    ui->tableWidget_2->setColumnWidth(4,140-3);
 
     for (auto i = 0; i < ui->tableWidget_2->rowCount(); i++) {
         for (auto j = 0; j < ui->tableWidget_2->columnCount(); j++) {
@@ -105,12 +104,12 @@ void MainWindow::resizeEvent(QResizeEvent *)
     ui->tableWidget->setColumnWidth(2,widthToSet);
     ui->tableWidget->setColumnWidth(4,widthToSet);
 
-    int widthToSet_2 = (this->width() - 340) / 3;
+    int widthToSet_2 = (this->width() - 290) / 3;
     if(widthToSet_2 < 150){
         widthToSet_2 = 150;
     }
+    ui->tableWidget_2->setColumnWidth(0,widthToSet_2);
     ui->tableWidget_2->setColumnWidth(1,widthToSet_2);
-    ui->tableWidget_2->setColumnWidth(2,widthToSet_2);
-    ui->tableWidget_2->setColumnWidth(4,widthToSet_2);
+    ui->tableWidget_2->setColumnWidth(3,widthToSet_2);
 }
 

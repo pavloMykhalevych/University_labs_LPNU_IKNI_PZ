@@ -41,7 +41,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QTableWidget" name="tableWidget">
@@ -290,21 +290,6 @@
       <row/>
       <column>
        <property name="text">
-        <string>№</string>
-       </property>
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;yuhu&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="background">
-        <color>
-         <red>180</red>
-         <green>180</green>
-         <blue>180</blue>
-        </color>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Surname</string>
        </property>
        <property name="background">
@@ -373,7 +358,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>33</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuTable">

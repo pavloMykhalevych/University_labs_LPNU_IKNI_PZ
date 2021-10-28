@@ -16,6 +16,7 @@ public:
     friend void operator<<(std::string filePath,const std::vector<Subscription>& mySubscription);
     friend void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscription);
     friend void operator<<(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscription);
+    friend void operator<<(QTableWidget* tableWidget,const Subscription& mySubscription);
 
     Subscription();
     Subscription(const Person& person, const SubscriptionType& type, const std::string& duration, const uint64_t& number);
@@ -26,6 +27,9 @@ public:
     Person GetPersonInfo() const;
     void SetPersonInfo(const std::string& surname, const std::string& name, const std::string& phoneNumber);
     void SetPersonInfo(const Person& person);
+    std::string GetSurname() const;
+    std::string GetName() const;
+    std::string GetPhoneNumber() const;
 
     uint64_t GetNumber() const;
     void SetNumber(const uint64_t& newNumber);

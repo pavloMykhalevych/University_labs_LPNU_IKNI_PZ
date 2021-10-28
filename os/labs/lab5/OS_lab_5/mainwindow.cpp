@@ -27,13 +27,14 @@ double GetCpuTime(HANDLE &pi){
             return ((double)userSystemTime.wHour * 3600.0 +
             (double)userSystemTime.wMinute * 60.0 +
             (double)userSystemTime.wSecond +
-            (double)userSystemTime.wMilliseconds / 1000.0)*1000;
+            (double)userSystemTime.wMilliseconds / 1000.0);
         else return -2;
     } else return -1;
 }
 
 std::mutex mu;
 HANDLE semaphore;
+HANDLE WinMutex;
 double time_threads = 0;
 int sum = 0;
 int myindex = 0;
@@ -83,6 +84,7 @@ MainWindow::~MainWindow()
         }
     }
     CloseHandle(semaphore);
+    CloseHandle(WinMutex);
     delete ui;
 }
 
@@ -105,6 +107,7 @@ void ArraySum(int* param)
 {
     //Sleep(1000);
     //system("pause");
+    Sleep(10000);
     const auto start = std::chrono::high_resolution_clock::now();
     for(int i = param[0]; i< param[1]; i++){
         if(i == 0){
@@ -125,6 +128,7 @@ void ArraySum(int* param)
 void MutexArraySum(int* param)
 {
     mu.lock();
+    Sleep(1000);
     const auto start = std::chrono::high_resolution_clock::now();
     //Sleep(1000);
     //system("pause");
@@ -148,6 +152,7 @@ void MutexArraySum(int* param)
 void SemaphorArraySum(int* param)
 {
     WaitForSingleObject(semaphore, INFINITE);
+    Sleep(10000);
     const auto start = std::chrono::high_resolution_clock::now();
     //Sleep(1000);
     //system("pause");
@@ -166,6 +171,30 @@ void SemaphorArraySum(int* param)
     const auto end = std::chrono::high_resolution_clock::now();
     time_threads += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 1e-6;
     ReleaseSemaphore(semaphore, 1, nullptr);
+}
+
+void WinMutexArraySum(int* param)
+{
+    WaitForSingleObject(WinMutex, INFINITE);
+    Sleep(1000);
+    const auto start = std::chrono::high_resolution_clock::now();
+    //Sleep(1000);
+    //system("pause");
+    for(int i = param[0]; i< param[1]; i++){
+        if(i == 0){
+            array[i] = 2;
+            sum+=array[i];
+            continue;
+        }
+        array[i] = array[i-1]*i + exp(i);
+        //sum+=array[i];
+        sum+=1;
+        std::cout<<myindex++<< " // " << std::endl;
+    }
+    std::cout<<"In current thread ("<<GetCurrentThreadId()<<")(semaphor): sum =" << sum << std::endl;
+    const auto end = std::chrono::high_resolution_clock::now();
+    time_threads += std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count() * 1e-6;
+    ReleaseMutex(WinMutex);
 }
 
 void MainWindow::MySlot(){
@@ -211,7 +240,7 @@ QPushButton* btn = (QPushButton*) sender();
         std::cout << sum << std::endl;*/
 
         semaphore = CreateSemaphore(0, 1, 1, nullptr);
-
+        WinMutex = CreateMutex(nullptr, FALSE, nullptr);
         for(int i = 0; i<ui->comboBox_thread_count->currentText().toInt(); i++){
             int* param = new int[2];
             array.resize(ui->spinBox_array_size->value());
@@ -220,6 +249,8 @@ QPushButton* btn = (QPushButton*) sender();
             if(ui->radioButton->isChecked()){
                 myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&MutexArraySum, param, 0, &mythreadid[i]);
             }else if(ui->radioButton_semaphor->isChecked()){
+                myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&SemaphorArraySum, param, 0, &mythreadid[i]);
+            }else if(ui->radioButton_winMutex->isChecked()){
                 myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&SemaphorArraySum, param, 0, &mythreadid[i]);
             }else{
                 myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
