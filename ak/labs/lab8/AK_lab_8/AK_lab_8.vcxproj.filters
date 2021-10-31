@@ -24,6 +24,9 @@
     <Text Include="tracker_needed.txt">
       <Filter>Source Files</Filter>
     </Text>
+    <Text Include="lab9_2.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="AK_lab_8.asm">

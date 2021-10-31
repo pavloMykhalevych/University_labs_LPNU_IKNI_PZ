@@ -141,6 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <Text Include="lab9.txt" />
+    <Text Include="lab9_2.txt" />
     <Text Include="Source.txt" />
     <Text Include="tracker_needed.txt" />
   </ItemGroup>
