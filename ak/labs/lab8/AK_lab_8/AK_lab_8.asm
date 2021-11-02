@@ -58,14 +58,14 @@ START:
  call skipSpaces     ; викликаємо пропуск пробілів
  add spacesCound, ecx   ; збільшуємо кількість пробілів
  call getWordLen     ; записуємо довжину слова в ecx
- add birthday_len, cl   ; зберігаємо довжину ім'я в name_len
+ add birthday_len, cl   ; зберігаємо довжину birthday в birthday_len
 
  ;копіюємо слово в birthday
 
  mov eax, edi     ; зберігаємо попереднє значення edi перед копіюванням
  mov esi, edi
  sub esi, ecx     ; записуємо в esi початок слова
- lea edi, birthday    ; зберігаємо розміщення name_
+ lea edi, birthday    ; зберігаємо розміщення birthday
  rep movsb      ; копіюємо значення
  mov edi, eax     ; відновлюємо попереднє значення edi
  ;==================================
