@@ -1,5 +1,4 @@
-includelib Irvine32.lib
-include Irvine32.inc
+include C:\LPNU\ak\labs\lab9\AK_lab9\Debug\irvine\Irvine32-master\Irvine32.inc
 
 .586P
 .MODEL FLAT, STDCALL
@@ -9,7 +8,7 @@ _DATA SEGMENT
 fileName db "Mykhalevych_Pavlo.txt"
 fileHandle dd ?
 
-string db "Mykhalevych Pavlo   07.07.2003    Lviv  PZ-23 00", 0
+string db "Mykhalevych Pavlo   07.07.2003    Lviv  PZ-23", 0
 stringLen equ $-string
 
 string2 db "OP 89 English 95", 0
@@ -27,59 +26,59 @@ _DATA ENDS
 _TEXT SEGMENT
 START:
 
-	INVOKE CreateFile,
-		ADDR filename, GENERIC_WRITE, DO_NOT_SHARE, NULL,
-		CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0
-
-	mov fileHandle, eax
-
-	INVOKE WriteFile,
-		fileHandle, ADDR string,
-		stringLen, ADDR writtenBytes, 0
-
-	INVOKE CloseHandle,
-		fileHandle
-
- ; Зчитуємо із файлу
- ;==================================================================
 	;INVOKE CreateFile,
-		;ADDR filename, GENERIC_READ, DO_NOT_SHARE,
-		;NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0
+		;ADDR filename, GENERIC_WRITE, DO_NOT_SHARE, NULL,
+		;CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0
 
 	;mov fileHandle, eax
 
-	;INVOKE ReadFile,
-		;fileHandle, ADDR readStr, stringLen, ADDR readBytesCount, 0
+	;INVOKE WriteFile,
+		;fileHandle, ADDR string,
+		;stringLen, ADDR writtenBytes, 0
 
-	;mov esi, readBytesCount
-	;mov readStr [esi], 0
-	;mov edx, OFFSET readStr
+	;INVOKE CloseHandle,
+		;fileHandle
 
-	;lea edi, readStr
-	;call skipSpaces;
+ ; Зчитуємо із файлу
+ ;==================================================================
+	INVOKE CreateFile,
+		ADDR filename, GENERIC_READ, DO_NOT_SHARE,
+		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0
 
-	;mov eax, [edi]
-	;mov sym, al
+	mov fileHandle, eax
+
+	INVOKE ReadFile,
+		fileHandle, ADDR readStr, stringLen, ADDR readBytesCount, 0
+
+	mov esi, readBytesCount
+	mov readStr [esi], 0
+	mov edx, OFFSET readStr
+
+	lea edi, readStr
+	call skipSpaces;
+
+	mov eax, [edi]
+	mov sym, al
 
  ; Обраховуємо скільки разів входить перший символ в зчитану стрічку
  ;==================================================================
-	;mov edx, stringLen
-	;dec edx
+	mov edx, stringLen
+	dec edx
 
-;L:
-	;inc symCount
-	;call findChar
+L:
+	inc symCount
+	call findChar
 
-	;mov ebx, i
+	mov ebx, i
 
-	;cmp ebx, edx
- ;jb L
-	;dec symCount
+	cmp ebx, edx
+jb L
+	dec symCount
  ;==================================================================
 
  ; Дописуємо в файл
  ;==================================================================
- INVOKE CloseHandle,
+INVOKE CloseHandle,
   fileHandle
 
 	;INVOKE CreateFile,

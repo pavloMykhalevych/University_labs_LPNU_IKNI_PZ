@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{a82c3cef-273a-4eef-ae83-104d3a4709f3}</ProjectGuid>
-    <RootNamespace>AKlab8</RootNamespace>
+    <ProjectGuid>{9a6895ac-5ca5-48f7-90d8-2b089488dbd5}</ProjectGuid>
+    <RootNamespace>AKlab9</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -109,11 +109,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
       <AdditionalDependencies>Irvine32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>C:\irvine</AdditionalLibraryDirectories>
     </Link>
     <MASM>
-      <IncludePaths>C:\irvine</IncludePaths>
+      <IncludePaths>
+      </IncludePaths>
     </MASM>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -145,13 +147,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="lab9.txt" />
-    <Text Include="lab9_2.txt" />
-    <Text Include="Source.txt" />
-    <Text Include="tracker_needed.txt" />
+    <MASM Include="source.asm" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="AK_lab_8.asm" />
+    <Text Include="lab10.txt" />
+    <Text Include="lab9.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
