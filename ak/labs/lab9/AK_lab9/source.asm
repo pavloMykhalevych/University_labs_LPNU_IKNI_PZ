@@ -1,151 +1,135 @@
-include C:\LPNU\ak\labs\lab9\AK_lab9\Debug\irvine\Irvine32-master\Irvine32.inc
+.586
 
-.586P
-.MODEL FLAT, STDCALL
-;------------------------------------------------
-_DATA SEGMENT
+.model flat, stdcall
 
-fileName db "Mykhalevych_Pavlo.txt"
-fileHandle dd ?
+option casemap:none
 
-string db "Mykhalevych Pavlo   07.07.2003    Lviv  PZ-23", 0
-stringLen equ $-string
+include c:\LPNU\ak\labs\lab9\AK_lab9\Debug\MASM32-SDK-master\include\windows.inc
+include c:\LPNU\ak\labs\lab9\AK_lab9\Debug\MASM32-SDK-master\include\kernel32.inc
+include c:\LPNU\ak\labs\lab9\AK_lab9\Debug\MASM32-SDK-master\include\user32.inc
+include c:\LPNU\ak\labs\lab9\AK_lab9\Debug\MASM32-SDK-master\include\masm32.inc
+;includelib c:\masm32\lib\kernel32.lib
+;includelib c:\masm32\lib\user32.lib
+;includelib c:\masm32\lib\masm32.lib
 
-string2 db "OP 89 English 95", 0
-stringLen2 equ $-string2
-writtenBytes dd ?
+.stack
 
-readStr db stringLen dup(0)
-readBytesCount dd 0
+.data
 
-i dd 0
-sym db ?
-symCount dd 0
+surname byte "Mykhalevych",0
+nname byte "Pavlo",0
+mgroup byte "PZ-23",0
 
-_DATA ENDS
-_TEXT SEGMENT
-START:
+color DWORD 0
+SSize DWORD 5
+Counter dword 200000
+hStdHnd DWORD ?
+written DWORD ?
+colors word 55 DUP(?)
+black word 55 DUP(?)
 
-	;INVOKE CreateFile,
-		;ADDR filename, GENERIC_WRITE, DO_NOT_SHARE, NULL,
-		;CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, 0
+.code
 
-	;mov fileHandle, eax
+main PROC
 
-	;INVOKE WriteFile,
-		;fileHandle, ADDR string,
-		;stringLen, ADDR writtenBytes, 0
+LOCAL systime:SYSTEMTIME
+invoke GetStdHandle,STD_OUTPUT_HANDLE
+mov hStdHnd,EAX
+invoke nrandom, 20
+invoke SetConsoleCursorPosition, hStdHnd, EAX
+lea ESI,surname
+mov ECX, 7
+print:
+invoke GetSystemTime, addr systime
+invoke nseed, systime.wSecond
+invoke nrandom,4
+or color, EAX
+invoke nrandom,8
+or color, EAX
+invoke nrandom,64
+or color,EAX
+invoke nrandom,128
+or color,EAX
+invoke SetConsoleTextAttribute, hStdHnd, color
+invoke WriteConsole, hStdHnd, ESI, 1, addr written, NULL
+mov color,0
+invoke Sleep, 1500
+add ESI,1
+dec SSize
+loop print
+mov ECX, 6
+invoke nrandom, 20
+add EAX,25
+invoke SetConsoleCursorPosition, hStdHnd, EAX
+lea ESI,nname
 
-	;INVOKE CloseHandle,
-		;fileHandle
+name:
 
- ; Зчитуємо із файлу
- ;==================================================================
-	INVOKE CreateFile,
-		ADDR filename, GENERIC_READ, DO_NOT_SHARE,
-		NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0
+invoke GetSystemTime, addr systime
+invoke nseed, systime.wSecond
+invoke nrandom,4
+or color, EAX
+invoke nrandom,8
+or color, EAX
+invoke nrandom,64
+or color,EAX
+invoke nrandom,128
+or color,EAX
+or color, 256
+invoke SetConsoleTextAttribute, hStdHnd, color
+invoke WriteConsole, hStdHnd, ESI, 1, addr written, NULL
+mov color,0
+invoke Sleep, 1500
+inc ESI
+dec SSize
 
-	mov fileHandle, eax
+loop name
 
-	INVOKE ReadFile,
-		fileHandle, ADDR readStr, stringLen, ADDR readBytesCount, 0
+mov ECX, 5
+invoke nrandom, 20
+add EAX,50
+invoke SetConsoleCursorPosition, hStdHnd, EAX
+lea ESI,mgroup
 
-	mov esi, readBytesCount
-	mov readStr [esi], 0
-	mov edx, OFFSET readStr
+group:
 
-	lea edi, readStr
-	call skipSpaces;
+invoke GetSystemTime, addr systime
+invoke nseed, systime.wSecond
+invoke nrandom,4
+or color, EAX
+invoke nrandom,8
+or color, EAX
+invoke nrandom,64
+or color,EAX
+invoke nrandom,128
+or color,EAX
+or color, 256
+invoke SetConsoleTextAttribute, hStdHnd, color
+invoke WriteConsole, hStdHnd, ESI, 1, addr written, NULL
+mov color,0
+invoke Sleep, 1500
+add ESI,1
+dec SSize
 
-	mov eax, [edi]
-	mov sym, al
+loop group
 
- ; Обраховуємо скільки разів входить перший символ в зчитану стрічку
- ;==================================================================
-	mov edx, stringLen
-	dec edx
+invoke ReadConsoleOutputAttribute, hStdHnd, addr colors, 56, 25, addr written
+invoke ReadConsoleOutputAttribute, hStdHnd, addr black, 56, 76, addr written
 
-L:
-	inc symCount
-	call findChar
+.REPEAT
 
-	mov ebx, i
+invoke WriteConsoleOutputAttribute, hStdHnd, addr black,56,25, addr written
+invoke WriteConsoleOutputAttribute, hStdHnd, addr colors,56,25, addr written
+lea ESI,black
+dec Counter
 
-	cmp ebx, edx
-jb L
-	dec symCount
- ;==================================================================
+.UNTIL Counter == 0
 
- ; Дописуємо в файл
- ;==================================================================
-INVOKE CloseHandle,
-  fileHandle
+invoke SetConsoleTextAttribute, hStdHnd, FOREGROUND_BLUE or FOREGROUND_GREEN or FOREGROUND_RED
+invoke ClearScreen
+invoke WriteConsoleOutputAttribute, hStdHnd, addr black,56,0, addr written
+invoke WriteConsoleOutputAttribute, hStdHnd, addr black,30,56, addr written
 
-	;INVOKE CreateFile,
-		;ADDR fileName, GENERIC_WRITE,
-		;DO_NOT_SHARE, NULL, OPEN_EXISTING,
-		;FILE_ATTRIBUTE_NORMAL, 0
-
-	;mov fileHandle, eax
-
-	;INVOKE SetFilePointer,
-		;fileHandle, 0, 0, FILE_END
-
-	;INVOKE WriteFile,
-		;fileHandle, ADDR string2,
-		;stringLen2, ADDR writtenBytes, 0
-
-	;INVOKE CloseHandle,
-		;fileHandle
- ;==================================================================
-
-	jmp PROGRAM_END
-
-;====================================================================
-; пропускає пробільні символи
-;====================================================================
-	skipSpaces:
-		mov ecx, stringLen
-		inc i
-		sub ecx, i
-		dec i
-		mov ebx, ecx
-
-		mov al, ' '
-		cld
-		repe scasb
-		dec edi
-
-		sub ebx, ecx
-		dec ebx
-		mov ecx, ebx
-
-		add i, ebx
-	ret
-;====================================================================
-; шукає певний символ
-;====================================================================
-	findChar:
-		mov ecx, stringLen
-		inc i
-		sub ecx, i
-		dec i
-		mov ebx, ecx
-
-		mov al, sym
-		cld
-		repne scasb
-		;dec edi
-
-		sub ebx, ecx
-		dec ebx
-		mov ecx, ebx
-
-		add i, ebx
-		inc i
-	ret
-
-PROGRAM_END:
-RET
-_TEXT ENDS
-END START
+ret
+main ENDP
+end main
