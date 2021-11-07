@@ -6,6 +6,7 @@
 #include <QTableWidget>
 
 #include "subscription.h"
+#include "mainwindow.h"
 
 void RemoveSpaces(std::string& myString);
 
@@ -14,5 +15,9 @@ void ShowSameType(QTableWidget* tableWidget,const std::vector<Subscription>& myS
 void ShowSameDuration(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect);
 
 void ShowMostType(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect);
+
+void FuncForResizeEvent(QTableWidget* tableWidget, MainWindow * mainWindow);
+
+void SetTableWidget(QTableWidget* tableWidget, MainWindow * mainWindow);
 
 #endif // FUNCTIONS_H

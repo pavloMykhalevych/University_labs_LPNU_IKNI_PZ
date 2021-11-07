@@ -24,11 +24,12 @@ public:
     Subscription(const Subscription& otherSubscription);
 
     Person GetPersonInfo() const;
-    void SetPersonInfo(const std::string& surname, const std::string& name, const std::string& phoneNumber);
     void SetPersonInfo(const Person& person);
+
     std::string GetSurname() const;
     std::string GetName() const;
     std::string GetPhoneNumber() const;
+    void SetPersonInfo(const std::string& surname, const std::string& name, const std::string& phoneNumber);
 
     uint64_t GetNumber() const;
     void SetNumber(const uint64_t& newNumber);

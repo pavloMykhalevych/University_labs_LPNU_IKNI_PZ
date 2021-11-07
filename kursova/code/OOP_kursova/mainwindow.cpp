@@ -12,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    // Setting UI
     setCentralWidget(ui->stackedWidget);
 
     ui->stackedWidget->insertWidget(0,ui->tableWidget);
@@ -42,25 +43,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->stackedWidget->setCurrentIndex(0);
 
-    ui->tableWidget->setColumnWidth(0,50);
-    int widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget->setColumnWidth(1,widthToSet);
-    ui->tableWidget->setColumnWidth(2,widthToSet);
-    ui->tableWidget->setColumnWidth(3,150);
-    ui->tableWidget->setColumnWidth(4,widthToSet);
-    ui->tableWidget->setColumnWidth(5,140-3);
+    SetTableWidget(ui->tableWidget,this);
 
-    for (auto i = 0; i < ui->tableWidget->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget->setItem(i,j,item);
-        }
-    }
     int widthToSet_2 = (this->width() - 290) / 3;
     if(widthToSet_2 < 150){
         widthToSet_2 = 150;
@@ -80,125 +64,17 @@ MainWindow::MainWindow(QWidget *parent)
         }
     }
 
-    ui->tableWidget_number->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_number->setColumnWidth(1,widthToSet);
-    ui->tableWidget_number->setColumnWidth(2,widthToSet);
-    ui->tableWidget_number->setColumnWidth(3,150);
-    ui->tableWidget_number->setColumnWidth(4,widthToSet);
-    ui->tableWidget_number->setColumnWidth(5,140-3);
+    SetTableWidget(ui->tableWidget_number,this);
 
-    for (auto i = 0; i < ui->tableWidget_number->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_number->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_number->setItem(i,j,item);
-        }
-    }
+    SetTableWidget(ui->tableWidget_surname,this);
 
-    ui->tableWidget_surname->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_surname->setColumnWidth(1,widthToSet);
-    ui->tableWidget_surname->setColumnWidth(2,widthToSet);
-    ui->tableWidget_surname->setColumnWidth(3,150);
-    ui->tableWidget_surname->setColumnWidth(4,widthToSet);
-    ui->tableWidget_surname->setColumnWidth(5,140-3);
+    SetTableWidget(ui->tableWidget_ph_num,this);
 
-    for (auto i = 0; i < ui->tableWidget_surname->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_surname->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_surname->setItem(i,j,item);
-        }
-    }
+    SetTableWidget(ui->tableWidget_sameduration,this);
 
-    ui->tableWidget_ph_num->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_ph_num->setColumnWidth(1,widthToSet);
-    ui->tableWidget_ph_num->setColumnWidth(2,widthToSet);
-    ui->tableWidget_ph_num->setColumnWidth(3,150);
-    ui->tableWidget_ph_num->setColumnWidth(4,widthToSet);
-    ui->tableWidget_ph_num->setColumnWidth(5,140-3);
+    SetTableWidget(ui->tableWidget_most_type,this);
 
-    for (auto i = 0; i < ui->tableWidget_ph_num->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_ph_num->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_ph_num->setItem(i,j,item);
-        }
-    }
-
-    ui->tableWidget_sameduration->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_sameduration->setColumnWidth(1,widthToSet);
-    ui->tableWidget_sameduration->setColumnWidth(2,widthToSet);
-    ui->tableWidget_sameduration->setColumnWidth(3,150);
-    ui->tableWidget_sameduration->setColumnWidth(4,widthToSet);
-    ui->tableWidget_sameduration->setColumnWidth(5,140-3);
-
-    for (auto i = 0; i < ui->tableWidget_sameduration->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_sameduration->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_sameduration->setItem(i,j,item);
-        }
-    }
-
-    ui->tableWidget_most_type->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_most_type->setColumnWidth(1,widthToSet);
-    ui->tableWidget_most_type->setColumnWidth(2,widthToSet);
-    ui->tableWidget_most_type->setColumnWidth(3,150);
-    ui->tableWidget_most_type->setColumnWidth(4,widthToSet);
-    ui->tableWidget_most_type->setColumnWidth(5,140-3);
-
-    for (auto i = 0; i < ui->tableWidget_most_type->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_most_type->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_most_type->setItem(i,j,item);
-        }
-    }
-
-    ui->tableWidget_same_type->setColumnWidth(0,50);
-    widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget_same_type->setColumnWidth(1,widthToSet);
-    ui->tableWidget_same_type->setColumnWidth(2,widthToSet);
-    ui->tableWidget_same_type->setColumnWidth(3,150);
-    ui->tableWidget_same_type->setColumnWidth(4,widthToSet);
-    ui->tableWidget_same_type->setColumnWidth(5,140-3);
-
-    for (auto i = 0; i < ui->tableWidget_same_type->rowCount(); i++) {
-        for (auto j = 0; j < ui->tableWidget_same_type->columnCount(); j++) {
-            QTableWidgetItem* item = new QTableWidgetItem();
-            item->setText("");
-            item->setTextAlignment(Qt::AlignCenter);
-            ui->tableWidget_same_type->setItem(i,j,item);
-        }
-    }
+    SetTableWidget(ui->tableWidget_same_type,this);
 }
 
 MainWindow::~MainWindow()
@@ -206,7 +82,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+// Open the widget with editable table.
 void MainWindow::on_actionEdit_table_triggered()
 {
     ui->stackedWidget->setCurrentIndex(1);
@@ -222,6 +98,7 @@ void MainWindow::on_actionEdit_table_triggered()
     ui->actionWrite_to_file->setEnabled(false);
 }
 
+// Go back to table.
 void MainWindow::on_actionBack_to_table_triggered()
 {
     ui->stackedWidget->setCurrentIndex(0);
@@ -237,16 +114,9 @@ void MainWindow::on_actionBack_to_table_triggered()
     ui->actionWrite_to_file->setEnabled(true);
 }
 
+// Event that resize the table.
 void MainWindow::resizeEvent(QResizeEvent *)
 {
-    int widthToSet = (this->width() - 340) / 3;
-    if(widthToSet < 150){
-        widthToSet = 150;
-    }
-    ui->tableWidget->setColumnWidth(1,widthToSet);
-    ui->tableWidget->setColumnWidth(2,widthToSet);
-    ui->tableWidget->setColumnWidth(4,widthToSet);
-
     int widthToSet_2 = (this->width() - 290) / 3;
     if(widthToSet_2 < 150){
         widthToSet_2 = 150;
@@ -254,68 +124,44 @@ void MainWindow::resizeEvent(QResizeEvent *)
     ui->tableWidget_2->setColumnWidth(0,widthToSet_2);
     ui->tableWidget_2->setColumnWidth(1,widthToSet_2);
     ui->tableWidget_2->setColumnWidth(3,widthToSet_2);
+
+    FuncForResizeEvent(ui->tableWidget,this);
+    FuncForResizeEvent(ui->tableWidget_most_type,this);
+    FuncForResizeEvent(ui->tableWidget_number,this);
+    FuncForResizeEvent(ui->tableWidget_ph_num,this);
+    FuncForResizeEvent(ui->tableWidget_same_type,this);
+    FuncForResizeEvent(ui->tableWidget_sameduration,this);
+    FuncForResizeEvent(ui->tableWidget_surname,this);
 }
 
+// Open the widget where you give the number and get the info about person with such number.
 void MainWindow::on_actionGive_number_Get_duration_triggered()
 {
     ui->stackedWidget->setCurrentIndex(5);
-    ui->actionAdd->setVisible(false);
-    ui->actionAdd->setEnabled(false);
-    ui->actionBack_to_table->setVisible(true);
-    ui->actionBack_to_table->setEnabled(true);
-    ui->actionEdit_table->setVisible(false);
-    ui->actionEdit_table->setEnabled(false);
-    ui->actionRead_from_file->setVisible(false);
-    ui->actionRead_from_file->setEnabled(false);
-    ui->actionWrite_to_file->setVisible(false);
-    ui->actionWrite_to_file->setEnabled(false);
+    BackToTableOff();
 }
 
+// Open the widget where you give the surname and get the info about person with such surname.
 void MainWindow::on_actionGive_surname_triggered()
 {
     ui->stackedWidget->setCurrentIndex(6);
-    ui->actionAdd->setVisible(false);
-    ui->actionAdd->setEnabled(false);
-    ui->actionBack_to_table->setVisible(true);
-    ui->actionBack_to_table->setEnabled(true);
-    ui->actionEdit_table->setVisible(false);
-    ui->actionEdit_table->setEnabled(false);
-    ui->actionRead_from_file->setVisible(false);
-    ui->actionRead_from_file->setEnabled(false);
-    ui->actionWrite_to_file->setVisible(false);
-    ui->actionWrite_to_file->setEnabled(false);
+    BackToTableOff();
 }
 
+// Open the widget where you give the phone number and get the info about person with such phone number.
 void MainWindow::on_actionGive_phone_number_triggered()
 {
     ui->stackedWidget->setCurrentIndex(7);
-    ui->actionAdd->setVisible(false);
-    ui->actionAdd->setEnabled(false);
-    ui->actionBack_to_table->setVisible(true);
-    ui->actionBack_to_table->setEnabled(true);
-    ui->actionEdit_table->setVisible(false);
-    ui->actionEdit_table->setEnabled(false);
-    ui->actionRead_from_file->setVisible(false);
-    ui->actionRead_from_file->setEnabled(false);
-    ui->actionWrite_to_file->setVisible(false);
-    ui->actionWrite_to_file->setEnabled(false);
+    BackToTableOff();
 }
 
+// Show people who have the most used subscription type.
 void MainWindow::on_actionShow_most_used_type_triggered()
 {
     try{
         ui->tableWidget_most_type->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(3);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowMostType(ui->tableWidget_most_type, SubscriptionVector);
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -323,21 +169,13 @@ void MainWindow::on_actionShow_most_used_type_triggered()
 
 }
 
+// Show people who have the most used duration.
 void MainWindow::on_actionShow_with_same_duration_triggered()
 {
     try{
         ui->tableWidget_sameduration->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(4);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowSameDuration(ui->tableWidget_sameduration, SubscriptionVector);
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -345,12 +183,17 @@ void MainWindow::on_actionShow_with_same_duration_triggered()
 
 }
 
+// Show person with the number you give.
 void MainWindow::on_pushButton_num_clicked()
 {
     try{
+        if(SubscriptionVector.empty()){
+            QMessageBox::information(NULL,"Info","There is no data.");
+            return;
+        }
         ui->tableWidget_number->setRowCount(1);
-        for (auto i = 0; i < ui->tableWidget_2->rowCount(); i++) {
-            for (auto j = 0; j < ui->tableWidget_2->columnCount(); j++) {
+        for (auto i = 0; i < ui->tableWidget_number->rowCount(); i++) {
+            for (auto j = 0; j < ui->tableWidget_number->columnCount(); j++) {
                 ui->tableWidget_number->item(i,j)->setText("");
             }
         }
@@ -360,10 +203,15 @@ void MainWindow::on_pushButton_num_clicked()
             QMessageBox::warning(NULL,"Wrong input","Please, enter the positive integer number.");
             return;
         }
+        int count = 0;
         for(const auto& subscription : SubscriptionVector){
             if(subscription.GetNumber() == number){
                 ui->tableWidget_number << subscription;
+                ++count;
             }
+        }
+        if(count == 0){
+            QMessageBox::information(NULL,"Info","There is no person with such phone number.");
         }
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -371,12 +219,17 @@ void MainWindow::on_pushButton_num_clicked()
 
 }
 
+// Show people with the surname you give.
 void MainWindow::on_pushButton_surname_clicked()
 {
     try{
+        if(SubscriptionVector.empty()){
+            QMessageBox::information(NULL,"Info","There is no data.");
+            return;
+        }
         ui->tableWidget_surname->setRowCount(1);
-        for (auto i = 0; i < ui->tableWidget_2->rowCount(); i++) {
-            for (auto j = 0; j < ui->tableWidget_2->columnCount(); j++) {
+        for (auto i = 0; i < ui->tableWidget_surname->rowCount(); i++) {
+            for (auto j = 0; j < ui->tableWidget_surname->columnCount(); j++) {
                 ui->tableWidget_surname->item(i,j)->setText("");
             }
         }
@@ -385,10 +238,15 @@ void MainWindow::on_pushButton_surname_clicked()
             QMessageBox::warning(NULL,"Wrong input","Please, enter the right surname.");
             return;
         }
+        int count = 0;
         for(const auto& subscription : SubscriptionVector){
             if(subscription.GetSurname() == surname){
                 ui->tableWidget_surname << subscription;
+                ++count;
             }
+        }
+        if(count == 0){
+            QMessageBox::information(NULL,"Info","There is no person with such surname.");
         }
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -396,12 +254,17 @@ void MainWindow::on_pushButton_surname_clicked()
 
 }
 
+// Show people with the phone number you give.
 void MainWindow::on_pushButton_ph_num_clicked()
 {
     try{
+        if(SubscriptionVector.empty()){
+            QMessageBox::information(NULL,"Info","There is no data.");
+            return;
+        }
         ui->tableWidget_ph_num->setRowCount(1);
-        for (auto i = 0; i < ui->tableWidget_2->rowCount(); i++) {
-            for (auto j = 0; j < ui->tableWidget_2->columnCount(); j++) {
+        for (auto i = 0; i < ui->tableWidget_surname->rowCount(); i++) {
+            for (auto j = 0; j < ui->tableWidget_surname->columnCount(); j++) {
                 ui->tableWidget_ph_num->item(i,j)->setText("");
             }
         }
@@ -420,10 +283,15 @@ void MainWindow::on_pushButton_ph_num_clicked()
             throw std::runtime_error("The phone number is incorrect!");
             return;
         }
+        int count = 0;
         for(const auto& subscription : SubscriptionVector){
             if(subscription.GetPhoneNumber() == ph_number){
                 ui->tableWidget_ph_num << subscription;
+                ++count;
             }
+        }
+        if(count == 0){
+            QMessageBox::information(NULL,"Info","There is no person with such phone number.");
         }
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -431,21 +299,13 @@ void MainWindow::on_pushButton_ph_num_clicked()
 
 }
 
+// Show person with the subscription type you pick.
 void MainWindow::on_actionSimple_First_Half_Day_triggered()
 {
     try{
         ui->tableWidget_same_type->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(2);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowSameType(ui->tableWidget_same_type, SubscriptionVector, SubscriptionType::SimpleFirstHalfDay);
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -453,21 +313,13 @@ void MainWindow::on_actionSimple_First_Half_Day_triggered()
 
 }
 
+// Show person with the subscription type you pick.
 void MainWindow::on_actionSimple_Full_Day_triggered()
 {
     try{
         ui->tableWidget_same_type->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(2);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowSameType(ui->tableWidget_same_type, SubscriptionVector, SubscriptionType::SimpleFullDay);
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -475,21 +327,13 @@ void MainWindow::on_actionSimple_Full_Day_triggered()
 
 }
 
+// Show person with the subscription type you pick.
 void MainWindow::on_actionLux_Full_Day_triggered()
 {
     try{
         ui->tableWidget_same_type->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(2);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowSameType(ui->tableWidget_same_type, SubscriptionVector, SubscriptionType::LuxFullDay);
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -497,27 +341,20 @@ void MainWindow::on_actionLux_Full_Day_triggered()
 
 }
 
+// Show person with the subscription type you pick.
 void MainWindow::on_actionSuper_Lux_Full_Day_triggered()
 {
     try {
         ui->tableWidget_same_type->setRowCount(1);
         ui->stackedWidget->setCurrentIndex(2);
-        ui->actionAdd->setVisible(false);
-        ui->actionAdd->setEnabled(false);
-        ui->actionBack_to_table->setVisible(true);
-        ui->actionBack_to_table->setEnabled(true);
-        ui->actionEdit_table->setVisible(false);
-        ui->actionEdit_table->setEnabled(false);
-        ui->actionRead_from_file->setVisible(false);
-        ui->actionRead_from_file->setEnabled(false);
-        ui->actionWrite_to_file->setVisible(false);
-        ui->actionWrite_to_file->setEnabled(false);
+        BackToTableOff();
         ShowSameType(ui->tableWidget_same_type, SubscriptionVector, SubscriptionType::SuperLuxFullDay);
     }  catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
     }
 }
 
+// Read the info from file and fill the table.
 void MainWindow::on_actionRead_from_file_triggered()
 {
     try{
@@ -528,6 +365,7 @@ void MainWindow::on_actionRead_from_file_triggered()
     }
 }
 
+// Write the info from table to file.
 void MainWindow::on_actionWrite_to_file_triggered()
 {
     try{
@@ -537,6 +375,7 @@ void MainWindow::on_actionWrite_to_file_triggered()
     }
 }
 
+// Add person you write to table.
 void MainWindow::on_actionAdd_triggered()
 {
     try{
@@ -550,5 +389,20 @@ void MainWindow::on_actionAdd_triggered()
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
     }
+}
+
+// Some prosperities needed when you go to additional widgets.
+void MainWindow::BackToTableOff()
+{
+    ui->actionAdd->setVisible(false);
+    ui->actionAdd->setEnabled(false);
+    ui->actionBack_to_table->setVisible(true);
+    ui->actionBack_to_table->setEnabled(true);
+    ui->actionEdit_table->setVisible(false);
+    ui->actionEdit_table->setEnabled(false);
+    ui->actionRead_from_file->setVisible(false);
+    ui->actionRead_from_file->setEnabled(false);
+    ui->actionWrite_to_file->setVisible(false);
+    ui->actionWrite_to_file->setEnabled(false);
 }
 

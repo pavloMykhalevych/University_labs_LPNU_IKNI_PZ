@@ -5,6 +5,7 @@
 #include <vector>
 #include <QString>
 #include <QStringList>
+#include <QMessageBox>
 
 #include "Functions.h"
 
@@ -112,6 +113,7 @@ Subscription::~Subscription()
 
 }
 
+// Fill vector of Subscription from file.
 void operator>>(std::string filePath,std::vector<Subscription>& mySubscriptionVect){
     std::ifstream file;
     file.open(filePath);
@@ -208,22 +210,14 @@ void operator>>(std::string filePath,std::vector<Subscription>& mySubscriptionVe
         mySubscriptionVect.push_back(mySubscription);
     }
     file.close();
-    /*QString text_line = QString::fromStdString(line);
-    if(!text_line.isEmpty()){
-        QStringList valuestr = text_line.split('|');
-        mySubscription.SetDuration(valuestr[5].toStdString());
-        mySubscription.SetNumber(valuestr[0].toInt());
-        person.m_surname = valuestr[1].toStdString();
-        person.m_name = valuestr[2].toStdString();
-        person.m_phoneNumber = valuestr[3].toStdString();
-        mySubscription.SetPersonInfo(person);
-        subscriptionType = valuestr[4].toStdString();
-    }else{
-
-    } */
 }
 
+// Write vector of Subscription to file.
 void operator<<(std::string filePath,const std::vector<Subscription>& mySubscriptionVect){
+    if(mySubscriptionVect.empty()){
+        QMessageBox::information(NULL,"Info","There is no data.");
+        return;
+    }
     std::ofstream file;
     file.open(filePath);
     std::string myType;
@@ -257,6 +251,7 @@ void operator<<(std::string filePath,const std::vector<Subscription>& mySubscrip
     file.close();
 }
 
+// Fill vector of Subscription from QTableWidget.
 void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscriptionVect){
     Subscription mySubscription;
     Person person;
@@ -335,7 +330,12 @@ void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscript
     mySubscriptionVect.push_back(mySubscription);
 }
 
+// Write vector of Subscription to QTableWidget.
 void operator<<(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect){
+    if(mySubscriptionVect.empty()){
+        QMessageBox::information(NULL,"Info","There is no data.");
+        return;
+    }
     std::string myType;
     tableWidget->setRowCount(mySubscriptionVect.size()+1);
     for (auto i = 0; i < tableWidget->rowCount(); i++) {
@@ -374,6 +374,7 @@ void operator<<(QTableWidget* tableWidget,const std::vector<Subscription>& mySub
     }
 }
 
+// Write Subscription object to the end of QTableWidget.
 void operator<<(QTableWidget* tableWidget,const Subscription& mySubscription){
     std::string myType;
     tableWidget->insertRow( tableWidget->rowCount() );

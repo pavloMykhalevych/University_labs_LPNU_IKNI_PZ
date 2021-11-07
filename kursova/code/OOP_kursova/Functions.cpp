@@ -2,7 +2,9 @@
 #include <algorithm>
 #include <map>
 #include <string>
+#include <QMessageBox>
 
+// Removes unnecessary spaces.
 void RemoveSpaces(std::string& myString){
     for (size_t i = 1; i <= myString.size(); ++i) {
         if(i-1 == 0 && myString[i - 1] == ' '){
@@ -19,20 +21,35 @@ void RemoveSpaces(std::string& myString){
     }
 }
 
+// Show person with the subscription type you pick.
 void ShowSameType(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect, const enum SubscriptionType type){
+    if(mySubscriptionVect.empty()){
+        QMessageBox::information(NULL,"Info","There is no data.");
+        return;
+    }
     for (auto i = 0; i < tableWidget->rowCount(); i++) {
         for (auto j = 0; j < tableWidget->columnCount(); j++) {
             tableWidget->item(i,j)->setText("");
         }
     }
+    int count = 0;
     for(const auto& subscription : mySubscriptionVect){
         if(subscription.GetSubscriptionType() == type){
             tableWidget << subscription;
+            ++count;
         }
+    }
+    if(count == 0){
+        QMessageBox::information(NULL,"Info","There is no person with such subscription.");
     }
 }
 
+// Show people who have the most used duration.
 void ShowSameDuration(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect){
+    if(mySubscriptionVect.empty()){
+        QMessageBox::information(NULL,"Info","There is no data.");
+        return;
+    }
     std::map<std::string,int> myMap;
     for(const auto& subscription : mySubscriptionVect){
         myMap[subscription.GetDuration()]++;
@@ -54,7 +71,12 @@ void ShowSameDuration(QTableWidget* tableWidget,const std::vector<Subscription>&
     }
 }
 
+// Show people who have the most used subscription type.
 void ShowMostType(QTableWidget* tableWidget,const std::vector<Subscription>& mySubscriptionVect){
+    if(mySubscriptionVect.empty()){
+        QMessageBox::information(NULL,"Info","There is no data.");
+        return;
+    }
     int count_1 = 0;
     int count_2 = 0;
     int count_3 = 0;
@@ -101,6 +123,40 @@ void ShowMostType(QTableWidget* tableWidget,const std::vector<Subscription>& myS
     for(const auto& subscription : mySubscriptionVect){
         if(subscription.GetSubscriptionType() == type){
             tableWidget << subscription;
+        }
+    }
+}
+
+// Function for avoiding duplication.
+void FuncForResizeEvent(QTableWidget* tableWidget, MainWindow * mainWindow){
+    int widthToSet = (mainWindow->width() - 340) / 3;
+    if(widthToSet < 150){
+        widthToSet = 150;
+    }
+    tableWidget->setColumnWidth(1,widthToSet);
+    tableWidget->setColumnWidth(2,widthToSet);
+    tableWidget->setColumnWidth(4,widthToSet);
+}
+
+// Function for avoiding duplication.
+void SetTableWidget(QTableWidget* tableWidget, MainWindow * mainWindow){
+    tableWidget->setColumnWidth(0,50);
+    int widthToSet = (mainWindow->width() - 340) / 3;
+    if(widthToSet < 150){
+        widthToSet = 150;
+    }
+    tableWidget->setColumnWidth(1,widthToSet);
+    tableWidget->setColumnWidth(2,widthToSet);
+    tableWidget->setColumnWidth(3,150);
+    tableWidget->setColumnWidth(4,widthToSet);
+    tableWidget->setColumnWidth(5,140-3);
+
+    for (auto i = 0; i < tableWidget->rowCount(); i++) {
+        for (auto j = 0; j < tableWidget->columnCount(); j++) {
+            QTableWidgetItem* item = new QTableWidgetItem();
+            item->setText("");
+            item->setTextAlignment(Qt::AlignCenter);
+            tableWidget->setItem(i,j,item);
         }
     }
 }

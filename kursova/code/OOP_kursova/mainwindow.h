@@ -54,6 +54,8 @@ private slots:
 
     void on_actionAdd_triggered();
 
+    void BackToTableOff();
+
 private:
     Ui::MainWindow *ui;
     std::vector<Subscription> SubscriptionVector;
