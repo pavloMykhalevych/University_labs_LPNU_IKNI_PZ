@@ -7,7 +7,6 @@
 
 #include "Person.h"
 #include "SubscriptionType.h"
-#include "Functions.h"
 
 class Subscription
 {
