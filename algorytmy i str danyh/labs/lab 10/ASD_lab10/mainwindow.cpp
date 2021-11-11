@@ -11,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(MySlot()));
     connect(ui->pushButton_start,SIGNAL(clicked()),this,SLOT(MySlot()));
+    ui->textEdit->setText("These modules was hard");
+    ui->textEdit_text_2->setText("I saw him earlier");
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +42,7 @@ void MainWindow::MySlot()
 {
     QPushButton* btn = (QPushButton *) sender();
     if(btn->text() == "Start"){
+        auto begin = std::chrono::high_resolution_clock::now();
         if(ui->textEdit->toPlainText() == "" || ui->textEdit_text_2->toPlainText() == ""){
             QMessageBox::information(nullptr,"No input data","Enter text 1 and text 2!");
             return;
@@ -68,11 +71,15 @@ void MainWindow::MySlot()
         std::string str;
         std::string minstr = list[minIdx].toStdString();
         str.resize(minstr.size());
-        int i = 0;
+        int idx = 0;
         for(int j = minstr.size()-1;j >= 0; j--){
-            str[i++] = minstr[j];
+            str[idx++] = minstr[j];
         }
         reverseWord = QString::fromStdString(str);
+
+        auto end = std::chrono::high_resolution_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        ui->lineEdit_task_time->setText(QString::number(elapsed.count()));
 
         QString reverseWordSpaces = " " + reverseWord + " ";
         std::string strreverseWordSpaces = reverseWordSpaces.toStdString();
@@ -82,27 +89,29 @@ void MainWindow::MySlot()
 
         int count = 0;
         int Idx = 0;
-
-        for(int i = 0; i < strlowerline_2.size(); i++){
-            for (int j = 0; j < strreverseWordSpaces.size() && i < strlowerline_2.size() ; j++) {
-                if(strlowerline_2[i] == ' '){
-                    Idx++;
-                }
-                if(strreverseWordSpaces[j] == strlowerline_2[i]){
-                    count++;
-                }else{
-                    j--;
-                    count = 0;
-                }
-                if(count == strreverseWordSpaces.size()){
-                    break;
-                }
-                i++;
+        begin = std::chrono::high_resolution_clock::now();
+        int i = 0;
+        for (int j = 0; j < strreverseWordSpaces.size() && i < strlowerline_2.size() ; j++) {
+            if(strlowerline_2[i] == ' '){
+                Idx++;
             }
+            if(strreverseWordSpaces[j] == strlowerline_2[i]){
+                count++;
+            }else{
+                j = -1;
+                count = 0;
+            }
+            if(count == strreverseWordSpaces.size()){
+                break;
+            }
+            i++;
         }
 
+        end = std::chrono::high_resolution_clock::now();
+        elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
+        ui->lineEdit_find_time->setText(QString::number(elapsed.count()));
         ui->lineEdit_rword->setText(reverseWord);
-        ui->lineEdit_rword_idx->setText(QString::number(Idx));
+        ui->lineEdit_rword_idx->setText(QString::number(Idx - 1));
     }else if(btn->text() == "Clear"){
         ui->textEdit->clear();
         ui->textEdit_text_2->clear();
@@ -110,6 +119,8 @@ void MainWindow::MySlot()
         ui->lineEdit_rword_idx->clear();
         ui->lineEdit_word->clear();
         ui->lineEdit_word_idx->clear();
+        ui->lineEdit_find_time->clear();
+        ui->lineEdit_task_time->clear();
     }
 }
 
