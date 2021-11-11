@@ -25,11 +25,18 @@ void MainWindow::MySlot()
 {
     QPushButton* btn = (QPushButton*)sender();
     if(btn->text()=="Start"){
+        ui->textEdit_result->clear();
+        int count = 0;
         for(size_t i = 0; i < g_vect.size(); ++i){
             if(g_vect[i] % 5 == 0){
                 ui->textEdit_result->append("Element found: index = " + QString::number(i+1) + " ;");
+                count++;
             }
         }
+        if(count == 0){
+            ui->textEdit_result->append("Element not found;");
+        }
+        ui->lineEdit->setText(QString::number(g_vect.size()));
     }else if(btn->text()== "Clear"){
         ui->textEdit->clear();
         ui->textEdit_result->clear();
@@ -39,7 +46,11 @@ void MainWindow::MySlot()
         g_vect.clear();
         srand(time(nullptr));
         for(auto i = 0; i < ui->spinBox->value(); ++i){
-            g_vect.push_back(rand() % 500);
+            auto num = rand() % 500;
+            //while(num % 5 == 0){
+            //    num = rand() % 500;
+            //}
+            g_vect.push_back(num);
         }
         int iter = 0;
         int iterComa = 0;
