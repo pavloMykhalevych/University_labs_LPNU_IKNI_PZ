@@ -101,7 +101,7 @@
                 }
             }
             if(count == 0){
-                ui->textEdit_result->append("Element not found;");
+                ui->textEdit_result->append("Element not found!");
             }
             ui->lineEdit->setText(QString::number(CompNum));
         }else if(btn->text()== "Clear"){

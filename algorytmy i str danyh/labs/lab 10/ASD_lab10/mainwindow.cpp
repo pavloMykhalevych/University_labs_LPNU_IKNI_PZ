@@ -111,6 +111,10 @@ void MainWindow::MySlot()
         elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - begin);
         ui->lineEdit_find_time->setText(QString::number(elapsed.count()));
         ui->lineEdit_rword->setText(reverseWord);
+        if(count != strreverseWordSpaces.size()){
+            ui->lineEdit_rword_idx->setText("Element not found!");
+            return;
+        }
         ui->lineEdit_rword_idx->setText(QString::number(Idx - 1));
     }else if(btn->text() == "Clear"){
         ui->textEdit->clear();
