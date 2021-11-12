@@ -23,12 +23,6 @@ MainWindow::~MainWindow()
 // Removes unnecessary spaces.
 std::string RemoveSpaces(std::string myString){
     for (size_t i = 1; i <= myString.size(); ++i) {
-//        if(i-1 == 0 && myString[i - 1] == ' '){
-//            myString.erase(myString.begin() + (i - 1));
-//            myString.shrink_to_fit();
-//            i--;
-//            continue;
-//        }
         if (myString[i - 1] == ' ' && (myString[i] == ' ' || myString[i] == '\0')) {
             myString.erase(myString.begin() + (i - 1));
             myString.shrink_to_fit();
