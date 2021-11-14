@@ -211,7 +211,7 @@ void MainWindow::on_pushButton_num_clicked()
             }
         }
         if(count == 0){
-            QMessageBox::information(NULL,"Info","There is no person with such phone number.");
+            QMessageBox::information(NULL,"Info","There is no person with such number.");
         }
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -233,7 +233,8 @@ void MainWindow::on_pushButton_surname_clicked()
                 ui->tableWidget_surname->item(i,j)->setText("");
             }
         }
-        const auto surname = ui->lineEdit_surname->text().toStdString();
+        auto surname = ui->lineEdit_surname->text().toStdString();
+        RemoveSpaces(surname);
         if(surname.size() > 35 || surname.size() < 3){
             QMessageBox::warning(NULL,"Wrong input","Please, enter the right surname.");
             return;
@@ -268,7 +269,8 @@ void MainWindow::on_pushButton_ph_num_clicked()
                 ui->tableWidget_ph_num->item(i,j)->setText("");
             }
         }
-        const auto ph_number = ui->lineEdit_ph_num->text().toStdString();
+        auto ph_number = ui->lineEdit_ph_num->text().toStdString();
+        RemoveSpaces(ph_number);
         if(ph_number.size() > 12 || ph_number.size() < 10 || ph_number.size() == 11){
             throw std::runtime_error("The phone number is incorrect!");
             return;

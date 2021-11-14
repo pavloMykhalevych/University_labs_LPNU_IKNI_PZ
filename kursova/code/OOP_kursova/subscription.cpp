@@ -260,6 +260,7 @@ void operator>>(QTableWidget* tableWidget,std::vector<Subscription>& mySubscript
     std::vector<std::string> tokenVect{5};
     for(auto i = 0; i < 5; ++i){
         tokenVect[i] = tableWidget->item(0,i)->text().toStdString();
+        RemoveSpaces(tokenVect[i]);
     }
     if(tokenVect[4].size() > 10 || tokenVect[4].size() < 8 || tokenVect[4].size() == 9){
         throw std::runtime_error("The duration is incorrect!");

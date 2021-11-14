@@ -16,4 +16,4 @@
 16   |Hapko                              |Taras                              |380995429873   |Simple first half day         |17.03.2022     |
 17   |Zabarnyy                           |Veronica                           |380972092552   |Simple full day               |27.05.2022     |
 18   |Mykhalevych                        |Olga                               |380992347647   |Lux full day                  |07.02.2023     |
-19   |Halynuk                            |Igor                               |380972662776   |Super Lux                     |07.07.2024     |
+19   |Mykhalevych                        |Sophia                             |380972552445   |Super Lux                     |07.04.2024     |
