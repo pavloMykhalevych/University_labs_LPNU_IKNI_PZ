@@ -360,7 +360,7 @@ void MainWindow::on_actionSuper_Lux_Full_Day_triggered()
 void MainWindow::on_actionRead_from_file_triggered()
 {
     try{
-        "C:\\LPNU\\kursova\\code\\OOP_kursova\\Input.txt" >> SubscriptionVector;
+        "Input.txt" >> SubscriptionVector;
         ui->tableWidget << SubscriptionVector;
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
@@ -371,7 +371,7 @@ void MainWindow::on_actionRead_from_file_triggered()
 void MainWindow::on_actionWrite_to_file_triggered()
 {
     try{
-        "C:\\LPNU\\kursova\\code\\OOP_kursova\\Output.txt" << SubscriptionVector;
+        "Output.txt" << SubscriptionVector;
     }catch(const std::exception& exc){
         QMessageBox::warning(NULL,"Error",QString::fromStdString(exc.what()));
     }

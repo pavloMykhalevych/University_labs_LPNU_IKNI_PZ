@@ -117,7 +117,11 @@ Subscription::~Subscription()
 void operator>>(std::string filePath,std::vector<Subscription>& mySubscriptionVect){
     std::ifstream file;
     file.open(filePath);
-
+    if (!file)
+    {
+        throw std::runtime_error("Can't open the file");
+        return;
+    }
     while(!file.eof()){
         Subscription mySubscription;
         Person person;
