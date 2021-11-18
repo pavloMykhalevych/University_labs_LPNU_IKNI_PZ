@@ -1,20 +1,11 @@
-// StaticLib1.cpp : Defines the functions for the static library.
-//
-
 #include "pch.h"
-#include "framework.h"
-#include "StaticLib1.h"
+
+#include "Functions.h"
 
 #include <Windows.h>
 #include <vector>
 #include <iostream>
 #include <mutex>
-
-
-// TODO: This is an example of a library function
-//void fnStaticLib1()
-//{
-//}
 
 int sum = 0;
 std::vector<int> array(10000, 0);
@@ -31,12 +22,8 @@ void ArraySum(int* param) {
             sum += array[i];
             continue;
         }
-
         array[i] = array[i - 1] * i + exp(i);
-
-        std::cout << "In current thread (" << GetCurrentThreadId() << "): array["<<i<<"] = " << array[i] << std::endl;
-
-        sum+=array[i];
+        sum += array[i];
         //sum += 1;
         //std::cout << myindex++ << " / " << std::endl;
     }
@@ -44,8 +31,7 @@ void ArraySum(int* param) {
     mu.unlock();
 }
 
-void StaticLibFunc() {
-    sum = 0;
+void DynamicLibFunc() {
     for (int i = 0; i < 4; i++) {
         int* param = new int[2];
         param[0] = (i) * (10000 / 4);
