@@ -15,7 +15,7 @@ std::mutex mu;
 std::vector<HANDLE> myhandle(4, 0);
 std::vector<DWORD> mythreadid(4, 0);
 
-void ArraySum(int* param) {
+void DynArraySum(int* param) {
     mu.lock();
     for (size_t i = param[0]; i < param[1]; i++) {
         if (i == 0) {
@@ -37,7 +37,7 @@ void DynamicLibFunc() {
         int* param = new int[2];
         param[0] = (i) * (10000 / 4);
         param[1] = (i + 1) * (10000 / 4);
-        myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
+        myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&DynArraySum, param, 0, &mythreadid[i]);
     }
     for (int i = 0; i < 4; i++) {
         WaitForSingleObject(myhandle[i], INFINITE);

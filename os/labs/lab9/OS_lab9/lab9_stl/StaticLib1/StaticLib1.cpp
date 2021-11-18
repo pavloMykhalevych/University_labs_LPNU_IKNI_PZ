@@ -9,6 +9,7 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
+#include <cmath>
 
 
 // TODO: This is an example of a library function
@@ -34,7 +35,7 @@ void ArraySum(int* param) {
 
         array[i] = array[i - 1] * i + exp(i);
 
-        std::cout << "In current thread (" << GetCurrentThreadId() << "): array["<<i<<"] = " << array[i] << std::endl;
+        //std::cout << "In current thread (" << GetCurrentThreadId() << "): array["<<i<<"] = " << array[i] << std::endl;
 
         sum+=array[i];
         //sum += 1;
@@ -51,8 +52,6 @@ void StaticLibFunc() {
         param[0] = (i) * (10000 / 4);
         param[1] = (i + 1) * (10000 / 4);
         myhandle[i] = CreateThread(0, 0, (LPTHREAD_START_ROUTINE)&ArraySum, param, 0, &mythreadid[i]);
-    }
-    for (int i = 0; i < 4; i++) {
         WaitForSingleObject(myhandle[i], INFINITE);
         CloseHandle(myhandle[i]);
     }
