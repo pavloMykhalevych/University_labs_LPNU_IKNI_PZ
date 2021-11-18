@@ -6,6 +6,7 @@
 #include <vector>
 #include <iostream>
 #include <mutex>
+#include <cmath>
 
 int sum = 0;
 std::vector<int> array(10000, 0);
@@ -16,7 +17,7 @@ std::vector<DWORD> mythreadid(4, 0);
 
 void ArraySum(int* param) {
     mu.lock();
-    for (int i = param[0]; i < param[1]; i++) {
+    for (size_t i = param[0]; i < param[1]; i++) {
         if (i == 0) {
             array[i] = 2;
             sum += array[i];
