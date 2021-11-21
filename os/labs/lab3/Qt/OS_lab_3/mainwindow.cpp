@@ -68,7 +68,7 @@ void MainWindow::MySlot()
             }
         }
 
-        std::wstring cmd  = L"C:\\politeh 2 kurs\\os\\labs\\lab3\\OS_lab_3\\x64\\Debug\\OS_lab_3 "
+        std::wstring cmd  = L"C:\\LPNU\\os\\labs\\lab3\\OS_lab_3\\x64\\Debug\\OS_lab_3 "
                             + std::to_wstring(rowCount) + L" " + std::to_wstring(columnCount);
         for(int i = 0; i < ProcessCount; i++){
             ZeroMemory(&si[i], sizeof(si[i]));
@@ -80,18 +80,19 @@ void MainWindow::MySlot()
                             CREATE_NEW_CONSOLE,NULL,NULL,&si[i],&pi[i]);
 
             ui->tableWidget->item(i,0)->setText(QString::number(pi[i].dwProcessId));
-            ui->tableWidget->item(i,1)->setText("Suspended");
+            //ui->tableWidget->item(i,1)->setText("Suspended");
+            ui->tableWidget->item(i,1)->setText("Running");
             ui->tableWidget->item(i,2)->setText("High");
             ui->tableWidget->item(i,3)->setText("0");
         }
 
-        Sleep(1500);
+        //Sleep(1500);
 
-        for(int i = 0; i < ProcessCount; i++)
-        {
-            SuspendThread(pi[i].hThread);
-            ui->tableWidget->item(i,3)->setText(QString::number(GetCpuTime(pi[i])));
-        }
+        //for(int i = 0; i < ProcessCount; i++)
+        //{
+        //    SuspendThread(pi[i].hThread);
+        //    ui->tableWidget->item(i,3)->setText(QString::number(GetCpuTime(pi[i])));
+        //}
 
     }else if(btn->text() == "Suspend"){
         DWORD dwCode;
