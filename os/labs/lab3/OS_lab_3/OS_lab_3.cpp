@@ -4,12 +4,16 @@
 #include <windows.h>
 #include <sstream>
 
+
+
+
 int main(int argc, const char* argv[])
 {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     int N;
     int M;
-    
+    std::stringstream str;
+
     srand(time(NULL));
     try {
         if (argc >= 2) {
@@ -86,8 +90,31 @@ int main(int argc, const char* argv[])
         else if (k % 7 == 0) {
             SetConsoleTextAttribute(hConsole, 0x04);
         }
-        std::cout << "The number of similar to first element in " << i << " column is "<< numberOfCount[i] << std::endl;
+        std::stringstream str_1;
+        str << "The number of similar to first element in " << i << " column is "<< numberOfCount[i] << std::endl;
+        str_1 << "The number of similar to first element in " << i << " column is "<< numberOfCount[i] << std::endl;
+        std::string stringline = str_1.str();
+        std::cout << stringline;
+
     }
+    HANDLE file = CreateFile(L"C:\\LPNU\\os\\labs\\lab3\\OS_lab_3\\File.txt", GENERIC_WRITE, FILE_SHARE_WRITE, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+    if (file == INVALID_HANDLE_VALUE)
+    {
+        std::cout << "Can't open the file!" << std::endl;
+        system("pause");
+        return 2;
+    }
+
+    std::string buf = str.str();
+    //HANDLE map = CreateFileMappingW(file, NULL, PAGE_READWRITE, NULL, buf.size(), NULL);
+    //LPVOID pointer = MapViewOfFile(map, FILE_MAP_ALL_ACCESS, 0, 0, buf.size());
+    //memcpy(pointer, buf.c_str(), buf.size());
+    //UnmapViewOfFile(pointer);
+    //CloseHandle(map);
+    WriteFile(file, buf.c_str(), buf.size(), NULL, NULL);
+    CloseHandle(file);
     SetConsoleTextAttribute(hConsole, 0xFFFF);
     system("pause");
+    return 0;
 }
