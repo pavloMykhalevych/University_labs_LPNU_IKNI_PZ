@@ -3,7 +3,7 @@
 #include <ctime>
 #include <windows.h>
 #include <sstream>
-
+#include <io.h>
 
 
 
@@ -113,6 +113,7 @@ int main(int argc, const char* argv[])
     //UnmapViewOfFile(pointer);
     //CloseHandle(map);
     WriteFile(file, buf.c_str(), buf.size(), NULL, NULL);
+    _chmod("C:\\LPNU\\os\\labs\\lab3\\OS_lab_3\\File.txt", _S_IREAD);
     CloseHandle(file);
     SetConsoleTextAttribute(hConsole, 0xFFFF);
     system("pause");
