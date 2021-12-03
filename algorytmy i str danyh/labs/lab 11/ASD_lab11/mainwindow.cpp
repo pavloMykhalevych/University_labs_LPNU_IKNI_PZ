@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pushButton_clear,SIGNAL(clicked()),this,SLOT(MySlot()));
     connect(ui->pushButton_start,SIGNAL(clicked()),this,SLOT(MySlot()));
     ui->textEdit->setText("These modules was hard");
-    ui->textEdit_text_2->setText("I was in Paris these days and the day was hard");
+    ui->textEdit_text_2->setText("It was hard to understand");
 }
 
 // Removes unnecessary spaces.
