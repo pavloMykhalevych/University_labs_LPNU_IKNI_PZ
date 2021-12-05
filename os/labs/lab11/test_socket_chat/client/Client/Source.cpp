@@ -49,7 +49,6 @@ int main(int argc, char* argv[]) {
 		send(Connection, (char*)&msg_size, sizeof(int), NULL);
 		send(Connection, msg1.c_str(), msg_size, NULL);
 		Sleep(10);
-
 	}
 
 	system("pause");
