@@ -14,13 +14,14 @@ START:
 
 infloop:
 
-    mov eax, yellow
-    call SetTextColor
-
     mov dh, 2
     mov dl, 2
 
     call GoToXY
+
+    mov eax, red
+    call Random32
+    call SetTextColor
 
     lea edx, name_
     call WriteString
