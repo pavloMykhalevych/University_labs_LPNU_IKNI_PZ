@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="chess.css">
+        <script src="chess.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>
+            Chess game
+        </title>
+    </head>
+    <body>
+        <h1 style="text-align: center;">
+            Solve the puzzle
+        </h1>
+        <button type="submit" class="openForm" onclick="openForm()">Sign in</button>
+        <div class="Form" id="Form">
+            <form class="registration">
+                <h1>Login</h1>
+
+                <label class="label" for="email"><b>Nickname</b></label>
+                <input type="text" placeholder="Enter nickname" name="email" required>
+                
+                <label class="label" for="psw"><b>Password</b></label>
+                <input type="password" placeholder="Enter password" name="psw" required>
+                
+                <button type="submit" class="btn">Play</button>
+                <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+            </form>
+        </div>
+        
+        <div>
+            <table>
+                <tr>
+                    <td><div class = "cell"><span class = "number">8</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">7</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">6</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"><img class="figure black pawn" src="Resources/bp.png" alt="black pawn" onclick="TagCell(event)"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">5</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"><img class="figure black pawn" src="Resources/bp.png" alt="black pawn" onclick="TagCell(event)"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">4</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"><img class="figure white king" src="Resources/wk.png" alt="white king" onclick="TagCell(event)"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">3</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"><img class="figure white pawn" src="Resources/wp.png" alt="white pawn" onclick="TagCell(event)"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"><img class="figure black king" src="Resources/bk.png" alt="black king" onclick="TagCell(event)"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">2</span></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                    <td><div class = "cell"></div></td>
+                </tr>
+                <tr>
+                    <td><div class = "cell"><span class = "number">1</span><span class = "letter">a</span></div></td>
+                    <td><div class = "cell"><span class = "letter">b</span></div></td>
+                    <td><div class = "cell"><span class = "letter">c</span></div></td>
+                    <td><div class = "cell"><span class = "letter">d</span></div></td>
+                    <td><div class = "cell"><span class = "letter">e</span></div></td>
+                    <td><div class = "cell"><span class = "letter">f</span></div></td>
+                    <td><div class = "cell"><span class = "letter">g</span></div></td>
+                    <td><div class = "cell"><span class = "letter">h</span></div></td>
+                </tr>
+            </table>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="https://www.chess.com/puzzles/problem/491418">Puzzle</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Rules_of_chess">Chess rules</a></li>
+            </ul>
+        </nav>
+    </body>
+</html>
