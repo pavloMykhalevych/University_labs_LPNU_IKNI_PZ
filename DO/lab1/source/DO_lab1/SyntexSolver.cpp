@@ -54,6 +54,7 @@ void SyntexSolver::CreateProblem(const bool fromFile) {
 		}
 	}
 	startParamNumber = m_conditions.m_parameters.size();
+	AddAllParams();
 	ShowConditions();
 	ConvertToCanonical();
 	ShowConditions("\nAfter converting to canonical\n");
@@ -75,7 +76,7 @@ void SyntexSolver::ConvertToCanonical() {
 		}
 		case EquationSign::NotEqual:
 		{
-			m_removedParam.push_back(std::pair<int, double>(equation.GetCoeficients()[0].first, equation.GetB()));
+			m_conditions.m_removedParam.push_back(std::pair<int, double>(equation.GetCoeficients()[0].first, equation.GetB()));
 			equation.SetSign(EquationSign::None);
 			equation.SetB(m_conditions.m_parameters.size());
 			Equation y1, y2;
@@ -97,8 +98,8 @@ void SyntexSolver::ConvertToCanonical() {
 		for (auto& coeficient : coeficients) {
 			auto& parameter = m_conditions.m_parameters[coeficient.first - 1];
 			if (parameter.GetSign() == EquationSign::None) {
-				auto paramY1 = m_conditions.m_parameters[static_cast<int>(parameter.GetB()) - 1];
-				auto paramY2 = m_conditions.m_parameters[static_cast<int>(parameter.GetB())];
+				auto paramY1 = m_conditions.m_parameters[static_cast<int>(parameter.GetB())];
+				auto paramY2 = m_conditions.m_parameters[static_cast<int>(parameter.GetB()) + 1];
 				auto prevCoef = coeficient.second;
 				coeficient = std::pair<int, double>(static_cast<int>(parameter.GetB()), prevCoef);
 				auto coeficient2 = std::pair<int, double>(static_cast<int>(parameter.GetB()) + 1, -prevCoef);
@@ -128,8 +129,8 @@ void SyntexSolver::ConvertToCanonical() {
 	for (auto& coeficient : problemCoeficients) {
 		auto& parameter = m_conditions.m_parameters[coeficient.first];
 		if (parameter.GetSign() == EquationSign::None) {
-			auto paramY1 = m_conditions.m_parameters[static_cast<int>(parameter.GetB()) - 1];
-			auto paramY2 = m_conditions.m_parameters[static_cast<int>(parameter.GetB())];
+			auto paramY1 = m_conditions.m_parameters[static_cast<int>(parameter.GetB())];
+			auto paramY2 = m_conditions.m_parameters[static_cast<int>(parameter.GetB()) + 1];
 			auto prevCoef = coeficient.second;
 			coeficient = std::pair<int, double>(static_cast<int>(parameter.GetB()), prevCoef);
 			auto coeficient2 = std::pair<int, double>(static_cast<int>(parameter.GetB()) + 1, -prevCoef);
@@ -194,12 +195,7 @@ void SyntexSolver::CreateSyntexTable() {
 		const auto equationCoef = m_conditions.m_equations[i].GetCoeficients();
 		m_syntexTable[i][0] = m_conditions.m_equations[i].GetB();
 		for (int j = 1; j < m_syntexTable[0].size(); ++j) {
-			if ((j - 1) < equationCoef.size()) {
-				m_syntexTable[i][j] = equationCoef[j - 1].second;
-			}
-			else {
-				m_syntexTable[i][j] = 0;
-			}
+			m_syntexTable[i][j] = equationCoef[j - 1].second;
 		}
 	}
 }
@@ -246,14 +242,9 @@ void SyntexSolver::ShowSyntexTable() {
 		<< std::setw(11) << std::left << "|c"
 		<< std::setw(11) << std::left << "|P[0]";
 	const auto& problemCoef = m_conditions.m_problem.GetCoeficients();
-	for (int i = 0; i < m_conditions.m_parameters.size(); ++i) {
-		std::cout << "|c[" << i+1 << "] = ";
-		if (i < problemCoef.size()) {
-			std::cout << std::setw(3) << std::left << problemCoef[i].second;
-		}
-		else {
-			std::cout << std::setw(3) << std::left << "0";
-		}
+	for (int i = 0; i < m_conditions.m_parameters.size() - m_conditions.m_removedParam.size(); ++i) {
+		std::cout << "|c[" << problemCoef[i].first << "] = ";
+		std::cout << std::setw(3) << std::left << problemCoef[i].second;
 	}
 	std::cout << std::setw(11) << std::left << "|" << "|";
 	// 2 row.
@@ -261,20 +252,15 @@ void SyntexSolver::ShowSyntexTable() {
 	std::cout << std::setw(10) << std::left << "|"
 		<< std::setw(11) << std::left << "|"
 		<< std::setw(11) << std::left << "|";
-	for (int i = 0; i < m_conditions.m_parameters.size(); ++i) {
-		std::cout << "|P[" << i+1 << std::setw(7) << std::left <<"]";
+	for (int i = 0; i < m_conditions.m_parameters.size() - m_conditions.m_removedParam.size(); ++i) {
+		std::cout << "|P[" << problemCoef[i].first << std::setw(7) << std::left <<"]";
 	}
 	std::cout << std::setw(11) << std::left << "|" << "|";
 	// Matrix
 	for (int i = 0; i < m_syntexTable.size(); ++i) {
 		std::cout << "\n";
 		std::cout<< "|x[" << (basisVectorIndices[i] + 1) << std::setw(6) << std::left << "]";
-		if (basisVectorIndices[i] < problemCoef.size()) {
-			std::cout << "|" << std::setw(10) << std::left << problemCoef[basisVectorIndices[i]].second;
-		}
-		else {
-			std::cout << "|" << std::setw(10) << std::left << 0;
-		}
+		std::cout << "|" << std::setw(10) << std::left << problemCoef[basisVectorIndices[i]].second;
 		for (int j = 0; j < m_syntexTable[0].size(); ++j) {
 			std::cout << "|" << std::setw(10) << std::left << m_syntexTable[i][j];
 		}
@@ -311,10 +297,9 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 	cout << "\nProblem:\n";
 	{
 		const auto& problemCoef = equationConditions.m_problem.GetCoeficients();
-		int index = 0;
-		for (int i = 1; i <= equationConditions.m_parameters.size(); ++i) {
-			std::string sign = (problemCoef[index].second > 0) ? "+" : "";
-			cout << sign << problemCoef[index].second << "* x[" << i << "] ";
+		for (int i = 0; i < equationConditions.m_parameters.size() - equationConditions.m_removedParam.size(); ++i) {
+			std::string sign = (problemCoef[i].second > 0) ? "+" : "";
+			cout << sign << problemCoef[i].second << "* x[" << problemCoef[i].first << "] ";
 		}
 		std::string minMaxStr;
 		if (equationConditions.m_problem.GetB() == 0)
@@ -329,10 +314,9 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 	cout << "\nEquations:\n";
 	for (auto& equation : equationConditions.m_equations) {
 		const auto& equationCoef = equation.GetCoeficients();
-		int index = 0;
-		for (int i = 1; i <= equationConditions.m_parameters.size(); ++i) {
-			std::string sign = (equationCoef[index].second > 0) ? "+" : "";
-			cout << sign << equationCoef[index].second << "* x[" << i << "] ";
+		for (int i = 0; i < equationConditions.m_parameters.size() - equationConditions.m_removedParam.size(); ++i) {
+			std::string sign = (equationCoef[i].second > 0) ? "+" : "";
+			cout << sign << equationCoef[i].second << "* x[" << equationCoef[i].first << "] ";
 		}
 		if (equation.GetSign() == EquationSign::GreaterThan) {
 			cout << "> ";

@@ -9,6 +9,7 @@ struct EquationConditions {
 
 	std::vector<Equation> m_equations;
 	std::vector<Equation> m_parameters;
+	std::vector<std::pair<int, double>> m_removedParam;
 	Equation m_problem;
 };
 
@@ -50,8 +51,6 @@ private:
 	std::vector<double> m_q;
 
 	std::vector<double> m_lastColumn;
-
-	std::vector<std::pair<int, double>> m_removedParam;
 
 	int mainColIndex = -1;
 	int mainRowIndex = -1;
