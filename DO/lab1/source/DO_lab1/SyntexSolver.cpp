@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 void SyntexSolver::Start() {
 	CreateProblem();
@@ -203,6 +204,9 @@ void SyntexSolver::CreateSyntexTable() {
 void SyntexSolver::CalculateQ() {
 	m_q[0] = 0;
 	double min = 0;
+	int min_index = -1;
+	double min_row = 0;
+	int min_index_row = -1;
 	const auto& problemCoef = m_conditions.m_problem.GetCoeficients();
 	for (int j = 0; j < m_syntexTable.size(); ++j) {
 		m_q[0] += m_syntexTable[j][0] * problemCoef[basisVectorIndices[j]].second;
@@ -214,6 +218,7 @@ void SyntexSolver::CalculateQ() {
 		m_q[i] -= problemCoef[i - 1].second;
 		if (m_q[i] < 0 && m_q[i] < min) {
 			min = m_q[i];
+			min_index = i;
 		}
 	}
 	for (int j = 0; j < m_syntexTable.size(); ++j) {
@@ -222,17 +227,34 @@ void SyntexSolver::CalculateQ() {
 		}
 		else {
 			m_lastColumn[j] = m_syntexTable[j][0] / m_syntexTable[j][1];
+			if (m_lastColumn[j] > 0 && m_lastColumn[j] < min) {
+				min_row = m_lastColumn[j];
+				min_index_row = j;
+			}
 		}
 	}
 	m_lastColumn[m_lastColumn.size() - 1] = min;
+	m_mainColIndex = min_index - 1;
+	m_mainRowIndex = min_index_row;
 }
 
-void SyntexSolver::FindMainRowAndCol() {
-
+bool SyntexSolver::FoundOptimal() {
+	return m_mainColIndex == -1;
 }
 
 void SyntexSolver::RecalculateTable() {
+	basisVectorIndices[m_mainRowIndex] = m_mainColIndex;
+	// Perpendiculars.
 
+	for (int j = 0; j < m_syntexTable[0].size(); ++j) {
+		m_syntexTable[m_mainRowIndex][j] /= m_syntexTable[m_mainRowIndex][m_mainColIndex + 1];
+	}
+	for (int i = 0; i < m_syntexTable.size(); ++i) {
+		if (i == m_mainRowIndex) {
+			continue;
+		}
+		m_syntexTable[i][m_mainColIndex + 1] = 0;
+	}
 }
 
 void SyntexSolver::ShowSyntexTable() {
@@ -291,6 +313,11 @@ void SyntexSolver::Solve() {
 	CreateSyntexTable();
 	CalculateQ();
 	ShowSyntexTable();
+	while (!FoundOptimal()) {
+		RecalculateTable();
+		CalculateQ();
+		ShowSyntexTable();
+	}
 }
 
 std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditions) {

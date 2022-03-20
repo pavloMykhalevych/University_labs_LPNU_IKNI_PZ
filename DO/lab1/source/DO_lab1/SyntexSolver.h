@@ -33,9 +33,9 @@ private:
 
 	void CalculateQ();
 
-	void FindMainRowAndCol();
-
 	void RecalculateTable();
+
+	bool FoundOptimal();
 
 	void Solve();
 
@@ -44,7 +44,7 @@ private:
 
 	int startParamNumber;
 
-	std::vector<double> basisVectorIndices;
+	std::vector<int> basisVectorIndices;
 
 	std::vector<std::vector<double>> m_syntexTable;
 
@@ -52,6 +52,6 @@ private:
 
 	std::vector<double> m_lastColumn;
 
-	int mainColIndex = -1;
-	int mainRowIndex = -1;
+	int m_mainColIndex = -2;
+	int m_mainRowIndex = -2;
 };
