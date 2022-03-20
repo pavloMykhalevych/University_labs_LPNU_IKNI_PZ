@@ -45,6 +45,14 @@ ul {
     padding: 0;
 }
 
+span.green{
+    color: rgb(98, 146, 26);
+}
+
+span.white{
+    color: rgb(239, 255, 215);
+}
+
 a {
     text-decoration: none;
 }
