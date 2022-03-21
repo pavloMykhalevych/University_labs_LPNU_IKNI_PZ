@@ -4,6 +4,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
+#include <climits>
 
 void SyntexSolver::Start() {
 	CreateProblem();
@@ -202,10 +203,12 @@ void SyntexSolver::CreateSyntexTable() {
 }
 
 void SyntexSolver::CalculateQ() {
-	m_q[0] = 0;
+	for (int j = 0; j < m_syntexTable[0].size(); ++j) {
+		m_q[j] = 0;
+	}
 	double min = 0;
 	int min_index = -1;
-	double min_row = 0;
+	double min_row = std::numeric_limits<double>::max();
 	int min_index_row = -1;
 	const auto& problemCoef = m_conditions.m_problem.GetCoeficients();
 	for (int j = 0; j < m_syntexTable.size(); ++j) {
@@ -221,20 +224,26 @@ void SyntexSolver::CalculateQ() {
 			min_index = i;
 		}
 	}
+	m_mainColIndex = min_index;
+	if (m_mainColIndex == -1) {
+		for (int j = 0; j < m_syntexTable.size(); ++j) {
+			m_lastColumn[j] = -1;
+		}
+		return;
+	}
 	for (int j = 0; j < m_syntexTable.size(); ++j) {
-		if (m_syntexTable[j][1] == 0) {
+		if (m_syntexTable[j][m_mainColIndex] == 0) {
 			m_lastColumn[j] = -1;
 		}
 		else {
-			m_lastColumn[j] = m_syntexTable[j][0] / m_syntexTable[j][1];
-			if (m_lastColumn[j] > 0 && m_lastColumn[j] < min) {
+			m_lastColumn[j] = m_syntexTable[j][0] / m_syntexTable[j][m_mainColIndex];
+			if (m_lastColumn[j] > 0 && m_lastColumn[j] < min_row) {
 				min_row = m_lastColumn[j];
 				min_index_row = j;
 			}
 		}
 	}
 	m_lastColumn[m_lastColumn.size() - 1] = min;
-	m_mainColIndex = min_index - 1;
 	m_mainRowIndex = min_index_row;
 }
 
@@ -243,17 +252,32 @@ bool SyntexSolver::FoundOptimal() {
 }
 
 void SyntexSolver::RecalculateTable() {
-	basisVectorIndices[m_mainRowIndex] = m_mainColIndex;
+	basisVectorIndices[m_mainRowIndex] = m_mainColIndex - 1;
 	// Perpendiculars.
-
-	for (int j = 0; j < m_syntexTable[0].size(); ++j) {
-		m_syntexTable[m_mainRowIndex][j] /= m_syntexTable[m_mainRowIndex][m_mainColIndex + 1];
-	}
 	for (int i = 0; i < m_syntexTable.size(); ++i) {
 		if (i == m_mainRowIndex) {
 			continue;
 		}
-		m_syntexTable[i][m_mainColIndex + 1] = 0;
+		for (int j = 0; j < m_syntexTable[0].size(); ++j) {
+			if (j == m_mainColIndex) {
+				continue;
+			}
+			m_syntexTable[i][j]
+				-= ((m_syntexTable[i][m_mainColIndex]* m_syntexTable[m_mainRowIndex][j]) / m_syntexTable[m_mainRowIndex][m_mainColIndex]);
+		}
+	}
+	for (int j = 0; j < m_syntexTable[0].size(); ++j) {
+		if (j == m_mainColIndex) {
+			continue;
+		}
+		m_syntexTable[m_mainRowIndex][j] /= m_syntexTable[m_mainRowIndex][m_mainColIndex];
+	}
+	for (int i = 0; i < m_syntexTable.size(); ++i) {
+		if (i == m_mainRowIndex) {
+			m_syntexTable[i][m_mainColIndex] = 1;
+			continue;
+		}
+		m_syntexTable[i][m_mainColIndex] = 0;
 	}
 }
 
@@ -317,6 +341,18 @@ void SyntexSolver::Solve() {
 		RecalculateTable();
 		CalculateQ();
 		ShowSyntexTable();
+	}
+	std::cout << "\n Optimal parameters and value:\n";
+	std::cout << "Q = " << m_q[0] << "\n";
+	for (int i = 0; i < m_conditions.m_parameters.size(); ++i) {
+		auto basisVectorIndicesIterator =
+			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditions.m_parameters[i].GetCoeficients()[0].first);
+		if (basisVectorIndicesIterator != basisVectorIndices.end()) {
+			int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
+			if (m_conditions.m_problem.GetCoeficients()[*basisVectorIndicesIterator].second != 0) {
+				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] = " << m_syntexTable[index][0] << "\n";
+			}
+		}
 	}
 }
 
