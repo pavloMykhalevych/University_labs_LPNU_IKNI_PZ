@@ -7,8 +7,8 @@
 #include <climits>
 
 void SyntexSolver::Start() {
-	CreateProblem(true, "SyntexSolver_3.json");
-	//CreateProblem();
+	//CreateProblem(true, "SyntexSolver_3.json");
+	CreateProblem();
 	Solve();
 }
 
