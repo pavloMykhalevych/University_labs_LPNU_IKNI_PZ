@@ -1,0 +1,106 @@
+{
+  "Problem": {
+    "Coeficients": {
+      "Count": 2,
+      "Vector": [
+        {
+          "index": 1,
+          "value": 2
+        },
+        {
+          "index": 2,
+          "value": 7
+        }
+      ]
+    },
+    "Purpose": 1
+  },
+  "Equations": {
+    "EquationsCount": 5,
+    "Vector": [
+      {
+        "Coeficients": {
+          "Count": 1,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 1
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 50
+      },
+      {
+        "Coeficients": {
+          "Count": 1,
+          "Vector": [
+            {
+              "index": 2,
+              "value": 1
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 80
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": -3
+            },
+            {
+              "index": 2,
+              "value": 2
+            }
+          ]
+        },
+        "Sign": 1,
+        "B": -90
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 4
+            },
+            {
+              "index": 2,
+              "value": 1
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 240
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": -3
+            },
+            {
+              "index": 2,
+              "value": 1
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 0
+      }
+    ]
+  },
+  "Parameters": {
+    "Count": 2,
+    "Vector": [
+      1,1
+    ]
+  }
+}

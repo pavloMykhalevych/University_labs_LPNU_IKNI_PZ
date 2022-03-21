@@ -7,24 +7,25 @@
 #include <climits>
 
 void SyntexSolver::Start() {
+	//CreateProblem(true, "SyntexSolver_2.json");
 	CreateProblem();
 	Solve();
 }
 
-void SyntexSolver::CreateProblem(const bool fromFile) {
+void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
 	if (fromFile) {
-		std::ifstream jsonFile("SyntexSolver.json");
+		std::ifstream jsonFile(str);
 		if (jsonFile.fail())
 		{
 			throw std::runtime_error("Ground truth was not found.\n");
 		}
 		nlohmann::json parsedJson = nlohmann::json::parse(jsonFile);
 		m_conditions.m_problem = Equation::CreateFromFile(EquationType::Problem, parsedJson);
-		int equationsNumber = parsedJson.at("Equations").at("EquationsCount").get<int>();
+		int equationsNumber = parsedJson.at("Equations").at("EquationsCount").get<double>();
 		for (int i = 0; i < equationsNumber; ++i) {
 			m_conditions.m_equations.push_back(Equation::CreateFromFile(EquationType::Simple, parsedJson, i));
 		}
-		int parametersNumber = parsedJson.at("Parameters").at("Count").get<int>();
+		int parametersNumber = parsedJson.at("Parameters").at("Count").get<double>();
 		for (int i = 0; i < parametersNumber; ++i) {
 			m_conditions.m_parameters.push_back(Equation::CreateFromFile(EquationType::ParamSign, parsedJson, i));
 		}

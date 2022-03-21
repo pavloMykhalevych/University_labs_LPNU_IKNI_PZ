@@ -146,10 +146,10 @@ Equation Equation::CreateFromFile(const EquationType& type, nlohmann::json& pars
 	case EquationType::Simple:
 	{
 		auto& parsedEquation = parsedJson.at("Equations").at("Vector")[index];
-		int paramCount = parsedEquation.at("Coeficients").at("Count");
+		int paramCount = parsedEquation.at("Coeficients").at("Count").get<int>();
 		for (auto i = 0; i < paramCount; ++i) {
 			int paramIndex = parsedEquation.at("Coeficients").at("Vector")[i].at("index").get<int>();
-			int a = parsedEquation.at("Coeficients").at("Vector")[i].at("value").get<int>();
+			double a = parsedEquation.at("Coeficients").at("Vector")[i].at("value").get<double>();
 			equation.SetCoeficient(paramIndex, a);
 		}
 		int signNumber = parsedEquation.at("Sign").get<int>();
@@ -172,17 +172,17 @@ Equation Equation::CreateFromFile(const EquationType& type, nlohmann::json& pars
 			break;
 		}
 		}
-		int b = parsedEquation.at("B").get<int>();
+		int b = parsedEquation.at("B").get<double>();
 		equation.SetB(b);
 		break;
 	}
 	case EquationType::Problem:
 	{
 		auto& parsedEquation = parsedJson.at("Problem");
-		int paramCount = parsedEquation.at("Coeficients").at("Count");
+		int paramCount = parsedEquation.at("Coeficients").at("Count").get<int>();
 		for (auto i = 0; i < paramCount; ++i) {
 			int paramIndex = parsedEquation.at("Coeficients").at("Vector")[i].at("index").get<int>();
-			int a = parsedEquation.at("Coeficients").at("Vector")[i].at("value").get<int>();
+			double a = parsedEquation.at("Coeficients").at("Vector")[i].at("value").get<double>();
 			equation.SetCoeficient(paramIndex, a);
 		}
 		int b = parsedEquation.at("Purpose").get<int>();
@@ -191,7 +191,7 @@ Equation Equation::CreateFromFile(const EquationType& type, nlohmann::json& pars
 	}
 	case EquationType::ParamSign:
 	{
-		int signNumber = parsedJson.at("Parameters").at("Vector")[index];
+		int signNumber = parsedJson.at("Parameters").at("Vector")[index].get<int>();
 		equation.SetCoeficient(index, 1);
 		switch (signNumber)
 		{

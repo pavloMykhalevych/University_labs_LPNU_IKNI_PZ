@@ -19,7 +19,7 @@ public:
 	void Start();
 
 private:
-	void CreateProblem(const bool fromFile = true);
+	void CreateProblem(const bool fromFile = true, std::string str = "SyntexSolver_main.json");
 
 	void ConvertToCanonical();
 
