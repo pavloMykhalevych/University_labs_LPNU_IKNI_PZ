@@ -1,0 +1,80 @@
+{
+  "Problem": {
+    "Coeficients": {
+      "Count": 2,
+      "Vector": [
+        {
+          "index": 1,
+          "value": 16
+        },
+        {
+          "index": 2,
+          "value": 12
+        }
+      ]
+    },
+    "Purpose": 1
+  },
+  "Equations": {
+    "EquationsCount": 3,
+    "Vector": [
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 2
+            },
+            {
+              "index": 2,
+              "value": 3
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 180
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 4
+            },
+            {
+              "index": 2,
+              "value": 1
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 240
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 6
+            },
+            {
+              "index": 2,
+              "value": 7
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 426
+      }
+    ]
+  },
+  "Parameters": {
+    "Count": 2,
+    "Vector": [
+      1,1
+    ]
+  }
+}

@@ -7,8 +7,8 @@
 #include <climits>
 
 void SyntexSolver::Start() {
-	//CreateProblem(true, "SyntexSolver_2.json");
-	CreateProblem();
+	CreateProblem(true, "SyntexSolver_3.json");
+	//CreateProblem();
 	Solve();
 }
 
@@ -83,10 +83,10 @@ void SyntexSolver::ConvertToCanonical() {
 			equation.SetSign(EquationSign::None);
 			equation.SetB(m_conditions.m_parameters.size());
 			Equation y1, y2;
-			y1.SetCoeficient(m_conditions.m_parameters.size()+1, 1);
+			y1.SetCoeficient(m_conditions.m_parameters.size(), 1);
 			y1.SetSign(EquationSign::GreaterThan);
 			y1.SetB(0);
-			y2.SetCoeficient(m_conditions.m_parameters.size()+2, 1);
+			y2.SetCoeficient(m_conditions.m_parameters.size()+1, 1);
 			y2.SetSign(EquationSign::GreaterThan);
 			y2.SetB(0);
 			m_conditions.m_parameters.push_back(y1);
@@ -112,7 +112,7 @@ void SyntexSolver::ConvertToCanonical() {
 		}
 		if (equation.GetSign() == EquationSign::GreaterThan) {
 			Equation y;
-			y.SetCoeficient(m_conditions.m_parameters.size() + 1, 1);
+			y.SetCoeficient(m_conditions.m_parameters.size(), 1);
 			y.SetSign(EquationSign::GreaterThan);
 			y.SetB(0);
 			coeficients.push_back(std::pair<int, double>(m_conditions.m_parameters.size() + 1, -1));
@@ -120,7 +120,7 @@ void SyntexSolver::ConvertToCanonical() {
 		}
 		else if (equation.GetSign() == EquationSign::LessThan) {
 			Equation y;
-			y.SetCoeficient(m_conditions.m_parameters.size() + 1, 1);
+			y.SetCoeficient(m_conditions.m_parameters.size(), 1);
 			y.SetSign(EquationSign::GreaterThan);
 			y.SetB(0);
 			coeficients.push_back(std::pair<int, double>(m_conditions.m_parameters.size() + 1, 1));
@@ -362,7 +362,7 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 	{
 		const auto& problemCoef = equationConditions.m_problem.GetCoeficients();
 		for (int i = 0; i < equationConditions.m_parameters.size() - equationConditions.m_removedParam.size(); ++i) {
-			std::string sign = (problemCoef[i].second > 0) ? "+" : "";
+			std::string sign = (problemCoef[i].second >= 0) ? "+" : "";
 			cout << sign << problemCoef[i].second << "* x[" << problemCoef[i].first << "] ";
 		}
 		std::string minMaxStr;
@@ -379,7 +379,7 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 	for (auto& equation : equationConditions.m_equations) {
 		const auto& equationCoef = equation.GetCoeficients();
 		for (int i = 0; i < equationConditions.m_parameters.size() - equationConditions.m_removedParam.size(); ++i) {
-			std::string sign = (equationCoef[i].second > 0) ? "+" : "";
+			std::string sign = (equationCoef[i].second >= 0) ? "+" : "";
 			cout << sign << equationCoef[i].second << "* x[" << equationCoef[i].first << "] ";
 		}
 		if (equation.GetSign() == EquationSign::GreaterThan) {
@@ -396,18 +396,18 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 	cout << "\nParameters:\n";
 	for (auto& equation : equationConditions.m_parameters) {
 		if (equation.GetSign() == EquationSign::None) {
-			cout << "x[" << equation.GetCoeficients()[0].first << "] = "
-				<< "x[" << equationConditions.m_parameters[static_cast<int>(equation.GetB())].GetCoeficients()[0].first << "] - "
-				<< "x[" << equationConditions.m_parameters[static_cast<int>(equation.GetB()) + 1].GetCoeficients()[0].first << "]\n";
+			cout << "x[" << equation.GetCoeficients()[0].first + 1 << "] = "
+				<< "x[" << equationConditions.m_parameters[static_cast<int>(equation.GetB())].GetCoeficients()[0].first + 1 << "] - "
+				<< "x[" << equationConditions.m_parameters[static_cast<int>(equation.GetB()) + 1].GetCoeficients()[0].first + 1 << "]\n";
 		}
 		else if (equation.GetSign() == EquationSign::GreaterThan) {
-			cout << "x[" << equation.GetCoeficients()[0].first << "] > 0\n";
+			cout << "x[" << equation.GetCoeficients()[0].first + 1 << "] > 0\n";
 		}
 		else if (equation.GetSign() == EquationSign::LessThan) {
-			cout << "x[" << equation.GetCoeficients()[0].first << "] < 0\n";
+			cout << "x[" << equation.GetCoeficients()[0].first + 1 << "] < 0\n";
 		}
 		else if (equation.GetSign() == EquationSign::NotEqual) {
-			cout << "x[" << equation.GetCoeficients()[0].first << "] <> 0\n";
+			cout << "x[" << equation.GetCoeficients()[0].first + 1 << "] <> 0\n";
 		}
 	}
 	return cout;
