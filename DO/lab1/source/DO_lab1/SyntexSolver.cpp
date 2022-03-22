@@ -7,8 +7,8 @@
 #include <climits>
 
 void SyntexSolver::Start() {
-	//CreateProblem(true, "SyntexSolver_3.json");
-	CreateProblem();
+	CreateProblem(true, "SyntexSolver_4.json");
+	//CreateProblem();
 	Solve();
 }
 
@@ -21,11 +21,11 @@ void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
 		}
 		nlohmann::json parsedJson = nlohmann::json::parse(jsonFile);
 		m_conditions.m_problem = Equation::CreateFromFile(EquationType::Problem, parsedJson);
-		int equationsNumber = parsedJson.at("Equations").at("EquationsCount").get<double>();
+		int equationsNumber = parsedJson.at("Equations").at("EquationsCount").get<int>();
 		for (int i = 0; i < equationsNumber; ++i) {
 			m_conditions.m_equations.push_back(Equation::CreateFromFile(EquationType::Simple, parsedJson, i));
 		}
-		int parametersNumber = parsedJson.at("Parameters").at("Count").get<double>();
+		int parametersNumber = parsedJson.at("Parameters").at("Count").get<int>();
 		for (int i = 0; i < parametersNumber; ++i) {
 			m_conditions.m_parameters.push_back(Equation::CreateFromFile(EquationType::ParamSign, parsedJson, i));
 		}
@@ -237,10 +237,15 @@ void SyntexSolver::CalculateQ() {
 			m_lastColumn[j] = -1;
 		}
 		else {
-			m_lastColumn[j] = m_syntexTable[j][0] / m_syntexTable[j][m_mainColIndex];
-			if (m_lastColumn[j] > 0 && m_lastColumn[j] < min_row) {
-				min_row = m_lastColumn[j];
-				min_index_row = j;
+			if (m_syntexTable[j][m_mainColIndex] < 0) {
+				m_lastColumn[j] = -1;
+			}
+			else {
+				m_lastColumn[j] = m_syntexTable[j][0] / m_syntexTable[j][m_mainColIndex];
+				if (m_lastColumn[j] >= 0 && m_lastColumn[j] < min_row) {
+					min_row = m_lastColumn[j];
+					min_index_row = j;
+				}
 			}
 		}
 	}
