@@ -13,19 +13,22 @@
         <h1 style="text-align: center;">
             Solve the puzzle
         </h1>
-        <button type="submit" class="openForm" onclick="openForm()">Sign in</button>
+        <button class="openForm" onclick="openForm()">Sign in</button>
         <div class="Form" id="Form">
-            <form class="registration">
+            <form method="get" class="registration">
                 <h1>Login</h1>
 
-                <label class="label" for="email"><b>Nickname</b></label>
-                <input type="text" placeholder="Enter nickname" name="email" required>
+                <label class="label" for="fnickname"><b>Nickname</b></label><br>
+                <input type="text" id="fnickname" placeholder="Enter nickname" name="nickname" required>
+
+                <label class="label" for="femail"><b>Email</b></label><br>
+                <input type="text" id="femail" placeholder="Enter email" name="email" required>
                 
-                <label class="label" for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter password" name="psw" required>
-                
+                <label class="label" for="fpsw"><b>Password</b></label><br>
+                <input type="password" id="fpsw" placeholder="Enter password" name="psw" required>
+
                 <button type="submit" class="btn">Play</button>
-                <button type="submit" class="btn cancel" onclick="closeForm()">Close</button>
+                <button class="btn cancel" onclick="closeForm()">Close</button>
             </form>
         </div>
         
@@ -116,8 +119,8 @@
         
         <nav>
             <ul>
-                <li><a href="https://www.chess.com/puzzles/problem/491418">Puzzle</a></li>
-                <li><a href="https://en.wikipedia.org/wiki/Rules_of_chess">Chess rules</a></li>
+                <li><a class="link" href="https://www.chess.com/puzzles/problem/491418" target="_blank">Puzzle</a></li>
+                <li><a class="link" href="https://en.wikipedia.org/wiki/Rules_of_chess" target="_blank">Chess rules</a></li>
             </ul>
         </nav>
     </body>

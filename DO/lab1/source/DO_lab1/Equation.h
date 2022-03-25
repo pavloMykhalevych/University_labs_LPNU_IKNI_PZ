@@ -14,6 +14,7 @@ class Equation
 public:
 	static Equation Create(const EquationType& type);
 	static Equation CreateFromFile(const EquationType& type, nlohmann::json& parsedJson, int index = 0);
+	static Equation Create(const std::vector<std::pair<int, double>>& coefs, const EquationSign& sign, const double b);
 
 	std::vector<std::pair<int, double>>& GetCoeficients();
 	void SetCoeficient(const int paramIndex, const double a);

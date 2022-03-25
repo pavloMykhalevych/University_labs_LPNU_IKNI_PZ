@@ -21,17 +21,21 @@ public:
 private:
 	void CreateProblem(const bool fromFile = true, std::string str = "SyntexSolver_main.json");
 
-	void ConvertToCanonical();
+	void ConvertToCanonical(EquationConditions& conditions);
 
-	void ShowConditions(const std::string& message = "");
+	void ShowConditions(EquationConditions& conditions, const std::string& message = "");
 
-	void AddAllParams();
+	void AddAllParams(EquationConditions& conditions);
 
 	void CreateSyntexTable();
 
 	void ShowSyntexTable();
 
+	void ShowSyntexTableWithDoubleMethod();
+
 	void CalculateQ();
+
+	bool CheckIfCanSolve();
 
 	void RecalculateTable();
 
@@ -39,8 +43,19 @@ private:
 
 	void Solve();
 
+	bool FoundOptimalDoubleMethod();
+
+	void CreateTableForDoubleMethod();
+
+	void CreateTableForDoubleMethodFromSyntex();
+
+	void SolveWithDoubleMethod(bool fromSyntex = false);
+
+	void CalculateQForDoubleMethod();
+
 private:
 	EquationConditions m_conditions;
+	EquationConditions m_conditionsDoubleMethod;
 
 	int startParamNumber;
 
@@ -51,6 +66,7 @@ private:
 	std::vector<double> m_q;
 
 	std::vector<double> m_lastColumn;
+	std::vector<double> m_lastRow;
 
 	int m_mainColIndex = -2;
 	int m_mainRowIndex = -2;

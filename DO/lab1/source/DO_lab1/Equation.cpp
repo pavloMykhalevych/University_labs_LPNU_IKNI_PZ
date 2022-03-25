@@ -218,3 +218,13 @@ Equation Equation::CreateFromFile(const EquationType& type, nlohmann::json& pars
 	}
 	return equation;
 }
+
+Equation Equation::Create(const std::vector<std::pair<int, double>>& coefs, const EquationSign& sign, const double b) {
+	Equation equation;
+	for (auto& coef : coefs) {
+		equation.SetCoeficient(coef.first, coef.second);
+	}
+	equation.SetSign(sign);
+	equation.SetB(b);
+	return equation;
+}
