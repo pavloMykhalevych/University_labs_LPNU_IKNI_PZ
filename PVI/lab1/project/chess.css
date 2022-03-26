@@ -67,8 +67,8 @@ a:hover {
     position: absolute;
     background-color: white;
     z-index: 4;
-    width: 98%;
-    height: 90%;
+    width: 98vw;
+    height: 98vh;
 }
 
 .openForm {
@@ -84,24 +84,23 @@ a:hover {
 }
 
 .registration {
+    width: 330px;
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     margin-left: 25px;
     margin-top: 15px;
     margin-bottom: 40px;
-    max-width: 300px;
+    max-width: 320px;
     padding: 15px;
-    border: 3px solid #f1f1f1;
-    border-radius: 10px;
     background-color: white
 }
 
-.registration input[type=text], .registration input[type=password] {
+.registration input.input_line{
     width: 89%;
     padding: 15px;
-    margin: 5px 0 22px 0;
+    margin: 5px 0 10px 0;
     border: none;
     background: #f1f1f1;
 }
@@ -118,9 +117,18 @@ a:hover {
     opacity: 0.8;
 }
 
+.registration .clear {
+    background-color: yellow;
+}
+
 .registration .cancel {
     background-color: red;
     margin-bottom:0px;
+}
+
+.textarea{
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 img.figure:hover{

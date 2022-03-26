@@ -1,9 +1,11 @@
 function closeForm() {
     document.getElementById("Form").style.display = "none";
+    document.getElementById("pageName").style.display = "";
 }
 
 function openForm() {
     document.getElementById("Form").style.display = "block";
+    document.getElementById("pageName").style.display = "none";
 }
 
 function GetTr(img){

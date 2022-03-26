@@ -10,25 +10,60 @@
         </title>
     </head>
     <body>
-        <h1 style="text-align: center;">
+        <h1 id="pageName" style="text-align: center;">
             Solve the puzzle
         </h1>
         <button class="openForm" onclick="openForm()">Sign in</button>
         <div class="Form" id="Form">
             <form method="get" class="registration">
+               
                 <h1>Login</h1>
 
                 <label class="label" for="fnickname"><b>Nickname</b></label><br>
-                <input type="text" id="fnickname" placeholder="Enter nickname" name="nickname" required>
+                <input class="input_line" type="text" maxlength="20" id="fnickname" placeholder="Enter nickname" name="nickname" required>
 
                 <label class="label" for="femail"><b>Email</b></label><br>
-                <input type="text" id="femail" placeholder="Enter email" name="email" required>
+                <input class="input_line" type="email" id="femail" placeholder="Enter email" name="email" required>
                 
                 <label class="label" for="fpsw"><b>Password</b></label><br>
-                <input type="password" id="fpsw" placeholder="Enter password" name="psw" required>
+                <input class="input_line" type="password" id="fpsw" placeholder="Enter password" name="psw" required>
 
+                <label class="label" for="fage"><b>Age</b></label><br>
+                <input class="input_line" type="number" id="fage" min="6" max="170" name="fage" placeholder="6" required><br>
+                
+                <fieldset>
+                    <label class="label"><b>Do you ever play chess?</b></label><br>
+                    <input type="radio" id="radio_yes" name="radio_play" value="yes">
+                    <label for="radio_yes">Yes</label><br>
+                    <input type="radio" id="radio_little" name="radio_play" value="little">
+                    <label for="radio_little">A little</label><br>
+                    <input type="radio" id="radio_yes" name="radio_play" value="no">
+                    <label for="radio_no">No</label>
+                </fieldset>
+
+                <br><label class="label" for="fage"><b>Chess level</b></label><br>
+                <input class="input_line" type="range" id="flevel" min="1" max="3" name="flevel" required><br>
+
+                <label class="label" for="fdatalist"><b>City</b></label><br>
+                <input class="input_line" list="fdatalist" placeholder="Enter your city" name="fcity" required>
+                <datalist id="fdatalist">
+                    <option value="Lviv"></option>
+                    <option value="Kyiv"></option>
+                    <option value="Melitopol"></option>
+                    <option value="Mariupol"></option>
+                    <option value="Odesa"></option>
+                    <option value="Chernihiv"></option>
+                    <option value="Ternopil"></option>
+                    <option value="Kharkiv"></option>
+                    <option value="Other"></option>
+                </datalist>
+                
+                <textarea class="textarea" name="fotherinfo" cols="38" rows="6" placeholder="Additional information"></textarea>
+                <input type="hidden" name="fhiddeninfo_game" value="chess">
+                
                 <button type="submit" class="btn">Play</button>
-                <button class="btn cancel" onclick="closeForm()">Close</button>
+                <button type="reset" class="btn clear">Clear</button>
+                <button class="btn cancel" onclick="closeForm()">Close</button>                
             </form>
         </div>
         
