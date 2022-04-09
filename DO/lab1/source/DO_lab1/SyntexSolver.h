@@ -53,6 +53,14 @@ private:
 
 	void CalculateQForDoubleMethod();
 
+	void GomorySolve();
+
+	void GomorySolveAfterInitialResult();
+
+	bool CheckGomoryResults();
+
+	bool SolveWithGomory();
+
 private:
 	EquationConditions m_conditions;
 	EquationConditions m_conditionsDoubleMethod;
@@ -70,4 +78,8 @@ private:
 
 	int m_mainColIndex = -2;
 	int m_mainRowIndex = -2;
+
+	bool m_GomorySolve = false;
+
+	std::vector<std::pair<double, int>> m_resultsValueWithBasisVectorIndex;
 };

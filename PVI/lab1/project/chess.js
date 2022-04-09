@@ -1,3 +1,10 @@
+function MyFunc(){
+    var nickname = document.getElementById("fnickname").value;
+    alert("Hello, " + nickname);
+    var form = document.getElementById("myForm");
+    form.submit();
+}
+
 function closeForm() {
     document.getElementById("Form").style.display = "none";
     document.getElementById("pageName").style.display = "";

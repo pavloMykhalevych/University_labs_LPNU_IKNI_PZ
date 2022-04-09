@@ -10,14 +10,14 @@
         },
         {
           "index": 2,
-          "value": 2
+          "value": 3
         }
       ]
     },
-    "Purpose": 1
+    "Purpose": 0
   },
   "Equations": {
-    "EquationsCount": 4,
+    "EquationsCount": 5,
     "Vector": [
       {
         "Coeficients": {
@@ -29,12 +29,12 @@
             },
             {
               "index": 2,
-              "value": 2
+              "value": 1
             }
           ]
         },
         "Sign": 0,
-        "B": 6
+        "B": 4
       },
       {
         "Coeficients": {
@@ -42,7 +42,7 @@
           "Vector": [
             {
               "index": 1,
-              "value": 2
+              "value": 3
             },
             {
               "index": 2,
@@ -50,8 +50,8 @@
             }
           ]
         },
-        "Sign": 0,
-        "B": 8
+        "Sign": 1,
+        "B": 4
       },
       {
         "Coeficients": {
@@ -59,16 +59,29 @@
           "Vector": [
             {
               "index": 1,
-              "value": -1
+              "value": 1
             },
             {
               "index": 2,
+              "value": 5
+            }
+          ]
+        },
+        "Sign": 1,
+        "B": 4
+      },
+      {
+        "Coeficients": {
+          "Count": 1,
+          "Vector": [
+            {
+              "index": 1,
               "value": 1
             }
           ]
         },
         "Sign": 0,
-        "B": 1
+        "B": 3
       },
       {
         "Coeficients": {
@@ -81,7 +94,7 @@
           ]
         },
         "Sign": 0,
-        "B": 2
+        "B": 3
       }
     ]
   },

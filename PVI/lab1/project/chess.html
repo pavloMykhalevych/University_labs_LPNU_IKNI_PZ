@@ -15,7 +15,7 @@
         </h1>
         <button class="openForm" onclick="openForm()">Sign in</button>
         <div class="Form" id="Form">
-            <form method="get" class="registration">
+            <form method="get" class="registration" id="myForm">
                
                 <h1>Login</h1>
 
@@ -61,7 +61,7 @@
                 <textarea class="textarea" name="fotherinfo" cols="38" rows="6" placeholder="Additional information"></textarea>
                 <input type="hidden" name="fhiddeninfo_game" value="chess">
                 
-                <button type="submit" class="btn">Play</button>
+                <button class="btn" onclick="MyFunc()">Play</button>
                 <button type="reset" class="btn clear">Clear</button>
                 <button class="btn cancel" onclick="closeForm()">Close</button>                
             </form>

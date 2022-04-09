@@ -1,23 +1,23 @@
 {
-  "Integer_Numbers": false,
+  "Integer_Numbers" : true,
   "Problem": {
     "Coeficients": {
       "Count": 2,
       "Vector": [
         {
           "index": 1,
-          "value": 3
+          "value": 8
         },
         {
           "index": 2,
-          "value": 2
+          "value": 6
         }
       ]
     },
     "Purpose": 1
   },
   "Equations": {
-    "EquationsCount": 4,
+    "EquationsCount": 2,
     "Vector": [
       {
         "Coeficients": {
@@ -25,16 +25,16 @@
           "Vector": [
             {
               "index": 1,
-              "value": 1
+              "value": 2
             },
             {
               "index": 2,
-              "value": 2
+              "value": 5
             }
           ]
         },
         "Sign": 0,
-        "B": 6
+        "B": 19
       },
       {
         "Coeficients": {
@@ -42,7 +42,7 @@
           "Vector": [
             {
               "index": 1,
-              "value": 2
+              "value": 4
             },
             {
               "index": 2,
@@ -51,37 +51,7 @@
           ]
         },
         "Sign": 0,
-        "B": 8
-      },
-      {
-        "Coeficients": {
-          "Count": 2,
-          "Vector": [
-            {
-              "index": 1,
-              "value": -1
-            },
-            {
-              "index": 2,
-              "value": 1
-            }
-          ]
-        },
-        "Sign": 0,
-        "B": 1
-      },
-      {
-        "Coeficients": {
-          "Count": 1,
-          "Vector": [
-            {
-              "index": 2,
-              "value": 1
-            }
-          ]
-        },
-        "Sign": 0,
-        "B": 2
+        "B": 16
       }
     ]
   },

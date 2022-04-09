@@ -7,15 +7,20 @@
 #include <climits>
 
 void SyntexSolver::Start() {
-	CreateProblem(true, "SyntexSolver_d_1.json");
+	CreateProblem(true, "SyntexSolver_main_Gomori.json");
 	//CreateProblem();
-	if (!CheckIfCanSolve()) {
-		std::cout << "\nCan't solve with syntex method!\n";
-		SolveWithDoubleMethod();
+	if (SolveWithGomory()) {
+		GomorySolve();
 	}
 	else {
-		Solve();
-		SolveWithDoubleMethod(true);
+		if (!CheckIfCanSolve()) {
+			std::cout << "\nCan't solve with syntex method!\n";
+			SolveWithDoubleMethod();
+		}
+		else {
+			Solve();
+			SolveWithDoubleMethod(true);
+		}
 	}
 }
 
@@ -27,6 +32,7 @@ void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
 			throw std::runtime_error("File was not found.\n");
 		}
 		nlohmann::json parsedJson = nlohmann::json::parse(jsonFile);
+		m_GomorySolve = parsedJson.at("Integer_Numbers").get<bool>();
 		m_conditions.m_problem = Equation::CreateFromFile(EquationType::Problem, parsedJson);
 		int equationsNumber = parsedJson.at("Equations").at("EquationsCount").get<int>();
 		for (int i = 0; i < equationsNumber; ++i) {
@@ -36,8 +42,13 @@ void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
 		for (int i = 0; i < parametersNumber; ++i) {
 			m_conditions.m_parameters.push_back(Equation::CreateFromFile(EquationType::ParamSign, parsedJson, i));
 		}
+		m_resultsValueWithBasisVectorIndex.resize(m_conditions.m_parameters.size(), std::pair<double, int>(0, -1));
 	}
 	else {
+		std::cout << "\nSolve only for integer basic parameter? (1 - yes, 0 - no) ";
+		int GomorySolve;
+		std::cin >> GomorySolve;
+		m_GomorySolve = static_cast<bool>(GomorySolve);
 		std::cout << "\nEnter the problem: ";
 		m_conditions.m_problem = Equation::Create(EquationType::Problem);
 		int equationsNumber = 0;
@@ -324,51 +335,51 @@ void SyntexSolver::RecalculateTable() {
 void SyntexSolver::ShowSyntexTable() {
 	// 1 row.
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|x"
-		<< std::setw(11) << std::left << "|c"
-		<< std::setw(11) << std::left << "|P[0]";
+	std::cout << std::setw(16) << std::left << "|x"
+		<< std::setw(17) << std::left << "|c"
+		<< std::setw(17) << std::left << "|P[0]";
 	const auto& problemCoef = m_conditions.m_problem.GetCoeficients();
 	for (int i = 0; i < m_conditions.m_parameters.size() - m_conditions.m_removedParam.size(); ++i) {
 		std::cout << "|c[" << problemCoef[i].first << "] = ";
-		std::cout << std::setw(3) << std::left << problemCoef[i].second;
+		std::cout << std::setw(9) << std::left << problemCoef[i].second;
 	}
-	std::cout << std::setw(11) << std::left << "|" << "|";
+	std::cout << std::setw(17) << std::left << "|" << "|";
 	// 2 row.
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|"
-		<< std::setw(11) << std::left << "|"
-		<< std::setw(11) << std::left << "|";
+	std::cout << std::setw(16) << std::left << "|"
+		<< std::setw(17) << std::left << "|"
+		<< std::setw(17) << std::left << "|";
 	for (int i = 0; i < m_conditions.m_parameters.size() - m_conditions.m_removedParam.size(); ++i) {
-		std::cout << "|P[" << problemCoef[i].first << std::setw(7) << std::left <<"]";
+		std::cout << "|P[" << problemCoef[i].first << std::setw(13) << std::left <<"]";
 	}
-	std::cout << std::setw(11) << std::left << "|" << "|";
+	std::cout << std::setw(17) << std::left << "|" << "|";
 	// Matrix
 	for (int i = 0; i < m_syntexTable.size(); ++i) {
 		std::cout << "\n";
-		std::cout<< "|x[" << (basisVectorIndices[i] + 1) << std::setw(6) << std::left << "]";
-		std::cout << "|" << std::setw(10) << std::left << problemCoef[basisVectorIndices[i]].second;
+		std::cout<< "|x[" << (basisVectorIndices[i] + 1) << std::setw(12) << std::left << "]";
+		std::cout << "|" << std::setw(16) << std::left << problemCoef[basisVectorIndices[i]].second;
 		for (int j = 0; j < m_syntexTable[0].size(); ++j) {
-			std::cout << "|" << std::setw(10) << std::left << m_syntexTable[i][j];
+			std::cout << "|" << std::setw(16) << std::left << m_syntexTable[i][j];
 		}
 		if (m_lastColumn[i] < 0) {
-			std::cout << "|" << std::setw(10) << std::left << "   < 0" << "|";
+			std::cout << "|" << std::setw(16) << std::left << "   < 0" << "|";
 		}
 		else {
-			std::cout << "|" << std::setw(10) << std::left << m_lastColumn[i] << "|";
+			std::cout << "|" << std::setw(16) << std::left << m_lastColumn[i] << "|";
 		}
 	}
 	// Q
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|Q"
-		<< std::setw(11) << std::left << "|   =";
+	std::cout << std::setw(16) << std::left << "|Q"
+		<< std::setw(17) << std::left << "|   =";
 	for (int i = 0; i < m_q.size(); ++i) {
-		std::cout << "|" << std::setw(10) << std::left << m_q[i];
+		std::cout << "|" << std::setw(16) << std::left << m_q[i];
 	}
 	if (m_lastColumn[m_lastColumn.size() - 1] == 0) {
-		std::cout << std::setw(11) << std::left << "|" << "|";
+		std::cout << std::setw(17) << std::left << "|" << "|";
 	}
 	else {
-		std::cout << "|" << std::setw(10) << std::left << m_lastColumn[m_lastColumn.size() - 1] << "|";
+		std::cout << "|" << std::setw(16) << std::left << m_lastColumn[m_lastColumn.size() - 1] << "|";
 	}
 	std::cout << "\n";
 }
@@ -376,54 +387,54 @@ void SyntexSolver::ShowSyntexTable() {
 void SyntexSolver::ShowSyntexTableWithDoubleMethod() {
 	// 1 row.
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|x"
-		<< std::setw(11) << std::left << "|c"
-		<< std::setw(11) << std::left << "|P[0]";
+	std::cout << std::setw(16) << std::left << "|x"
+		<< std::setw(17) << std::left << "|c"
+		<< std::setw(17) << std::left << "|P[0]";
 	const auto& problemCoef = m_conditionsDoubleMethod.m_problem.GetCoeficients();
 	for (int i = 0; i < m_conditionsDoubleMethod.m_parameters.size() - m_conditionsDoubleMethod.m_removedParam.size(); ++i) {
 		std::cout << "|c[" << problemCoef[i].first << "] = ";
-		std::cout << std::setw(3) << std::left << problemCoef[i].second;
+		std::cout << std::setw(9) << std::left << problemCoef[i].second;
 	}
 	std::cout << "|";
 	// 2 row.
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|"
-		<< std::setw(11) << std::left << "|"
-		<< std::setw(11) << std::left << "|";
+	std::cout << std::setw(16) << std::left << "|"
+		<< std::setw(17) << std::left << "|"
+		<< std::setw(17) << std::left << "|";
 	for (int i = 0; i < m_conditionsDoubleMethod.m_parameters.size() - m_conditionsDoubleMethod.m_removedParam.size(); ++i) {
-		std::cout << "|P[" << problemCoef[i].first << std::setw(7) << std::left << "]";
+		std::cout << "|P[" << problemCoef[i].first << std::setw(13) << std::left << "]";
 	}
 
 	std::cout << "|";
 	// Matrix
 	for (int i = 0; i < m_syntexTable.size(); ++i) {
 		std::cout << "\n";
-		std::cout << "|x[" << (basisVectorIndices[i] + 1) << std::setw(6) << std::left << "]";
-		std::cout << "|" << std::setw(10) << std::left << problemCoef[basisVectorIndices[i]].second;
+		std::cout << "|x[" << (basisVectorIndices[i] + 1) << std::setw(12) << std::left << "]";
+		std::cout << "|" << std::setw(16) << std::left << problemCoef[basisVectorIndices[i]].second;
 		for (int j = 0; j < m_syntexTable[0].size(); ++j) {
-			std::cout << "|" << std::setw(10) << std::left << m_syntexTable[i][j];
+			std::cout << "|" << std::setw(16) << std::left << m_syntexTable[i][j];
 		}
 		std::cout << "|";
 	}
 	// Q
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|Q"
-		<< std::setw(11) << std::left << "|   =";
+	std::cout << std::setw(16) << std::left << "|Q"
+		<< std::setw(17) << std::left << "|   =";
 	for (int i = 0; i < m_q.size(); ++i) {
-		std::cout << "|" << std::setw(10) << std::left << m_q[i];
+		std::cout << "|" << std::setw(16) << std::left << m_q[i];
 	}
 	std::cout << "|";
 	// Last row
 	std::cout << "\n";
-	std::cout << std::setw(10) << std::left << "|"
-		<< std::setw(11) << std::left << "|"
-		<< std::setw(11) << std::left << "|";
+	std::cout << std::setw(16) << std::left << "|"
+		<< std::setw(17) << std::left << "|"
+		<< std::setw(17) << std::left << "|";
 	for (int i = 0; i < m_lastRow.size(); ++i) {
 		if (m_lastRow[i] < 0) {
-			std::cout << std::setw(11) << std::left << "|";
+			std::cout << std::setw(17) << std::left << "|";
 		}
 		else {
-			std::cout << "|" << std::setw(10) << std::left << m_lastRow[i];
+			std::cout << "|" << std::setw(16) << std::left << m_lastRow[i];
 		}
 	}
 	std::cout << "|\n";
@@ -448,6 +459,9 @@ void SyntexSolver::Solve() {
 			if (m_conditions.m_problem.GetCoeficients()[*basisVectorIndicesIterator].second != 0) {
 				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] = " << m_syntexTable[index][0] << "\n";
 			}
+		}
+		else {
+			std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
 		}
 	}
 }
@@ -510,6 +524,7 @@ std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditi
 
 void SyntexSolver::CreateTableForDoubleMethodFromSyntex() {
 	auto paramSize = m_conditions.m_equations.size();
+	startParamNumber = paramSize;
 	auto coefSize = m_conditions.m_equations[0].GetCoeficients().size();
 	auto prevProblemCoefs = m_conditions.m_problem.GetCoeficients();
 	std::vector<std::pair<int, double>> problemCoefs;
@@ -520,7 +535,7 @@ void SyntexSolver::CreateTableForDoubleMethodFromSyntex() {
 			equationsCoefs[j].push_back({i+1, coefs[j].second});
 		}
 		problemCoefs.push_back({ i + 1, m_conditions.m_equations[i].GetB() });
-		m_conditionsDoubleMethod.m_parameters.push_back(Equation::Create({ {i+1, 1} }, EquationSign::GreaterThan, 0));
+		m_conditionsDoubleMethod.m_parameters.push_back(Equation::Create({ {i, 1} }, EquationSign::GreaterThan, 0));
 	}
 	for (int i = 0; i < coefSize; ++i) {
 		int count1 = 0;
@@ -539,6 +554,7 @@ void SyntexSolver::CreateTableForDoubleMethodFromSyntex() {
 	}
 	m_conditionsDoubleMethod.m_problem = Equation::Create(problemCoefs, EquationSign::None, 0);
 	AddAllParams(m_conditionsDoubleMethod);
+	ShowConditions(m_conditionsDoubleMethod, "\nSolve with double method.\n");
 	ConvertToCanonical(m_conditionsDoubleMethod);
 	for (auto& equation : m_conditionsDoubleMethod.m_equations) {
 		for (auto coef : equation.GetCoeficients()) {
@@ -568,7 +584,7 @@ void SyntexSolver::CreateTableForDoubleMethodFromSyntex() {
 			m_syntexTable[i][j] = equationCoef[j - 1].second;
 		}
 	}
-	ShowConditions(m_conditionsDoubleMethod, "\nSolve with double method.\n");
+	ShowConditions(m_conditionsDoubleMethod, "\nAfter converting to canonical\n");
 }
 
 void SyntexSolver::CreateTableForDoubleMethod() {
@@ -617,6 +633,24 @@ void SyntexSolver::SolveWithDoubleMethod(bool fromSyntex) {
 		RecalculateTable();
 		CalculateQForDoubleMethod();
 		ShowSyntexTableWithDoubleMethod();
+	}
+	std::cout << "\n Optimal parameters and value:\n";
+	std::cout << "Q = " << -m_q[0] << "\n";
+	for (int i = 0; i < m_conditionsDoubleMethod.m_parameters.size() - startParamNumber + 1; ++i) {
+		auto basisVectorIndicesIterator =
+			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first);
+		if (basisVectorIndicesIterator != basisVectorIndices.end()) {
+			int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
+			if (m_conditionsDoubleMethod.m_problem.GetCoeficients()[*basisVectorIndicesIterator].second != 0) {
+				std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = " << m_syntexTable[index][0] << "\n";
+			}
+			else {
+				std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
+			}
+		}
+		else {
+			std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
+		}
 	}
 }
 
@@ -669,4 +703,154 @@ void SyntexSolver::CalculateQForDoubleMethod() {
 		}
 	}
 	m_mainColIndex = min_index_col;
+}
+
+bool SyntexSolver::SolveWithGomory() {
+	return m_GomorySolve;
+}
+
+void SyntexSolver::GomorySolve() {
+	if (!CheckIfCanSolve()) {
+		std::cout << "\nCan't solve start problem with syntex method!\n";
+		SolveWithDoubleMethod();
+		m_conditions = m_conditionsDoubleMethod;
+	}
+	else {
+		Solve();
+	}
+	GomorySolveAfterInitialResult();
+}
+
+bool SyntexSolver::CheckGomoryResults() {
+	int isIntegerCount = 0;
+	for (int i = 0; i < startParamNumber; ++i) {
+		auto basisVectorIndicesIterator =
+			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditions.m_parameters[i].GetCoeficients()[0].first);
+		if (basisVectorIndicesIterator != basisVectorIndices.end()) {
+			int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
+			if ((m_syntexTable[index][0] - static_cast<int>(m_syntexTable[index][0])) > 0.05) {
+				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] is not integer\n";
+			}
+			else {
+				m_syntexTable[index][0] = static_cast<int>(m_syntexTable[index][0]);
+				++isIntegerCount;
+			}
+			m_resultsValueWithBasisVectorIndex[i] = std::pair<double, int>(m_syntexTable[index][0], index);
+		}
+	}
+	if (isIntegerCount == startParamNumber) {
+		return false;
+	}
+	return true;
+}
+
+void SyntexSolver::GomorySolveAfterInitialResult()
+{
+	while (CheckGomoryResults()) {
+		std::cout << "\nResult not integer. Next iteration: \n";
+
+		double maxValue = 0;
+		int maxIndex = -1;
+		for (int i = 0; i < m_resultsValueWithBasisVectorIndex.size(); ++i) {
+			double fractionPart;
+			if (m_resultsValueWithBasisVectorIndex[i].first >= 0) {
+				fractionPart = m_resultsValueWithBasisVectorIndex[i].first - static_cast<int>(m_resultsValueWithBasisVectorIndex[i].first);
+			}
+			else {
+				fractionPart = m_resultsValueWithBasisVectorIndex[i].first - static_cast<int>(m_resultsValueWithBasisVectorIndex[i].first - 1);
+			}
+
+			if (fractionPart > maxValue) {
+				maxValue = fractionPart;
+				maxIndex = m_resultsValueWithBasisVectorIndex[i].second;
+			}
+		}
+		if (maxValue == 0 || maxIndex == -1) {
+			std::cout << "Error! Fraction part = 0.";
+			return;
+		}
+		std::vector<std::pair<int, double>> coef;
+		for (int col = 1; col < m_syntexTable[0].size(); ++col) {
+			if (col <= startParamNumber) {
+				double fractionPart;
+				if (m_syntexTable[maxIndex][col] >= 0) {
+					fractionPart = m_syntexTable[maxIndex][col] - static_cast<int>(m_syntexTable[maxIndex][col]);
+				}
+				else {
+					fractionPart = m_syntexTable[maxIndex][col] - static_cast<int>(m_syntexTable[maxIndex][col] - 1);
+				}
+				if (fractionPart <= maxValue) {
+					coef.push_back(std::pair<int, double>(col, -fractionPart * 1 / maxValue));
+				}
+				else {
+					double a = (maxValue / (1 - maxValue)) * (1 - fractionPart);
+					coef.push_back(std::pair<int, double>(col, -a * 1 / maxValue));
+				}
+			}
+			else {
+				if (m_syntexTable[maxIndex][col] >= 0) {
+					coef.push_back(std::pair<int, double>(col, -m_syntexTable[maxIndex][col] * 1 / maxValue));
+				}
+				else {
+					double a = (maxValue / (1 - maxValue)) * abs(m_syntexTable[maxIndex][col]);
+					coef.push_back(std::pair<int, double>(col, -a * 1 / maxValue));
+				}
+			}
+		}
+		coef.push_back(std::pair<int, double>(m_syntexTable[0].size(), 1 * 1 / maxValue));
+		auto newEquation = Equation::Create(coef, EquationSign::Equal, -maxValue * 1 / maxValue);
+		m_conditions.m_equations.push_back(newEquation);
+		m_conditions.m_parameters.push_back(Equation::Create(std::vector<std::pair<int, double>>(1, std::pair<int, double>(m_syntexTable[0].size() - 1, 1)), EquationSign::GreaterThan, 0));
+		AddAllParams(m_conditions);
+		ShowConditions(m_conditions, "\nAfter adding new equation\n");
+
+		m_q.push_back(0);
+		m_lastColumn.push_back(0);
+		m_lastRow.resize(m_q.size() - 1, 0);
+		basisVectorIndices.push_back(m_syntexTable[0].size() - 1);
+
+		for (int i = 0; i < m_syntexTable.size(); ++i) {
+			m_syntexTable[i].push_back(0);
+		}
+
+		std::vector<double> addedRow;
+		addedRow.push_back(newEquation.GetB());
+		for (int i = 0; i < coef.size(); ++i) {
+			addedRow.push_back(coef[i].second);
+		}
+		m_syntexTable.push_back(addedRow);
+
+		m_conditionsDoubleMethod = m_conditions;
+
+		CalculateQForDoubleMethod();
+		ShowSyntexTableWithDoubleMethod();
+		while (!FoundOptimalDoubleMethod()) {
+			RecalculateTable();
+			CalculateQForDoubleMethod();
+			ShowSyntexTableWithDoubleMethod();
+		}
+		std::cout << "\n Optimal parameters and value:\n";
+		std::cout << "Q = " << -m_q[0] << "\n";
+		for (int i = 0; i < m_conditionsDoubleMethod.m_parameters.size(); ++i) {
+			auto basisVectorIndicesIterator =
+				std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first);
+			if (basisVectorIndicesIterator != basisVectorIndices.end()) {
+				int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
+				if (m_conditionsDoubleMethod.m_problem.GetCoeficients()[*basisVectorIndicesIterator].second != 0) {
+					std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = " << m_syntexTable[index][0] << "\n";
+				}
+				else {
+					std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
+				}
+			}
+			else {
+				std::cout << "x[" << m_conditionsDoubleMethod.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
+			}
+		}
+	}
+	std::cout << "\n\nResults: \nQ = " << (int)m_q[0] << ";\n";
+	for (int i = 0; i < m_resultsValueWithBasisVectorIndex.size(); ++i) {
+		std::cout << "x[" << i+1 << "] = " << m_resultsValueWithBasisVectorIndex[i].first << ";\n";
+	}
+	std::cout << "\nEnd!!";
 }
