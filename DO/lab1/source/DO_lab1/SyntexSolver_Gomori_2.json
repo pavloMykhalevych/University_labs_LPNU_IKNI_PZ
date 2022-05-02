@@ -1,0 +1,65 @@
+{
+  "Integer_Numbers" : true,
+  "Problem": {
+    "Coeficients": {
+      "Count": 2,
+      "Vector": [
+        {
+          "index": 1,
+          "value": 4
+        },
+        {
+          "index": 2,
+          "value": 5
+        }
+      ]
+    },
+    "Purpose": 1
+  },
+  "Equations": {
+    "EquationsCount": 2,
+    "Vector": [
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 1
+            },
+            {
+              "index": 2,
+              "value": 4
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 11
+      },
+      {
+        "Coeficients": {
+          "Count": 2,
+          "Vector": [
+            {
+              "index": 1,
+              "value": 3
+            },
+            {
+              "index": 2,
+              "value": 3
+            }
+          ]
+        },
+        "Sign": 0,
+        "B": 13
+      }
+    ]
+  },
+  "Parameters": {
+    "Count": 2,
+    "Vector": [
+      1,
+      1
+    ]
+  }
+}

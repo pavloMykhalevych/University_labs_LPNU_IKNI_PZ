@@ -163,3 +163,30 @@ a.link{
     height: 35px;
     background-color: #4CAF50;
 }
+
+div.timer{
+    font-size: 20;
+    border: solid black 3px;
+    border-radius: 10px;
+    padding: 15px;
+    position: absolute;
+    right: 35%;
+    top: 15%;
+}
+
+button.startTimer{
+    font-size: large;
+    margin-top: 15px;
+    left: 50%;
+    width: fit-content;
+}
+
+#timer{
+    font-size: 30px;
+}
+
+div.chart{
+    position: absolute;
+    right: 30%;
+    top: 40%;
+}

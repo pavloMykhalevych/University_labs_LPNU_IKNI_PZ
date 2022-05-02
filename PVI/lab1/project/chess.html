@@ -2,6 +2,7 @@
 <html>
     <head>
         <link rel="stylesheet" href="chess.css">
+        <script src="external/chart.js"></script>
         <script src="chess.js"></script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,24 +10,34 @@
             Chess game
         </title>
     </head>
-    <body>
+    <body onload="CreateChart()">
         <h1 id="pageName" style="text-align: center;">
             Solve the puzzle
         </h1>
         <button class="openForm" onclick="openForm()">Sign in</button>
+        <div class="timer">
+            <span style="font-size: 30px;"><strong>Timer:</strong></span> <span id = "timer"></span><br>
+            <button class="startTimer" onclick="StartTimer()">Start Timer</button>
+            <button class="startTimer" onclick="ClearTimer()">Clear</button>
+        </div>
+        <div class="chart">
+            <canvas id="myChart" width="400" height="400"></canvas>
+        </div>
         <div class="Form" id="Form">
-            <form method="get" class="registration" id="myForm">
-               
+            <form method="get" class="registration" id="myForm"  onsubmit="return validate()">
                 <h1>Login</h1>
 
                 <label class="label" for="fnickname"><b>Nickname</b></label><br>
-                <input class="input_line" type="text" maxlength="20" id="fnickname" placeholder="Enter nickname" name="nickname" required>
+                <input class="input_line" type="text" maxlength="20" id="fnickname" placeholder="Enter nickname" name="nickname">
 
                 <label class="label" for="femail"><b>Email</b></label><br>
                 <input class="input_line" type="email" id="femail" placeholder="Enter email" name="email" required>
                 
                 <label class="label" for="fpsw"><b>Password</b></label><br>
                 <input class="input_line" type="password" id="fpsw" placeholder="Enter password" name="psw" required>
+
+                <label class="label" for="fpsw_repeat"><b>Confirm Password</b></label><br>
+                <input class="input_line" type="password" id="fpsw_repeat" placeholder="Confirm password" name="psw_repeat" required>
 
                 <label class="label" for="fage"><b>Age</b></label><br>
                 <input class="input_line" type="number" id="fage" min="6" max="170" name="fage" placeholder="6" required><br>
@@ -61,7 +72,7 @@
                 <textarea class="textarea" name="fotherinfo" cols="38" rows="6" placeholder="Additional information"></textarea>
                 <input type="hidden" name="fhiddeninfo_game" value="chess">
                 
-                <button class="btn" onclick="MyFunc()">Play</button>
+                <input type="submit" class="btn" value="Play">
                 <button type="reset" class="btn clear">Clear</button>
                 <button class="btn cancel" onclick="closeForm()">Close</button>                
             </form>

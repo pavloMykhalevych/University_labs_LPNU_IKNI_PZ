@@ -145,6 +145,7 @@
   <ItemGroup>
     <ClCompile Include="Equation.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Source1.cpp" />
     <ClCompile Include="SyntexSolver.cpp" />
   </ItemGroup>
   <ItemGroup>

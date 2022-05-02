@@ -1,8 +1,102 @@
-function MyFunc(){
+function validate(){
+    var fpsw = document.getElementById("fpsw").value;
+    var fpsw_repeat = document.getElementById("fpsw_repeat").value;
+    
+    var regex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/;
+    if(!regex.test(fpsw)){
+        alert("Password must have at least 1 upper and lower case letter, 1 number and consist of 8 characters!");
+        return false;
+    }   
+
+    if(fpsw !== fpsw_repeat){
+        alert("Passwords are not the same!");
+        return false;
+    }
+    
     var nickname = document.getElementById("fnickname").value;
+    if(nickname == ""){
+        alert("Please enter the nickname!");
+        return false;
+    }
     alert("Hello, " + nickname);
-    var form = document.getElementById("myForm");
-    form.submit();
+    return true;
+}
+
+var x;
+
+function StartTimer(){
+    var distance = 60;
+    x = setInterval(function() {
+      
+        document.getElementById("timer").innerHTML = " " + distance;
+
+        distance -= 1;
+
+        if (distance < 0) {
+          clearInterval(x);
+          document.getElementById("timer").innerHTML = "Time is up!";
+        }
+      }, 1000);
+}
+
+var updateChart;
+var myChart;
+
+function CreateChart(){
+    const ctx = document.getElementById('myChart');
+    console.log(ctx)
+    myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['White king', 'White pawn', 'Black king', 'Black pawn'],
+            datasets: [{
+                label: '# of figures',
+                data: [1, 1, 1, 2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    updateChart = setInterval(function() {
+        var bp = document.getElementsByClassName("figure black pawn");
+        var wp = document.getElementsByClassName("figure white pawn");
+        var bk = document.getElementsByClassName("figure black king");
+        var wk = document.getElementsByClassName("figure white king");
+
+        var bp_number = bp.length;
+        var wp_number = wp.length;
+        var bk_number = bk.length;
+        var wk_number = wk.length;
+
+        myChart.data.datasets[0].data[0] = wk_number;
+        myChart.data.datasets[0].data[1] = wp_number;
+        myChart.data.datasets[0].data[2] = bk_number;
+        myChart.data.datasets[0].data[3] = bp_number;
+        myChart.update();
+      }, 5000);
+}
+
+function ClearTimer(){
+    clearInterval(x);
+    document.getElementById("timer").innerHTML = "";
 }
 
 function closeForm() {

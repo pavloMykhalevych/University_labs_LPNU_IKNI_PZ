@@ -7,8 +7,8 @@
 #include <climits>
 
 void SyntexSolver::Start() {
-	CreateProblem(true, "SyntexSolver_main_Gomori.json");
-	//CreateProblem();
+	CreateProblem(true, "SyntexSolver_Gomori_3.json");
+	//CreateProblem(false);
 	if (SolveWithGomory()) {
 		GomorySolve();
 	}
@@ -38,6 +38,7 @@ void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
 		for (int i = 0; i < equationsNumber; ++i) {
 			m_conditions.m_equations.push_back(Equation::CreateFromFile(EquationType::Simple, parsedJson, i));
 		}
+		m_conditions.m_equations[1].SetB(5.66);
 		int parametersNumber = parsedJson.at("Parameters").at("Count").get<int>();
 		for (int i = 0; i < parametersNumber; ++i) {
 			m_conditions.m_parameters.push_back(Equation::CreateFromFile(EquationType::ParamSign, parsedJson, i));
@@ -728,7 +729,7 @@ bool SyntexSolver::CheckGomoryResults() {
 			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditions.m_parameters[i].GetCoeficients()[0].first);
 		if (basisVectorIndicesIterator != basisVectorIndices.end()) {
 			int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
-			if ((m_syntexTable[index][0] - static_cast<int>(m_syntexTable[index][0])) > 0.05) {
+			if ((m_syntexTable[index][0] - static_cast<int>(m_syntexTable[index][0])) > 0.08) {
 				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] is not integer\n";
 			}
 			else {
