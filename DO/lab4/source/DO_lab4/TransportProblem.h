@@ -4,11 +4,18 @@
 #include <vector>
 
 #include "Cell.h"
+#include "LoopCellInfo.h"
+#include "Potential.h"
 
 class TransportProblem
 {
+public:
+	void Start();
+
 private:
-	void CreateProblem(const bool fromConsole = true, std::string fileName = "main.json");
+	bool IsDegenerate();
+
+	void CreateProblem(const bool fromConsole = false, std::string fileName = "main.json");
 
 	void ShowTable(const std::string& message = "");
 
@@ -16,12 +23,16 @@ private:
 
 	void CalculatePotensials();
 
-	void CalculateFunction();
+	void CalculateFunction(std::string mes = "");
 
-	void Start();
+	bool FindLoopAndRecalculate();
 
-	std::vector<double> m_v_rows;
-	std::vector<double> m_u_cols;
+	std::pair<bool, std::vector<LoopCellInfo>> FindNextElementInLoop(const std::vector<LoopCellInfo>& path, bool horizontal);
+
+	std::vector<LoopCellInfo> FindNeigbors(LoopCellInfo loopCellInfo, bool horizontal);
+
+	std::vector<Potential> m_v_rows;
+	std::vector<Potential> m_u_cols;
 	std::vector<double> m_a_rows;
 	std::vector<double> m_b_cols;
 	std::vector<std::vector<Cell>> m_table;
