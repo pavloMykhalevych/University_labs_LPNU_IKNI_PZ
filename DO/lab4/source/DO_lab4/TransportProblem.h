@@ -11,9 +11,10 @@ class TransportProblem
 {
 public:
 	void Start();
+	void StartRent();
 
 private:
-	bool IsDegenerate();
+	bool IsClosed();
 
 	void CreateProblem(const bool fromConsole = false, std::string fileName = "main.json");
 

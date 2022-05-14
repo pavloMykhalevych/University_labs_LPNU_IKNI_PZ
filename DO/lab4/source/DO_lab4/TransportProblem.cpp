@@ -11,10 +11,27 @@
 #include "color.hpp"
 
 void TransportProblem::Start() {
-	CreateProblem();
-	if (!IsDegenerate()) {
-		std::cout << "Proble is not degenerate!";
+	CreateProblem(false, "main_2.json");
+	if (!IsClosed()) {
+		std::cout << "Proble is not closed type!";
 		return;
+	}
+	FindInitialFucntion();
+	CalculateFunction("Result function after finding supporting plan:");
+	ShowTable();
+	CalculatePotensials();
+	ShowTable();
+	while (FindLoopAndRecalculate()) {
+		CalculatePotensials();
+		ShowTable();
+	}
+	CalculateFunction("Found optimal:");
+}
+
+void TransportProblem::StartRent() {
+	CreateProblem();
+	if (!IsClosed()) {
+		std::cout << "Proble is not closed type!";
 	}
 	FindInitialFucntion();
 	CalculateFunction("Result function after finding supporting plan:");
@@ -85,7 +102,7 @@ void TransportProblem::CreateProblem(const bool fromConsole, std::string fileNam
 	m_u_cols.resize(m_b_cols.size(), Potential{ 0, false });
 }
 
-bool TransportProblem::IsDegenerate() {
+bool TransportProblem::IsClosed() {
 	double sum1 = 0;
 	double sum2 = 0;
 	for (auto a : m_a_rows) {
