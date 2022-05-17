@@ -1,7 +1,10 @@
-#include "TransportProblem.h"
+//#include "TransportProblem.h"
+#include "RouteOptimization.h"
 
 int main() {
-	TransportProblem transportProblem;
-	transportProblem.Start();
+	//TransportProblem transportProblem;
+	//transportProblem.StartRent();
+	RouteOptimization rt;
+	rt.Start();
 	return 0;
 }

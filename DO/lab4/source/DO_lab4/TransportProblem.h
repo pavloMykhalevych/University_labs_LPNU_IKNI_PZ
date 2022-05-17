@@ -20,9 +20,19 @@ private:
 
 	void ShowTable(const std::string& message = "");
 
+	void ShowTableRents(const std::string& message = "");
+
 	void FindInitialFucntion();
 
 	void CalculatePotensials();
+
+	void CalculateDiference();
+
+	double CalculateGived(std::vector<double> a_rows, std::vector<double> b_cols, std::vector<std::vector<Cell>> table);
+
+	void GoToNextRentTable();
+
+	bool HasNegative();
 
 	void CalculateFunction(std::string mes = "");
 
@@ -36,7 +46,10 @@ private:
 	std::vector<Potential> m_u_cols;
 	std::vector<double> m_a_rows;
 	std::vector<double> m_b_cols;
+	std::vector<std::pair<double, bool>> m_dif_rows;
+	std::vector<double> m_dif_cols;
 	std::vector<std::vector<Cell>> m_table;
+	std::vector<std::vector<Cell>> m_start_table;
 	double m_result;
 };
 
