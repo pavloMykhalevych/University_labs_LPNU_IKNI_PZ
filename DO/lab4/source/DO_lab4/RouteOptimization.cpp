@@ -14,7 +14,7 @@
 #include "color.hpp"
 
 void RouteOptimization::Start() {
-	CreateProblem(false, "lab6_dejkstra.json");
+	CreateProblem(false, "lab6_13.json");
 	FloydFindRoute();
 	DejkstraStart();
 }
@@ -75,19 +75,19 @@ void RouteOptimization::PrintFloyd(const int iteration, std::vector<std::pair<in
 				});
 			if (underline != underlineIndices.end()) {
 				std::ostringstream ss;
-				ss << std::setprecision(1) << std::left << m_floyd_d[rowIndex][colIndex];
-				std::cout << std::setw(10) << dye::red((m_floyd_d[rowIndex][colIndex] == std::numeric_limits<double>::max()) ? "-" : ss.str());
+				ss << std::setprecision(1) << std::left << std::fixed << m_floyd_d[rowIndex][colIndex];
+				std::cout << std::setw(7) << dye::red((m_floyd_d[rowIndex][colIndex] == std::numeric_limits<double>::max()) ? "-" : ss.str());
 			}
 			else {
 				std::ostringstream ss;
-				ss << std::setprecision(1) << std::left << m_floyd_d[rowIndex][colIndex];
-				std::cout << std::setw(10) << ((m_floyd_d[rowIndex][colIndex] == std::numeric_limits<double>::max()) ? "-" : ss.str());
+				ss << std::setprecision(1) << std::left << std::fixed << m_floyd_d[rowIndex][colIndex];
+				std::cout << std::setw(7) << ((m_floyd_d[rowIndex][colIndex] == std::numeric_limits<double>::max()) ? "-" : ss.str());
 			}
 			if (colIndex < m_costs.size() - 1) {
 				std::cout << ", ";
 			}
 		}
-		std::cout << std::setw(10) << std::left << " ] ";
+		std::cout << std::setw(7) << std::left << " ] ";
 		if (rowIndex == 0) {
 			std::cout << std::setw(5) << std::left << "R: [";
 		}
@@ -102,11 +102,11 @@ void RouteOptimization::PrintFloyd(const int iteration, std::vector<std::pair<in
 				});
 			if (underline != underlineIndices.end()) {
 				std::ostringstream ss;
-				ss << std::setw(10) << std::left << m_floyd_r[rowIndex][colIndex];
+				ss << std::setw(7) << std::left << m_floyd_r[rowIndex][colIndex];
 				std::cout << dye::red(ss.str());
 			}
 			else {
-				std::cout << std::setw(10) << std::left << m_floyd_r[rowIndex][colIndex];
+				std::cout << std::setw(7) << std::left << m_floyd_r[rowIndex][colIndex];
 			}
 			if (colIndex < m_costs.size() - 1) {
 				std::cout << ", ";
@@ -168,7 +168,7 @@ void RouteOptimization::FloydGoToNextTables(const int basisPeek) {
 			auto new_d = std::min(m_floyd_d[rowIndex][colIndex], (m_floyd_d[rowIndex][basisPeek] + m_floyd_d[basisPeek][colIndex]));
 			if (new_d < m_floyd_d[rowIndex][colIndex]) {
 				m_floyd_d[rowIndex][colIndex] = new_d;
-				m_floyd_r[rowIndex][colIndex] = basisPeek + 1;
+				m_floyd_r[rowIndex][colIndex] = m_floyd_r[basisPeek][colIndex];
 				underlineIndices.push_back(std::pair<int, int>(rowIndex, colIndex));
 			}
 		}
