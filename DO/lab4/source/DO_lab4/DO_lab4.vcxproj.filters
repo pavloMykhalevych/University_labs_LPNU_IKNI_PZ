@@ -24,6 +24,9 @@
     <ClCompile Include="RouteOptimization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HomoriHu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="TransportProblem.h">
@@ -39,6 +42,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="RouteOptimization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HomoriHu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

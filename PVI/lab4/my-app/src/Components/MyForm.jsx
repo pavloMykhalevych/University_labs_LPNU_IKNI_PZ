@@ -1,5 +1,6 @@
 import { Form, FormGroup, Button, Col, Row } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
+import PlayerName from "./PlayerName";
 
 const mystyle = {
   width: "25%",
@@ -32,30 +33,72 @@ function validate(e){
   if(f.id==="LogInForm")
   {
     var nickname_log = document.getElementById("nickname_log").value;
-    if(nickname_log === "")
-    {
-       console.log("Empty" + nickname_log)
-        alert("Enter your nickname");
+    var email = document.getElementById("email_log").value;
+    var pwd = document.getElementById("password_log").value;
+
+    var server = 'http://lab56/login.php';
+    var formdata = new FormData();
+    formdata.append('nickname', nickname_log);
+    formdata.append('email', email);
+    formdata.append('password', pwd);
+    fetch(server, {
+      method : 'POST',
+      header : {'Content-Type' : 'application/x-www-form-urlencoded'},
+      body : formdata
+    })
+    .then(response => { return response.json(); })
+    .then(data => {
+      if(!data.validated){
+        alert(data.validation_error_text);
         return false;
-    }
+      }
+      if(data.sever_error){
+        alert(data.sever_error_text);
+        return false;
+      }
+      f.reset();
+      closeform();
+      alert("Hi, " + data.nickname);
+    });
+    
   }
   else if(f.id==="SighInForm")
   {
     var fpsw = document.getElementById("password").value;
     var fpsw_repeat = document.getElementById("confirmpass").value;
     var nickname = document.getElementById("nickname").value;
+    var email = document.getElementById("email").value;
     if(fpsw !== fpsw_repeat)
     {
         alert("Passwords are not the same");
         return false;
     }
-    if(nickname === "")
-    {
-        alert("Enter your nickname");
+    var server = 'http://lab56/registration.php';
+    var formdata = new FormData();
+    formdata.append('nickname', nickname);
+    formdata.append('email', email);
+    formdata.append('password', fpsw);
+    fetch(server, {
+      method : 'POST',
+      header : {'Content-Type' : 'application/json'},
+      body : formdata
+    })
+    .then(response => {return response.json(); } )
+    .then(data => {
+      if(!data.validated){
+        alert(data.validation_error_text);
         return false;
-    }
+      }
+      if(data.sever_error){
+        alert(data.sever_error_text);
+        return false;
+      }
+      f.reset();
+      closeform();
+      alert('Hi, ' + data.nickname + ', your data has been saved!');
+      
+    });
   }
-  f.submit();
 }
 
 function MyForm() {
@@ -95,7 +138,7 @@ function MyForm() {
               name="email"
               type="email"
               placeholder="example@email.com"
-              required
+              
             />
           </FormGroup>
           <FormGroup style={{marginTop: 20}}>
@@ -105,7 +148,7 @@ function MyForm() {
               name="password"
               type="password"
               pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"
-              required
+              
             />
           </FormGroup>
           <FormGroup style={{marginTop: 20}}>
@@ -115,7 +158,7 @@ function MyForm() {
               name="confirmpass"
               type="password"
               pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"
-              required
+              
             />
           </FormGroup>
           <Button type="submit" variant="success" onClick={el => validate(el)} style={{marginTop: 10}}>
@@ -137,7 +180,7 @@ function MyForm() {
             <Form.Label>Enter your nickname</Form.Label>
             <Form.Control
               id="nickname_log"
-              name="nickname"
+              name="nickname_log"
               type="text"
               placeholder="Your nickname"
             />
@@ -149,7 +192,7 @@ function MyForm() {
               name="email_log"
               type="email"
               placeholder="example@email.com"
-              required
+              
             />
           </FormGroup>
           <FormGroup style={{marginTop: 20}}>
@@ -159,7 +202,7 @@ function MyForm() {
               name="password_log"
               type="password"
               pattern="^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}$"
-              required
+              
             />
           </FormGroup>
           <Button type="submit" variant="success" onClick={el => validate(el)} style={{marginTop: 10}}> 

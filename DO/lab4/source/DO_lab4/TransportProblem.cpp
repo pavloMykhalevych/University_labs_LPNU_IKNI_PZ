@@ -9,7 +9,7 @@
 #include <sstream>
 #include <limits>
 
-//#include "color.hpp"
+#include "color.hpp"
 
 void TransportProblem::Start() {
 	CreateProblem(false, "main_2.json");
@@ -145,10 +145,10 @@ void TransportProblem::ShowTable(const std::string& message) {
 
 		std::cout << std::setw(15) << std::left << "|";
 		for (int colIndex = 0; colIndex < m_u_cols.size(); ++colIndex) {
-			/*std::ostringstream ss;
+			std::ostringstream ss;
 			ss << std::setw(15) << std::setprecision(3) << std::right << m_table[rowIndex][colIndex].bottom;
 			auto value = m_table[rowIndex][colIndex].used ? dye::red(ss.str()) : dye::green(ss.str());
-			std::cout << "|" << value;*/
+			std::cout << "|" << value;
 		}
 		std::cout << "|";
 		std::cout << "\n";
@@ -469,20 +469,20 @@ void TransportProblem::ShowTableRents(const std::string& message) {
 			std::cout << "|" << std::setw(15) << std::setprecision(3) << std::left << m_table[rowIndex][colIndex].top;
 		}
 		std::cout << "|" << std::setw(15) << std::setprecision(3) << std::left << m_a_rows[rowIndex];
-		/*std::ostringstream ss_2;
+		std::ostringstream ss_2;
 		ss_2 << std::setw(15) << std::setprecision(3) << std::left << m_dif_rows[rowIndex].first;
 		auto value_2 = m_dif_rows[rowIndex].second ? dye::blue(ss_2.str()) : dye::yellow(ss_2.str());
-		std::cout << "|" << value_2;*/
+		std::cout << "|" << value_2;
 		//std::cout << "|" << std::setw(15) << std::setprecision(3) << std::left << m_dif_rows[rowIndex].first;
 		std::cout << "|";
 		std::cout << "\n";
 
 		std::cout << std::setw(15) << std::left << "|";
 		for (int colIndex = 0; colIndex < m_u_cols.size(); ++colIndex) {
-			/*std::ostringstream ss;
+			std::ostringstream ss;
 			ss << std::setw(15) << std::setprecision(3) << std::right << m_table[rowIndex][colIndex].bottom;
 			auto value = m_table[rowIndex][colIndex].used ? dye::red(ss.str()) : dye::green(ss.str());
-			std::cout << "|" << value;*/
+			std::cout << "|" << value;
 		}
 		std::cout << std::setw(16) << std::left << "|";
 		std::cout << std::setw(16) << std::left << "|";
