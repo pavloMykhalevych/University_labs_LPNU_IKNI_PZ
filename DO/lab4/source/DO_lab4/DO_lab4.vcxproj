@@ -152,6 +152,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cell.h" />
+    <ClInclude Include="Connection.h" />
     <ClInclude Include="HomoriHu.h" />
     <ClInclude Include="LoopCellInfo.h" />
     <ClInclude Include="Potential.h" />

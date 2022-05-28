@@ -3,9 +3,11 @@
 #include <vector>
 #include <utility>
 
+#include "Connection.h"
+
 struct Vertex
 {
 	int Index;
-	std::vector<std::pair<int, double>> Connections;
+	std::vector<Connection> Connections;
 };
 
