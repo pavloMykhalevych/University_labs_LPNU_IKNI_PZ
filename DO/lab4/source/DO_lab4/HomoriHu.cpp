@@ -10,7 +10,7 @@
 #include <limits>
 
 void HomoriHu::Start() {
-	CreateProblem(false, "lab7_homori_24.json");
+	CreateProblem(false, "lab7_homori_8.json");
 	BuildRoute();
 	ShowTable();
 }
@@ -142,14 +142,17 @@ void HomoriHu::BuildRoute() {
 				for (const auto& el : bestgroup) {
 					vertexGroups[selectedGroupIndex].erase(std::find(vertexGroups[selectedGroupIndex].begin(), vertexGroups[selectedGroupIndex].end(), el));
 				}
-				auto it = std::find_if(m_connections.begin(), m_connections.end(), [groupIdx](const auto& connection) {
-					return connection.GroupIndex1 == groupIdx || connection.GroupIndex2 == groupIdx;
-					});
-				if (it->GroupIndex1 == groupIdx) {
-					it->GroupIndex2 = int(vertexGroups.size() - 1);
-				}
-				else {
-					it->GroupIndex1 = int(vertexGroups.size() - 1);
+				for (auto connectionIndex = 0; connectionIndex < m_connections.size(); connectionIndex++) {
+					if ((m_connections[connectionIndex].GroupIndex1 == selectedGroupIndex && m_connections[connectionIndex].GroupIndex2 == groupIdx)
+						|| (m_connections[connectionIndex].GroupIndex1 == groupIdx && m_connections[connectionIndex].GroupIndex2 == selectedGroupIndex)) {
+						if (m_connections[connectionIndex].GroupIndex1 == groupIdx) {
+							m_connections[connectionIndex].GroupIndex2 = int(vertexGroups.size() - 1);
+						}
+						else {
+							m_connections[connectionIndex].GroupIndex1 = int(vertexGroups.size() - 1);
+						}
+						break;
+					}
 				}
 				m_connections.push_back(Connection{ selectedGroupIndex, -1,  int(vertexGroups.size() - 1), -1, min });
 			}
@@ -271,10 +274,11 @@ std::vector<int> HomoriHu::FindConectedGroupsToSelected(const std::vector<std::v
 		}
 		++count;
 		auto nextGroup = m_connections[connectionIndex].GroupIndex1 == selectedGroupIndex ? m_connections[connectionIndex].GroupIndex2 : m_connections[connectionIndex].GroupIndex1;
-		auto vertex_vector = FindConectedGroupsToSelected(vertexGroups, nextGroup, selectedGroupIndex);
-		for (const auto& el : vertex_vector) {
+		auto vertices = std::move(FindConectedGroupsToSelected(vertexGroups, nextGroup, selectedGroupIndex));
+		result_vertices.insert(result_vertices.end(), vertices.begin(), vertices.end());
+;		/*for (const auto& el : vertices) {
 			result_vertices.push_back(el);
-		}
+		}*/
 	}
 	for (const auto& el : vertexGroups[selectedGroupIndex]) {
 		result_vertices.push_back(el);
