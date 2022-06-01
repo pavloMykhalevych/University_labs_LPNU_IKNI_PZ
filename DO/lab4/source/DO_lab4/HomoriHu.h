@@ -27,6 +27,8 @@ private:
 
 	double FindFlowSum(const std::vector<int>& group);
 
+	void ShowConnections();
+
 	bool HasConnection(const std::vector<int>& group, int vertex);
 
 	bool HasConnection(const std::vector<int>& group1, const std::vector<int>& group2);

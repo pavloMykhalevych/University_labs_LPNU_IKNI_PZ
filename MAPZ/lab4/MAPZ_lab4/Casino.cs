@@ -113,7 +113,6 @@ namespace MAPZ_lab4
             Profit = income - (PreviousBalance - Balance) - cheated;
             var prof = income - cheated;
             Balance += prof;
-            Form1.GetInstance().CallMessage("The swindlers take out of your casino " + 1000.ToString() + "$ today.");
             PreviousBalance = Balance;
             Day += 1;
         }

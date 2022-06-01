@@ -158,6 +158,8 @@ void HomoriHu::BuildRoute() {
 			}
 		}
 		prevGroupIndex = selectedGroupIndex;
+		//std::cout << "Iteration " + std::to_string(10);
+		//ShowConnections();
 		m_step++;
 	}
 
@@ -165,6 +167,10 @@ void HomoriHu::BuildRoute() {
 		m_connections[connectionIndex].VertexIndex1 = vertexGroups[m_connections[connectionIndex].GroupIndex1][0];
 		m_connections[connectionIndex].VertexIndex2 = vertexGroups[m_connections[connectionIndex].GroupIndex2][0];
 	}
+
+}
+
+void HomoriHu::ShowConnections() {
 
 }
 

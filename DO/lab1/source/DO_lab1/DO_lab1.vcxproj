@@ -144,6 +144,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Equation.cpp" />
+    <ClCompile Include="HybridGame.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Source1.cpp" />
     <ClCompile Include="SyntexSolver.cpp" />
@@ -152,7 +153,7 @@
     <ClInclude Include="Equation.h" />
     <ClInclude Include="EquationSign.h" />
     <ClInclude Include="EquationType.h" />
-    <ClInclude Include="header.h" />
+    <ClInclude Include="HybridGame.h" />
     <ClInclude Include="SyntexSolver.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

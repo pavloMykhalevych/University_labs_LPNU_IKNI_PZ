@@ -6,10 +6,11 @@
 #include <algorithm>
 #include <climits>
 
-void SyntexSolver::Start() {
-	CreateProblem(true, "SyntexSolver_Gomori_3.json");
-	//CreateProblem(false);
-	if (SolveWithGomory()) {
+std::vector<double> SyntexSolver::Start() {
+	//CreateProblem(true, "SyntexSolver_1.json");
+	////CreateProblem(false);
+	return Solve();
+	/*if (SolveWithGomory()) {
 		GomorySolve();
 	}
 	else {
@@ -21,7 +22,24 @@ void SyntexSolver::Start() {
 			Solve();
 			SolveWithDoubleMethod(true);
 		}
+	}*/
+}
+
+void SyntexSolver::CreateProblem(std::vector<std::vector<int>> table) {
+	std::vector<int> problemCoefs(table[0].size(), 1);
+
+	m_conditions.m_problem = Equation::Create(problemCoefs, EquationSign::Equal, 1);
+	for (int i = 0; i < table.size(); ++i) {
+		m_conditions.m_equations.push_back(Equation::Create(table[i], EquationSign::LessThan, 1));
 	}
+	for (int i = 1; i <= table[0].size(); ++i) {
+		m_conditions.m_parameters.push_back(Equation::Create(std::vector<std::pair<int, double>>{ {i, 1} }, EquationSign::GreaterThan, 0));
+	}
+	startParamNumber = m_conditions.m_parameters.size();
+	AddAllParams(m_conditions);
+	ShowConditions(m_conditions);
+	ConvertToCanonical(m_conditions);
+	ShowConditions(m_conditions, "\nAfter converting to canonical\n");
 }
 
 void SyntexSolver::CreateProblem(const bool fromFile, std::string str) {
@@ -154,7 +172,7 @@ void SyntexSolver::ConvertToCanonical(EquationConditions& conditions) {
 		}
 		if (equation.GetSign() == EquationSign::GreaterThan) {
 			Equation y;
-			y.SetCoeficient(conditions.m_parameters.size(), 1);
+			y.SetCoeficient(conditions.m_parameters.size() + 1, 1);
 			y.SetSign(EquationSign::GreaterThan);
 			y.SetB(0);
 			coeficients.push_back(std::pair<int, double>(conditions.m_parameters.size() + 1, -1));
@@ -162,7 +180,7 @@ void SyntexSolver::ConvertToCanonical(EquationConditions& conditions) {
 		}
 		else if (equation.GetSign() == EquationSign::LessThan) {
 			Equation y;
-			y.SetCoeficient(conditions.m_parameters.size(), 1);
+			y.SetCoeficient(conditions.m_parameters.size() + 1, 1);
 			y.SetSign(EquationSign::GreaterThan);
 			y.SetB(0);
 			coeficients.push_back(std::pair<int, double>(conditions.m_parameters.size() + 1, 1));
@@ -441,7 +459,7 @@ void SyntexSolver::ShowSyntexTableWithDoubleMethod() {
 	std::cout << "|\n";
 }
 
-void SyntexSolver::Solve() {
+std::vector<double> SyntexSolver::Solve() {
 	CreateSyntexTable();
 	CalculateQ();
 	ShowSyntexTable();
@@ -452,19 +470,32 @@ void SyntexSolver::Solve() {
 	}
 	std::cout << "\n Optimal parameters and value:\n";
 	std::cout << "Q = " << m_q[0] << "\n";
-	for (int i = 0; i < m_conditions.m_parameters.size(); ++i) {
+	std::vector<double> result;
+	result.reserve(m_conditions.m_parameters.size() + 1);
+	result.push_back(m_q[0]);
+	for (int i = 0; i < startParamNumber; ++i) {
 		auto basisVectorIndicesIterator =
-			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditions.m_parameters[i].GetCoeficients()[0].first);
+			std::find(basisVectorIndices.begin(), basisVectorIndices.end(), m_conditions.m_parameters[i].GetCoeficients()[0].first - 1);
 		if (basisVectorIndicesIterator != basisVectorIndices.end()) {
 			int index = std::distance(basisVectorIndices.begin(), basisVectorIndicesIterator);
 			if (m_conditions.m_problem.GetCoeficients()[*basisVectorIndicesIterator].second != 0) {
-				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] = " << m_syntexTable[index][0] << "\n";
+				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first << "] = " << m_syntexTable[index][0] << "\n";
+				result.push_back(m_syntexTable[index][0]);
+			}
+			else {
+				std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first << "] = 0" << "\n";
+				result.push_back(0);
 			}
 		}
 		else {
-			std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first + 1 << "] = 0" << "\n";
+			std::cout << "x[" << m_conditions.m_parameters[i].GetCoeficients()[0].first << "] = 0" << "\n";
+			result.push_back(0);
 		}
 	}
+	for (int i = startParamNumber; i < m_conditions.m_parameters.size(); ++i) {
+		result.push_back(m_q[i+1]);
+	}
+	return result;
 }
 
 std::ostream& operator<<(std::ostream& cout, EquationConditions& equationConditions) {
@@ -536,7 +567,7 @@ void SyntexSolver::CreateTableForDoubleMethodFromSyntex() {
 			equationsCoefs[j].push_back({i+1, coefs[j].second});
 		}
 		problemCoefs.push_back({ i + 1, m_conditions.m_equations[i].GetB() });
-		m_conditionsDoubleMethod.m_parameters.push_back(Equation::Create({ {i, 1} }, EquationSign::GreaterThan, 0));
+		//m_conditionsDoubleMethod.m_parameters.push_back(Equation::Create({ {i, 1} }, EquationSign::GreaterThan, 0));
 	}
 	for (int i = 0; i < coefSize; ++i) {
 		int count1 = 0;

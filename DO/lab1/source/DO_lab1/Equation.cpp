@@ -228,3 +228,13 @@ Equation Equation::Create(const std::vector<std::pair<int, double>>& coefs, cons
 	equation.SetB(b);
 	return equation;
 }
+
+Equation Equation::Create(const std::vector<int>& coefs, const EquationSign& sign, const double b) {
+	Equation equation;
+	for (int i = 1; i <= coefs.size(); ++i) {
+		equation.SetCoeficient(i, coefs[i-1]);
+	}
+	equation.SetSign(sign);
+	equation.SetB(b);
+	return equation;
+}

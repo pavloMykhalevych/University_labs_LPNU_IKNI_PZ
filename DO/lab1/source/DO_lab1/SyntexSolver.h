@@ -16,7 +16,9 @@ struct EquationConditions {
 class SyntexSolver
 {
 public:
-	void Start();
+	std::vector<double> Start();
+
+	void CreateProblem(std::vector<std::vector<int>> table);
 
 private:
 	void CreateProblem(const bool fromFile = true, std::string str = "SyntexSolver_main.json");
@@ -41,7 +43,7 @@ private:
 
 	bool FoundOptimal();
 
-	void Solve();
+	std::vector<double> Solve();
 
 	bool FoundOptimalDoubleMethod();
 
