@@ -33,7 +33,7 @@ namespace MAPZ_lab4
         private void button_start_Click(object sender, EventArgs e)
         {
             MainMenu.GetInstance().Start();
-            Casino.NewGame();
+            GameFacade.GetInstance().NewGame();
             timer3.Enabled = true;
             timer1.Enabled = true;
         }
@@ -43,9 +43,9 @@ namespace MAPZ_lab4
             MainMenu.GetInstance().Exit();
         }
 
-        public void CallMessage(string mes)
+        public void CallMessage(string mes, string name)
         {
-            MessageBox.Show(mes, "Cool info!");
+            MessageBox.Show(mes, name);
         }
 
         public void ClosePauseMenu()
@@ -69,6 +69,11 @@ namespace MAPZ_lab4
             panel_games.BringToFront();
         }
 
+        public void OpenTable()
+        {
+            panel_game_tables.BringToFront();
+        }
+
         private void button_resume_Click(object sender, EventArgs e)
         {
             PauseMenu.GetInstance().Resume();
@@ -86,25 +91,91 @@ namespace MAPZ_lab4
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Casino.GetInstance().PassDay();
+            GameFacade.GetInstance().Casino.PassDay();
         }
 
         private void timer3_Tick(object sender, EventArgs e)
         {
-            label_balance.Text = Casino.GetInstance().Balance.ToString() + '$';
-            SetProfit(Casino.GetInstance().Profit);
-            label_croupier_count.Text = Casino.GetInstance().Croupiers.Count.ToString();
-            label_croupier_hire.Text = (700 + Casino.GetInstance().Croupiers.Count * 200).ToString() + '$';
-            spinBox_croupier.Maximum = Casino.GetInstance().Croupiers.Count;
-            label_guards_count.Text = Casino.GetInstance().Guards.Count.ToString();
-            label_guard_hire.Text = (500 + Casino.GetInstance().Guards.Count * 100).ToString() + '$';
-            spinBox_guard.Maximum = Casino.GetInstance().Guards.Count;
-            label_swindler.Text = Casino.GetInstance().CaughtSwindlers.ToString();
-            building_lvl.Text = Casino.GetInstance().Building.Level.ToString();
+            label_balance.Text = GameFacade.GetInstance().Casino.Balance.ToString() + '$';
+            SetProfit(GameFacade.GetInstance().Casino.Profit);
+
+            int croupierCount = 0;
+            foreach(var table in GameFacade.GetInstance().Casino.tables)
+            {
+                if (table.HasCroupier)
+                {
+                    croupierCount++;
+                }
+            }
+            label_croupier_count.Text = croupierCount.ToString();
+            label_croupier_hire.Text = (700 + croupierCount * 200).ToString() + '$';
+
+            int guardCount = 0;
+            foreach (var table in GameFacade.GetInstance().Casino.tables)
+            {
+                if (table.HasGuard)
+                {
+                    guardCount++;
+                }
+            }
+            label_guards_count.Text = guardCount.ToString();
+            label_guard_hire.Text = (500 + guardCount * 100).ToString() + '$';
+
+            if (spinBox_table.Value == 0)
+            {
+                return;
+            }
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasGuard)
+            {
+                label_guard_lvl_image.Visible = true;
+                label_guard_image.Visible = true;
+                pictureBox_guard.Visible = true;
+                guard_lvl.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Level.ToString();
+                label_guard_lvl_image.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Level.ToString();
+                label_improve_guard_price.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.ImprovePrice().ToString();
+            }
+            else
+            {
+                guard_lvl.Text = "None";
+                label_improve_guard_price.Text = "";
+                label_guard_lvl_image.Visible = false;
+                label_guard_image.Visible = false;
+                pictureBox_guard.Visible = false;
+            }
+
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasCroupier)
+            {
+                label_croupier_lvl_image.Visible = true;
+                label_croupier_image.Visible = true;
+                pictureBox_croupier.Visible = true;
+                croupier_lvl.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Level.ToString();
+                label_croupier_lvl_image.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Level.ToString();
+                label_improve_croupier_price.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.ImprovePrice().ToString();
+            }
+            else
+            {
+                croupier_lvl.Text = "None";
+                label_improve_croupier_price.Text = "";
+                label_croupier_lvl_image.Visible = false;
+                label_croupier_image.Visible = false;
+                pictureBox_croupier.Visible = false;
+            }
+
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Player.IsSwindler())
+            {
+                label_swindler_image.Text = "Swindler lvl";
+            }
+            else
+            {
+                label_swindler_image.Text = "Player lvl";
+            }
+            label_swindler_lvl_image.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Player.GetLevel().ToString();
+            label_swindler.Text = GameFacade.GetInstance().Casino.CaughtSwindlers.ToString();
+            building_lvl.Text = GameFacade.GetInstance().Casino.Building.Level.ToString();
             label_improve_building_price.Text = Casino.GetInstance().Building.ImprovePrice().ToString() + '$';
-            label_space_price.Text = Casino.GetInstance().Building.SpacePrice().ToString() + '$';
-            label_table_price.Text = Casino.GetInstance().Building.tablePrice().ToString() + '$';
-            label_tables_count.Text = Casino.GetInstance().Building.Tables.ToString();
+            label_space_price.Text = GameFacade.GetInstance().Casino.Building.SpacePrice().ToString() + '$';
+            label_table_price.Text = GameFacade.GetInstance().Casino.Building.tablePrice().ToString() + '$';
+            label_tables_count.Text = GameFacade.GetInstance().Casino.Building.Tables.ToString();
             button_hire_croupier.Enabled = CanHireCroupier();
             button_hire_guard.Enabled = CanHireGuard();
             button_buy_table.Enabled = CanBuyTable();
@@ -112,19 +183,7 @@ namespace MAPZ_lab4
             button_improve_building.Enabled = CanImproveBuilding();
             button_improve_croupier.Enabled = CanImproveCroupier();
             button_improve_guard.Enabled = CanImproveGuard();
-            label_day.Text = Casino.GetInstance().Day.ToString();
-
-            if (spinBox_croupier.Value != 0 && Casino.GetInstance().Croupiers.Count > (int)spinBox_croupier.Value - 1)
-            {
-                croupier_lvl.Text = Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].Level.ToString();
-                label_improve_croupier_price.Text = Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].ImprovePrice().ToString();
-            }
-
-            if (spinBox_guard.Value != 0 && Casino.GetInstance().Guards.Count > (int)spinBox_guard.Value - 1)
-            {
-                guard_lvl.Text = Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].Level.ToString();
-                label_improve_guard_price.Text = Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].ImprovePrice().ToString();
-            }
+            label_day.Text = GameFacade.GetInstance().Casino.Day.ToString();
         }
 
         private void SetProfit(int profit)
@@ -143,7 +202,19 @@ namespace MAPZ_lab4
 
         private bool CanHireCroupier()
         {
-            if (Casino.GetInstance().Balance < (700 + Casino.GetInstance().Croupiers.Count * 200))
+            if ((int)spinBox_table.Value == 0)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.tables.Count == 0)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasCroupier)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.Balance < (700 + GameFacade.GetInstance().Casino.tables.Count * 200))
             {
                 return false;
             }
@@ -151,7 +222,19 @@ namespace MAPZ_lab4
         }
         private bool CanHireGuard()
         {
-            if (Casino.GetInstance().Balance < (500 + Casino.GetInstance().Guards.Count * 100))
+            if ((int)spinBox_table.Value == 0)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.tables.Count == 0)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasGuard)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.Balance < (500 + GameFacade.GetInstance().Casino.tables.Count * 100))
             {
                 return false;
             }
@@ -159,7 +242,7 @@ namespace MAPZ_lab4
         }
         private bool CanBuyTable()
         {
-            if(Casino.GetInstance().Balance < Casino.GetInstance().Building.tablePrice() || !Casino.GetInstance().Building.CanBuyTable())
+            if (GameFacade.GetInstance().Casino.Balance < GameFacade.GetInstance().Casino.Building.tablePrice() || !GameFacade.GetInstance().Casino.Building.CanBuyTable())
             {
                 return false;
             }
@@ -167,7 +250,7 @@ namespace MAPZ_lab4
         }
         private bool CanBuySpace()
         {
-            if (Casino.GetInstance().Balance < Casino.GetInstance().Building.SpacePrice())
+            if (GameFacade.GetInstance().Casino.Balance < GameFacade.GetInstance().Casino.Building.SpacePrice())
             {
                 return false;
             }
@@ -175,11 +258,15 @@ namespace MAPZ_lab4
         }
         private bool CanImproveCroupier()
         {
-            if (spinBox_croupier.Value == 0)
+            if ((int)spinBox_table.Value == 0)
             {
                 return false;
             }
-            if (Casino.GetInstance().Balance < Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].ImprovePrice())
+            if(!GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasCroupier)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.Balance < GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.ImprovePrice())
             {
                 return false;
             }
@@ -187,11 +274,15 @@ namespace MAPZ_lab4
         }
         private bool CanImproveGuard()
         {
-            if (spinBox_guard.Value == 0)
+            if ((int)spinBox_table.Value == 0)
             {
                 return false;
             }
-            if (Casino.GetInstance().Balance < Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].ImprovePrice())
+            if (!GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasGuard)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.Balance < GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.ImprovePrice())
             {
                 return false;
             }
@@ -199,42 +290,20 @@ namespace MAPZ_lab4
         }
         private bool CanImproveBuilding()
         {
-            if (Casino.GetInstance().Balance < Casino.GetInstance().Building.ImprovePrice())
+            if ((int)spinBox_table.Value == 0)
+            {
+                return false;
+            }
+            if (GameFacade.GetInstance().Casino.Balance < GameFacade.GetInstance().Casino.Building.ImprovePrice())
             {
                 return false;
             }
             return true;
         }
 
-        private void spinBox_croupier_ValueChanged(object sender, EventArgs e)
-        {
-            if(spinBox_croupier.Value == 0)
-            {
-                return;
-            }
-            if (Casino.GetInstance().Croupiers.Count > (int)spinBox_croupier.Value - 1)
-            {
-                croupier_lvl.Text = Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].Level.ToString();
-                label_improve_croupier_price.Text = Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].ImprovePrice().ToString();
-            }
-        }
-
-        private void spinBox_guard_ValueChanged(object sender, EventArgs e)
-        {
-            if (spinBox_guard.Value == 0)
-            {
-                return;
-            }
-            if (Casino.GetInstance().Guards.Count > (int)spinBox_guard.Value - 1)
-            {
-                guard_lvl.Text = Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].Level.ToString();
-                label_improve_guard_price.Text = Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].ImprovePrice().ToString();
-            }
-        }
-
         private void button_improve_croupier_Click(object sender, EventArgs e)
         {
-            timer2.Interval = 70 + (Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].Level * 30);
+            timer2.Interval = 70 + (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Level * 30);
             timer1.Enabled = false;
             timer2.Enabled = true;
             progressBar_improve.Visible = true;
@@ -248,7 +317,7 @@ namespace MAPZ_lab4
 
         private void button_improve_guard_Click(object sender, EventArgs e)
         {
-            timer2.Interval = 70 + (Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].Level * 30);
+            timer2.Interval = 70 + (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Level * 30);
             timer1.Enabled = false;
             timer2.Enabled = true;
             progressBar_improve.Visible = true;
@@ -262,7 +331,7 @@ namespace MAPZ_lab4
 
         private void button_improve_building_Click(object sender, EventArgs e)
         {
-            timer2.Interval = 280 + ((Casino.GetInstance().Building.Level + Casino.GetInstance().Building.Space) * 30);
+            timer2.Interval = 280 + ((GameFacade.GetInstance().Casino.Building.Level + GameFacade.GetInstance().Casino.Building.Space) * 30);
             timer1.Enabled = false;
             timer2.Enabled = true;
             progressBar_improve.Visible = true;
@@ -282,15 +351,15 @@ namespace MAPZ_lab4
                 timer1.Enabled = true;
                 if (label_improve_explain.Text == "we are training our croupier")
                 {
-                    Casino.GetInstance().Croupiers[(int)spinBox_croupier.Value - 1].Improve();
+                    GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Improve();
                 }
                 else if (label_improve_explain.Text == "we are training our guard")
                 {
-                    Casino.GetInstance().Guards[(int)spinBox_guard.Value - 1].Improve();
+                    GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Improve();
                 }
                 else if (label_improve_explain.Text == "we are on reconstracting")
                 {
-                    Casino.GetInstance().Building.Upgrade();
+                    GameFacade.GetInstance().Casino.Building.Upgrade();
                 }
                 progressBar_improve.Visible = false;
                 label_casino_work.Visible = false;
@@ -309,34 +378,88 @@ namespace MAPZ_lab4
 
         private void button_hire_croupier_Click(object sender, EventArgs e)
         {
-            if (Casino.GetInstance().Croupiers.Count == 0)
-            {
-                spinBox_croupier.Maximum = 1;
-                spinBox_croupier.Minimum = 1;
-            }
-            Casino.GetInstance().Balance -= (700 + Casino.GetInstance().Croupiers.Count * 200);
-            Casino.GetInstance().HireNewCroupier();
+            GameFacade.GetInstance().Casino.Balance -= (700 + Casino.GetInstance().tables.Count * 200);
+            GameFacade.GetInstance().HireNewCroupier((int)spinBox_table.Value - 1);
         }
 
         private void button_hire_guard_Click(object sender, EventArgs e)
         {
-            if(Casino.GetInstance().Guards.Count == 0)
-            {
-                spinBox_guard.Maximum = 1;
-                spinBox_guard.Minimum = 1;
-            }
-            Casino.GetInstance().Balance -= (500 + Casino.GetInstance().Guards.Count * 100);
-            Casino.GetInstance().HireNewGuard();
+            GameFacade.GetInstance().Casino.Balance -= (500 + Casino.GetInstance().tables.Count * 100);
+            GameFacade.GetInstance().HireNewGuard((int)spinBox_table.Value - 1);
         }
 
         private void button_buy_table_Click(object sender, EventArgs e)
         {
-            Casino.GetInstance().Building.BuyTable();
+            GameFacade.GetInstance().Casino.Building.BuyTable();
+            GameFacade.GetInstance().Casino.tables.Add(new Table());
+            if (GameFacade.GetInstance().Casino.Building.Tables == 1)
+            {
+                spinBox_table.Maximum = 1;
+                spinBox_table.Minimum = 1;
+                spinBox_table.Value = 1;
+            }
+            spinBox_table.Maximum = GameFacade.GetInstance().Casino.Building.Tables;
         }
 
         private void button_buy_space_Click(object sender, EventArgs e)
         {
-            Casino.GetInstance().Building.BuySpace();
+            GameFacade.GetInstance().Casino.Building.BuySpace();
+        }
+
+        private void pictureBox9_Click(object sender, EventArgs e)
+        {
+            panel_game_tables.SendToBack();
+        }
+
+        private void spinBox_table_ValueChanged(object sender, EventArgs e)
+        {
+            if (spinBox_table.Value == 0)
+            {
+                return;
+            }
+            if(GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasGuard)
+            {
+                label_guard_lvl_image.Visible = true;
+                label_guard_image.Visible = true;
+                pictureBox_guard.Visible = true;
+                guard_lvl.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Level.ToString();
+                label_guard_lvl_image.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.Level.ToString();
+                label_improve_guard_price.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Guard.ImprovePrice().ToString();
+            }
+            else
+            {
+                guard_lvl.Text = "None";
+                label_improve_guard_price.Text = "";
+                label_guard_lvl_image.Visible = false;
+                label_guard_image.Visible = false;
+                pictureBox_guard.Visible = false;
+            }
+
+            if (GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].HasCroupier)
+            {
+                label_croupier_lvl_image.Visible = true;
+                label_croupier_image.Visible = true;
+                pictureBox_croupier.Visible = true;
+                croupier_lvl.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Level.ToString();
+                label_croupier_lvl_image.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.Level.ToString();
+                label_improve_croupier_price.Text = GameFacade.GetInstance().Casino.tables[(int)spinBox_table.Value - 1].Croupier.ImprovePrice().ToString();
+            }
+            else
+            {
+                croupier_lvl.Text = "None";
+                label_improve_croupier_price.Text = "";
+                label_croupier_lvl_image.Visible = false;
+                label_croupier_image.Visible = false;
+                pictureBox_croupier.Visible = false;
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if(spinBox_table.Value != 0)
+            {
+                OpenTable();
+            }
         }
     }
 }

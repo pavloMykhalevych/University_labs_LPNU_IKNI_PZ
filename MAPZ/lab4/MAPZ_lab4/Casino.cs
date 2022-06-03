@@ -22,41 +22,93 @@ namespace MAPZ_lab4
         public int CaughtSwindlers { set; get; }
         public int Day { set; get; }
 
-        public IEmployer croupierEmployee = new CroupierEmployer();
-        public IEmployer guardEmployee = new GuardEmployer();
-        public List<IEmployee> Croupiers = new List<IEmployee>();
-        public List<IEmployee> Guards = new List<IEmployee>();
-        public SwindlerBuilder swindlerBuilder = new SwindlerBuilder();
-        public SwindlerDirector swindlerDirector = new SwindlerDirector();
         public Building Building = new Building();
+        public List<Table> tables = new List<Table>();
 
         public void PassDay()
         {
+
+            int income = Building.Profit();
+            foreach (var table in tables)
+            {
+                if (table.HasCroupier)
+                {
+                    income += table.Croupier.Income();
+                }
+            }
+
+            int guardsLevel = 0;
+            int cheated = 0;
+            int caught = 0;
+            foreach (var table in tables)
+            {
+                if (table.Player.IsSwindler())
+                {
+                    bool Robbed = true;
+                    if (guardsLevel > table.Player.GetLevel() * 2)
+                    {
+                        Robbed = false;
+                        CaughtSwindlers += 1;
+                        ++caught;
+                        break;
+                    }
+                    if (table.HasGuard)
+                    {
+                        if (table.Guard.Level < table.Player.GetLevel() * 2)
+                        {
+                            guardsLevel += table.Guard.Level;
+                        }
+                        else
+                        {
+                            Robbed = false;
+                            CaughtSwindlers += 1;
+                            ++caught;
+                            break;
+                        }
+                    }
+                    if (Robbed) { cheated += table.Player.Profit(); }
+                }
+            }
+            if (cheated > 0)
+            {
+                Form1.GetInstance().CallMessage("The swindlers take out of your casino " + cheated.ToString() + "$ today.", "Bad news!");
+            }
+            int players_winnings = 0;
+            foreach (var table in tables)
+            {
+                if (!table.Player.IsSwindler())
+                {
+                    players_winnings += table.Player.Profit();
+                }
+            }
+            if (caught > 0)
+            {
+                if (caught == 1)
+                    Form1.GetInstance().CallMessage("Your guards caught " + caught.ToString() + " swindler today.", "Cool news!");
+                else
+                    Form1.GetInstance().CallMessage("Your guards caught " + caught.ToString() + " swindlers today.", "Cool news!");
+            }
+            Profit = income - (PreviousBalance - Balance) - cheated - players_winnings;
+            var prof = income - cheated;
+            Balance += prof;
+            PreviousBalance = Balance;
+            Day += 1;
+
+            foreach(var table in tables)
+            {
+                table.RemoveSwindler();
+            }
             int randomnumber = random.Next(0, 100);
             bool swindlerCome = false;
-            if (randomnumber > 90)
+            if (randomnumber > 20)
             {
                 swindlerCome = true;
             }
-            int income = Building.Profit();
-            int cheated = 0;
-            int caught = 0;
-            foreach (var croupier in Croupiers)
-            {
-                income += croupier.Income();
-            }
             if (swindlerCome)
             {
-                randomnumber = random.Next(0, (Building.Tables + 1) * 10);
-                int count = 0;
-                for (var i = 1; i < Building.Tables + 1; ++i)
-                {
-                    if (randomnumber - (Building.Tables + 1 - i) * 10 < 0)
-                    {
-                        count = i-1;
-                    }
-                }
-                var guards = new List<IEmployee>(Guards);
+                randomnumber = random.Next(1, Math.Min(tables.Count, 3) + 1);
+                int count = randomnumber;
+
                 for (var counter = 0; counter < count; ++counter)
                 {
                     int[] weights1 = { 36, 62, 77, 89, 96, 99, 100 };
@@ -70,67 +122,17 @@ namespace MAPZ_lab4
                             break;
                         }
                     }
-                    var sw = swindlerDirector.BuildSwindler(swindlerBuilder, type);
-                    int guardsLevel = 0;
-                    bool Robbed = true;
-                    foreach (var g in guards)
-                    {
-                        if(guardsLevel > sw.Level * 2)
-                        {
-                            Robbed = false;
-                            CaughtSwindlers += 1;
-                            ++caught;
-                            break;
-                        }
-                        if (g.Level < sw.Level * 2)
-                        {
-                            guards.Remove(g);
-                            guardsLevel += g.Level;
-                        }
-                        else
-                        {
-                            Robbed = false;
-                            CaughtSwindlers += 1;
-                            ++caught;
-                            guards.Remove(g);
-                            break;
-                        }
-                    }
-                    if (Robbed) { cheated += sw.Robbed(); }
+                    var sw = GameFacade.GetInstance().BuildSwindler(type);
+                    int tableIdx = random.Next(0, tables.Count);
+                    tables[tableIdx].AddSwindler(sw);
+                    randomnumber = random.Next(0, 3);
+                    Form1.GetInstance().CallMessage(DecoratorHelper.Message(randomnumber, sw, tableIdx), "Bad news!");
                 }
             }
-            if(cheated > 0)
-            {
-                Form1.GetInstance().CallMessage("The swindlers take out of your casino " + cheated.ToString() + "$ today.");
-            }
-            if (caught > 0)
-            {
-                if (caught == 1)
-                    Form1.GetInstance().CallMessage("Your guards caught " + caught.ToString() + " swindler today.");
-                else
-                    Form1.GetInstance().CallMessage("Your guards caught " + caught.ToString() + " swindlers today.");
-            }
-            Profit = income - (PreviousBalance - Balance) - cheated;
-            var prof = income - cheated;
-            Balance += prof;
-            PreviousBalance = Balance;
-            Day += 1;
-        }
-        public void HireNewCroupier()
-        {
-            Croupiers.Add(Hire(croupierEmployee));
-        }
-        public void HireNewGuard()
-        {
-            Guards.Add(Hire(guardEmployee));
-        }
-        private IEmployee Hire(IEmployer employer)
-        {
-            return employer.Hire(random);
         }
 
         private static Casino instance;
-        private static Random random;
+        public static Random random;
         public static Casino GetInstance()
         {
             if (instance == null)

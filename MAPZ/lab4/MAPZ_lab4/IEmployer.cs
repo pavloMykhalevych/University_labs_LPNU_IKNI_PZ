@@ -82,7 +82,7 @@ namespace MAPZ_lab4
         }
         public int Income()
         {
-            return 5 + (Level - 1);
+            return 5 + 2 * (Level - 1);
         }
     }
     public class Guard : IEmployee

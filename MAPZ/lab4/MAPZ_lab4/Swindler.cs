@@ -122,7 +122,12 @@ namespace MAPZ_lab4
             }
         }
     }
-    public class Swindler
+    interface IPlayer
+    {
+        int Level { set; get; }
+        int Profit();
+    }
+    public class Swindler : IPlayer
     {
         public Swindler()
         {
@@ -137,7 +142,7 @@ namespace MAPZ_lab4
         {
             Level = level;
         }
-        public int Robbed()
+        public int Profit()
         {
             int max = Casino.GetInstance().Balance;
             if(max <= 20000)
@@ -145,7 +150,7 @@ namespace MAPZ_lab4
                 max = 20000;
             }
             int sum = Level * 300;
-            return Level;
+            return Math.Min(sum, max);
         }
         public void CalculateLevel()
         {
@@ -173,5 +178,45 @@ namespace MAPZ_lab4
         public bool HasTeam { set; get; }
         public bool KnowMathematics { set; get; }
         public bool WasInOurCasino { set; get; }
+    }
+    public class ProxyPlayer : IPlayer
+    {
+        public Swindler _swindler = null;
+        public int Level { set; get; } = Casino.random.Next(0, 100);
+        public int Profit()
+        {
+            if(_swindler == null)
+            {
+                return Level;
+            }
+            else
+            {
+                return _swindler.Profit();
+            }
+        }
+        public int GetLevel()
+        {
+            if (_swindler == null)
+            {
+                return Level;
+            }
+            else
+            {
+                return _swindler.Level;
+            }
+        }
+        public bool IsSwindler()
+        {
+            return _swindler != null;
+        }
+        public void Clear()
+        {
+            _swindler = null;
+            Level = Casino.random.Next(0, 100);
+        }
+        public void SetSwindler(Swindler swindler)
+        {
+            _swindler = swindler;
+        }
     }
 }
