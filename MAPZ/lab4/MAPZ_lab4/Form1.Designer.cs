@@ -110,6 +110,9 @@ namespace MAPZ_lab4
             this.pictureBox_croupier = new System.Windows.Forms.PictureBox();
             this.pictureBox_guard = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label15 = new System.Windows.Forms.Label();
+            this.radioButton_easy = new System.Windows.Forms.RadioButton();
+            this.radioButton_hard = new System.Windows.Forms.RadioButton();
             this.main_menu.SuspendLayout();
             this.panel_pause.SuspendLayout();
             this.panel_games.SuspendLayout();
@@ -252,6 +255,9 @@ namespace MAPZ_lab4
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_games.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(30)))), ((int)(((byte)(30)))), ((int)(((byte)(30)))));
             this.panel_games.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.panel_games.Controls.Add(this.radioButton_hard);
+            this.panel_games.Controls.Add(this.radioButton_easy);
+            this.panel_games.Controls.Add(this.label15);
             this.panel_games.Controls.Add(this.button1);
             this.panel_games.Controls.Add(this.label_day);
             this.panel_games.Controls.Add(this.label11);
@@ -271,7 +277,7 @@ namespace MAPZ_lab4
             // 
             this.button1.Font = new System.Drawing.Font("Century Gothic", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.button1.Location = new System.Drawing.Point(454, 92);
+            this.button1.Location = new System.Drawing.Point(329, 87);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(103, 30);
             this.button1.TabIndex = 31;
@@ -306,7 +312,7 @@ namespace MAPZ_lab4
             this.label22.AutoSize = true;
             this.label22.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label22.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label22.Location = new System.Drawing.Point(307, 92);
+            this.label22.Location = new System.Drawing.Point(182, 87);
             this.label22.Name = "label22";
             this.label22.Size = new System.Drawing.Size(73, 25);
             this.label22.TabIndex = 29;
@@ -317,7 +323,7 @@ namespace MAPZ_lab4
             this.spinBox_table.BackColor = System.Drawing.SystemColors.Window;
             this.spinBox_table.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.spinBox_table.ForeColor = System.Drawing.SystemColors.MenuText;
-            this.spinBox_table.Location = new System.Drawing.Point(386, 90);
+            this.spinBox_table.Location = new System.Drawing.Point(261, 85);
             this.spinBox_table.Maximum = new decimal(new int[] {
             0,
             0,
@@ -1102,6 +1108,45 @@ namespace MAPZ_lab4
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label15.Location = new System.Drawing.Point(528, 87);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(69, 25);
+            this.label15.TabIndex = 32;
+            this.label15.Text = "Level";
+            // 
+            // radioButton_easy
+            // 
+            this.radioButton_easy.AutoSize = true;
+            this.radioButton_easy.Checked = true;
+            this.radioButton_easy.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_easy.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radioButton_easy.Location = new System.Drawing.Point(619, 65);
+            this.radioButton_easy.Name = "radioButton_easy";
+            this.radioButton_easy.Size = new System.Drawing.Size(79, 29);
+            this.radioButton_easy.TabIndex = 33;
+            this.radioButton_easy.TabStop = true;
+            this.radioButton_easy.Text = "Easy";
+            this.radioButton_easy.UseVisualStyleBackColor = true;
+            this.radioButton_easy.CheckedChanged += new System.EventHandler(this.radioButton_easy_Checked);
+            // 
+            // radioButton_hard
+            // 
+            this.radioButton_hard.AutoSize = true;
+            this.radioButton_hard.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_hard.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radioButton_hard.Location = new System.Drawing.Point(619, 100);
+            this.radioButton_hard.Name = "radioButton_hard";
+            this.radioButton_hard.Size = new System.Drawing.Size(82, 29);
+            this.radioButton_hard.TabIndex = 34;
+            this.radioButton_hard.Text = "Hard";
+            this.radioButton_hard.UseVisualStyleBackColor = true;
+            this.radioButton_hard.CheckedChanged += new System.EventHandler(this.radioButton_hard_Checked);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1110,10 +1155,10 @@ namespace MAPZ_lab4
             this.BackgroundImage = global::MAPZ_lab4.Properties.Resources.back1;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(871, 566);
-            this.Controls.Add(this.panel_game_tables);
             this.Controls.Add(this.panel_games);
-            this.Controls.Add(this.panel_pause);
             this.Controls.Add(this.main_menu);
+            this.Controls.Add(this.panel_game_tables);
+            this.Controls.Add(this.panel_pause);
             this.DoubleBuffered = true;
             this.ForeColor = System.Drawing.SystemColors.ControlText;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
@@ -1230,6 +1275,9 @@ namespace MAPZ_lab4
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.NumericUpDown spinBox_table;
         private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.RadioButton radioButton_hard;
+        private System.Windows.Forms.RadioButton radioButton_easy;
+        private System.Windows.Forms.Label label15;
     }
 }
 

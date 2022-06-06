@@ -3,11 +3,11 @@
 #include "HomoriHu.h"
 
 int main() {
-	TransportProblem transportProblem;
-	transportProblem.StartRent();
+	//TransportProblem transportProblem;
+	//transportProblem.StartRent();
 	//RouteOptimization rt;
 	//rt.Start();
-	//HomoriHu h;
-	//h.Start();
+	HomoriHu h;
+	h.Start();
 	return 0;
 }

@@ -8,12 +8,34 @@ namespace MAPZ_lab4
 {
     public class GameFacade
     {
-        public Casino Casino = Casino.GetInstance();
+        public Casino Casino;
 
         public IEmployer croupierEmployee = new CroupierEmployer();
         public IEmployer guardEmployee = new GuardEmployer();
         public SwindlerBuilder swindlerBuilder = new SwindlerBuilder();
         public SwindlerDirector swindlerDirector = new SwindlerDirector();
+
+        private State state = new StateEasy();
+        private IStrategy _complexity = new StrategyEasy();
+        public void SetStrategy(IStrategy strategy)
+        {
+            _complexity = strategy;
+            string mes = "";
+            if(_complexity is StrategyEasy)
+            {
+                mes = TransitionTo(new StateEasy());
+            }
+            else if (_complexity is StrategyHard)
+            {
+                mes = TransitionTo(new StateHard());
+            }
+            Form1.GetInstance().CallMessage($"You change game complexity!\n{mes}\n{state.GetMessage()}", "Info");
+        }
+        public string TransitionTo(State state)
+        {
+            this.state = state;
+            return "You change game state!";
+        }
         public Swindler BuildSwindler(int type)
         {
             return swindlerDirector.BuildSwindler(swindlerBuilder, type);
@@ -34,6 +56,10 @@ namespace MAPZ_lab4
         {
             Casino.NewGame();
             Casino = Casino.GetInstance();
+        }
+        public void PassDay()
+        {
+            Casino.PassDay(_complexity.ProfitRatio(), _complexity.SwindlerProbability());
         }
 
         private static GameFacade instance;

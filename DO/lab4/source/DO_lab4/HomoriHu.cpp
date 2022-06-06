@@ -10,7 +10,7 @@
 #include <limits>
 
 void HomoriHu::Start() {
-	CreateProblem(false, "lab7_homori_8.json");
+	CreateProblem(false, "lab7_1.json");
 	BuildRoute();
 	ShowTable();
 }

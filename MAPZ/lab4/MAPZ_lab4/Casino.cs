@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace MAPZ_lab4
 {
-    public class Casino
+    public class Casino : ISubject
     {
         private Casino()
         {
-            random = new Random();
+            Attach(new NewGameObserver());
+            Attach(new DayObserver());
+            Notify();
             Profit = 0;
             Balance = 5000;
             PreviousBalance = Balance;
@@ -22,12 +24,28 @@ namespace MAPZ_lab4
         public int CaughtSwindlers { set; get; }
         public int Day { set; get; }
 
+        private List<IObserver> _observers = new List<IObserver>();
+        public void Attach(IObserver observer)
+        {
+            _observers.Add(observer);
+        }
+        public void Detach(IObserver observer)
+        {
+            _observers.Remove(observer);
+        }
+        public void Notify()
+        {
+            foreach (var observer in _observers)
+            {
+                observer.Update(this);
+            }
+        }
+
         public Building Building = new Building();
         public List<Table> tables = new List<Table>();
 
-        public void PassDay()
+        public void PassDay(float ratio, int probability)
         {
-
             int income = Building.Profit();
             foreach (var table in tables)
             {
@@ -88,19 +106,18 @@ namespace MAPZ_lab4
                 else
                     Form1.GetInstance().CallMessage("Your guards caught " + caught.ToString() + " swindlers today.", "Cool news!");
             }
-            Profit = income - (PreviousBalance - Balance) - cheated - players_winnings;
+            Profit = (int)(income / ratio) - (PreviousBalance - Balance) - cheated - players_winnings;
             var prof = income - cheated;
             Balance += prof;
             PreviousBalance = Balance;
             Day += 1;
-
-            foreach(var table in tables)
+            foreach (var table in tables)
             {
                 table.RemoveSwindler();
             }
             int randomnumber = random.Next(0, 100);
             bool swindlerCome = false;
-            if (randomnumber > 20)
+            if (randomnumber > 100 - probability)
             {
                 swindlerCome = true;
             }
@@ -129,10 +146,11 @@ namespace MAPZ_lab4
                     Form1.GetInstance().CallMessage(DecoratorHelper.Message(randomnumber, sw, tableIdx), "Bad news!");
                 }
             }
+            Notify();
         }
 
         private static Casino instance;
-        public static Random random;
+        public static Random random = new Random();
         public static Casino GetInstance()
         {
             if (instance == null)

@@ -7,7 +7,7 @@
 #include <climits>
 
 void HybridGame::Start() {
-	CreateProblem(false, "Hybrid_1.json");
+	CreateProblem(false, "Hybrid_main.json");
 	if (FindBoundaries()) {
 		return;
 	}
