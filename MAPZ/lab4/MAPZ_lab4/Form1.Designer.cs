@@ -39,6 +39,9 @@ namespace MAPZ_lab4
             this.button_resume = new System.Windows.Forms.Button();
             this.button_exit_2 = new System.Windows.Forms.Button();
             this.panel_games = new System.Windows.Forms.Panel();
+            this.radioButton_hard = new System.Windows.Forms.RadioButton();
+            this.radioButton_easy = new System.Windows.Forms.RadioButton();
+            this.label15 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.label_day = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
@@ -110,9 +113,6 @@ namespace MAPZ_lab4
             this.pictureBox_croupier = new System.Windows.Forms.PictureBox();
             this.pictureBox_guard = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label15 = new System.Windows.Forms.Label();
-            this.radioButton_easy = new System.Windows.Forms.RadioButton();
-            this.radioButton_hard = new System.Windows.Forms.RadioButton();
             this.main_menu.SuspendLayout();
             this.panel_pause.SuspendLayout();
             this.panel_games.SuspendLayout();
@@ -272,6 +272,45 @@ namespace MAPZ_lab4
             this.panel_games.Name = "panel_games";
             this.panel_games.Size = new System.Drawing.Size(871, 569);
             this.panel_games.TabIndex = 4;
+            // 
+            // radioButton_hard
+            // 
+            this.radioButton_hard.AutoSize = true;
+            this.radioButton_hard.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_hard.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radioButton_hard.Location = new System.Drawing.Point(619, 100);
+            this.radioButton_hard.Name = "radioButton_hard";
+            this.radioButton_hard.Size = new System.Drawing.Size(82, 29);
+            this.radioButton_hard.TabIndex = 34;
+            this.radioButton_hard.Text = "Hard";
+            this.radioButton_hard.UseVisualStyleBackColor = true;
+            this.radioButton_hard.CheckedChanged += new System.EventHandler(this.radioButton_hard_Checked);
+            // 
+            // radioButton_easy
+            // 
+            this.radioButton_easy.AutoSize = true;
+            this.radioButton_easy.Checked = true;
+            this.radioButton_easy.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.radioButton_easy.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.radioButton_easy.Location = new System.Drawing.Point(619, 65);
+            this.radioButton_easy.Name = "radioButton_easy";
+            this.radioButton_easy.Size = new System.Drawing.Size(79, 29);
+            this.radioButton_easy.TabIndex = 33;
+            this.radioButton_easy.TabStop = true;
+            this.radioButton_easy.Text = "Easy";
+            this.radioButton_easy.UseVisualStyleBackColor = true;
+            this.radioButton_easy.CheckedChanged += new System.EventHandler(this.radioButton_easy_Checked);
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
+            this.label15.Location = new System.Drawing.Point(528, 87);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(69, 25);
+            this.label15.TabIndex = 32;
+            this.label15.Text = "Level";
             // 
             // button1
             // 
@@ -918,7 +957,7 @@ namespace MAPZ_lab4
             // 
             // timer1
             // 
-            this.timer1.Interval = 10000;
+            this.timer1.Interval = 1000;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // timer2
@@ -1107,45 +1146,6 @@ namespace MAPZ_lab4
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.label15.Location = new System.Drawing.Point(528, 87);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(69, 25);
-            this.label15.TabIndex = 32;
-            this.label15.Text = "Level";
-            // 
-            // radioButton_easy
-            // 
-            this.radioButton_easy.AutoSize = true;
-            this.radioButton_easy.Checked = true;
-            this.radioButton_easy.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton_easy.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radioButton_easy.Location = new System.Drawing.Point(619, 65);
-            this.radioButton_easy.Name = "radioButton_easy";
-            this.radioButton_easy.Size = new System.Drawing.Size(79, 29);
-            this.radioButton_easy.TabIndex = 33;
-            this.radioButton_easy.TabStop = true;
-            this.radioButton_easy.Text = "Easy";
-            this.radioButton_easy.UseVisualStyleBackColor = true;
-            this.radioButton_easy.CheckedChanged += new System.EventHandler(this.radioButton_easy_Checked);
-            // 
-            // radioButton_hard
-            // 
-            this.radioButton_hard.AutoSize = true;
-            this.radioButton_hard.Font = new System.Drawing.Font("Century Gothic", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.radioButton_hard.ForeColor = System.Drawing.SystemColors.ControlLightLight;
-            this.radioButton_hard.Location = new System.Drawing.Point(619, 100);
-            this.radioButton_hard.Name = "radioButton_hard";
-            this.radioButton_hard.Size = new System.Drawing.Size(82, 29);
-            this.radioButton_hard.TabIndex = 34;
-            this.radioButton_hard.Text = "Hard";
-            this.radioButton_hard.UseVisualStyleBackColor = true;
-            this.radioButton_hard.CheckedChanged += new System.EventHandler(this.radioButton_hard_Checked);
             // 
             // Form1
             // 

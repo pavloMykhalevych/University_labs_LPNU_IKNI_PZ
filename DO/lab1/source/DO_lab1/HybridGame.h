@@ -24,5 +24,7 @@ private:
 	std::vector<double> m_p;
 	double m_v;
 	SyntexSolver m_syntexSolver;
+	std::vector<int> m_removedRows;
+	std::vector<int> m_removedCols;
 };
 

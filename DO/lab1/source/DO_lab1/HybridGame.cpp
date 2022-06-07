@@ -7,7 +7,7 @@
 #include <climits>
 
 void HybridGame::Start() {
-	CreateProblem(false, "Hybrid_main.json");
+	CreateProblem(false, "Hybrid_2.json");
 	if (FindBoundaries()) {
 		return;
 	}
@@ -79,71 +79,96 @@ bool HybridGame::FindBoundaries() {
 void HybridGame::SimplifyProblem() {
 	std::vector<int> removedRows;
 	std::vector<int> removedCols;
-	for (int mainRow = 0; mainRow < m_table.size(); ++mainRow) {
-		if (std::find(removedRows.begin(), removedRows.end(), mainRow) != removedRows.end()) {
-			continue;
-		}
-		for (int i = 0; i < m_table.size(); ++i) {
-			if (i == mainRow) {
+	bool can_continue = true;
+	m_simplifiedTable = m_table;
+	while (can_continue) {
+		removedRows.clear();
+		for (int mainRow = 0; mainRow < m_simplifiedTable.size(); ++mainRow) {
+			if (std::find(removedRows.begin(), removedRows.end(), mainRow) != removedRows.end()) {
 				continue;
 			}
+			for (int i = 0; i < m_simplifiedTable.size(); ++i) {
+				if (i == mainRow) {
+					continue;
+				}
+				if (std::find(removedRows.begin(), removedRows.end(), i) != removedRows.end()) {
+					continue;
+				}
+				int count = 0;
+				for (int j = 0; j < m_simplifiedTable[0].size(); ++j) {
+					if (m_simplifiedTable[i][j] <= m_simplifiedTable[mainRow][j]) {
+						++count;
+					}
+				}
+				if (count == m_simplifiedTable[0].size()) {
+					removedRows.push_back(i);
+				}
+				else if (count == 0) {
+					removedRows.push_back(mainRow);
+					break;
+				}
+			}
+		}
+		auto rowCount = m_simplifiedTable.size();
+		auto colCount = m_simplifiedTable[0].size();
+		auto prevsimplifiedTable = m_simplifiedTable;
+		m_simplifiedTable.clear();
+		for (int i = 0; i < rowCount; ++i) {
 			if (std::find(removedRows.begin(), removedRows.end(), i) != removedRows.end()) {
 				continue;
 			}
-			int count = 0;
-			for (int j = 0; j < m_table[0].size(); ++j) {
-				if (m_table[i][j] <= m_table[mainRow][j]) {
-					++count;
+			std::vector<int> row;
+			for (int j = 0; j < colCount; ++j) {
+				row.push_back(prevsimplifiedTable[i][j]);
+			}
+			m_simplifiedTable.push_back(row);
+		}
+		m_removedRows.insert(m_removedRows.end(), removedRows.begin(), removedRows.end());
+		removedCols.clear();
+		for (int mainCol = 0; mainCol < colCount; ++mainCol) {
+			if (std::find(removedCols.begin(), removedCols.end(), mainCol) != removedCols.end()) {
+				continue;
+			}
+			for (int i = 0; i < m_simplifiedTable[0].size(); ++i) {
+				if (i == mainCol) {
+					continue;
+				}
+				if (std::find(removedCols.begin(), removedCols.end(), i) != removedCols.end()) {
+					continue;
+				}
+				int count = 0;
+				for (int j = 0; j < m_simplifiedTable.size(); ++j) {
+					if (m_simplifiedTable[j][i] >= m_simplifiedTable[j][mainCol]) {
+						++count;
+					}
+				}
+				if (count == m_simplifiedTable.size()) {
+					removedCols.push_back(i);
+				}
+				else if (count == 0) {
+					removedCols.push_back(mainCol);
+					break;
 				}
 			}
-			if (count == m_table[0].size()) {
-				removedRows.push_back(i);
-			}
-			else if (count == 0) {
-				removedRows.push_back(mainRow);
-				break;
-			}
 		}
-	}
-
-	for (int mainCol = 0; mainCol < m_table[0].size(); ++mainCol) {
-		if (std::find(removedCols.begin(), removedCols.end(), mainCol) != removedCols.end()) {
-			continue;
-		}
-		for (int i = 0; i < m_table[0].size(); ++i) {
-			if (i == mainCol) {
-				continue;
-			}
-			if (std::find(removedCols.begin(), removedCols.end(), i) != removedCols.end()) {
-				continue;
-			}
-			int count = 0;
-			for (int j = 0; j < m_table.size(); ++j) {
-				if (m_table[j][i] <= m_table[j][mainCol]) {
-					++count;
+		rowCount = m_simplifiedTable.size();
+		colCount = m_simplifiedTable[0].size();
+		prevsimplifiedTable = m_simplifiedTable;
+		m_simplifiedTable.clear();
+		for (int i = 0; i < rowCount; ++i) {
+			std::vector<int> row;
+			for (int j = 0; j < colCount; ++j) {
+				if (std::find(removedCols.begin(), removedCols.end(), j) != removedCols.end()) {
+					continue;
 				}
+				row.push_back(prevsimplifiedTable[i][j]);
 			}
-			if (count == m_table.size()) {
-				removedCols.push_back(i);
-			}
-			else if (count == 0) {
-				removedCols.push_back(mainCol);
-				break;
-			}
+			m_simplifiedTable.push_back(row);
 		}
-	}
-	for (int i = 0; i < m_table.size(); ++i) {
-		if (std::find(removedRows.begin(), removedRows.end(), i) != removedRows.end()) {
-			continue;
+		m_removedCols.insert(m_removedCols.end(), removedCols.begin(), removedCols.end());
+		if (removedRows.empty() || removedCols.empty()) {
+			can_continue = false;
 		}
-		std::vector<int> row;
-		for (int j = 0; j < m_table[0].size(); ++j) {
-			if (std::find(removedCols.begin(), removedCols.end(), j) != removedCols.end()) {
-				continue;
-			}
-			row.push_back(m_table[i][j]);
-		}
-		m_simplifiedTable.push_back(row);
 	}
 }
 
@@ -171,12 +196,24 @@ void HybridGame::ShowResults() {
 		std::cout << "]\n";
 	}
 	std::cout << "\n\nGame Price\n\nv = [1/F] = " << m_v;
+	std::vector<int> rowIdx;
+	std::vector<int> colIdx;
+	for (int i = 0; i < m_table.size(); ++i) {
+		if (std::find(m_removedRows.begin(), m_removedRows.end(), i) == m_removedRows.end()) {
+			rowIdx.push_back(i + 1);
+		}
+	}
+	for (int i = 0; i < m_table[0].size(); ++i) {
+		if (std::find(m_removedCols.begin(), m_removedCols.end(), i) == m_removedCols.end()) {
+			colIdx.push_back(i + 1);
+		}
+	}
 	std::cout << "\n\nProbabilities:\n\nFor player A:\n";
 	for (int i = 0; i < m_p.size(); ++i) {
-		std::cout << "A[" << i + 1 << "] = " << m_p[i] * m_v << "\n";
+		std::cout << "A[" << rowIdx[i] << "] = " << m_p[i] * m_v << "\n";
 	}
 	std::cout << "\nFor player B:\n";
 	for (int i = 0; i < m_q.size(); ++i) {
-		std::cout << "B[" << i + 1 << "] = " << m_q[i] * m_v << "\n";
+		std::cout << "B[" << colIdx[i] << "] = " << m_q[i] * m_v << "\n";
 	}
 }
