@@ -32,6 +32,7 @@ function LoginForm(props) {
             props.setUserId(data.id);
             props.setUserName(data.nickname);
             props.onHide();
+            props.setImages();
         });
         
     }
@@ -43,7 +44,7 @@ function LoginForm(props) {
             >
                 <Modal.Header>
                     <Modal.Title>
-                        Log in
+                        Sign in
                     </Modal.Title>
                 </Modal.Header>
 

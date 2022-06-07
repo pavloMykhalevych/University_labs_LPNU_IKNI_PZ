@@ -35,6 +35,7 @@ function RegisterForm(props) {
             props.setUserId(data.id);
             props.setUserName(data.nickname);
             props.onHide();
+            props.setImages();
         });
     }
 
@@ -44,7 +45,7 @@ function RegisterForm(props) {
             {...props}
             >
                 <Modal.Header>
-                    Sign in
+                    Sign up
                 </Modal.Header>
 
                 <Modal.Body>
