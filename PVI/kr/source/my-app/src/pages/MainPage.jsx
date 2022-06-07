@@ -2,14 +2,17 @@ import { Image, Navbar, InputGroup, FormControl, Button, Container } from "react
 import LoginForm from "./Login";
 import RegisterForm from "./Registration";
 import React, { useState } from 'react';
+import ImageBox from "../Components/ImageBox";
+import LoadingImage from "./Loading";
 
 function MainPage() {
     const [modalLoginShow, setModalLoginShow] = useState(false);
     const [modalRegisterShow, setModalRegisterShow] = useState(false);
     const [user_id, setUserId] = useState(0);
     const [user_name, setUserName] = useState("");
+    const [images, setImages] = useState(Array(<LoadingImage />));
 
-    function showImages(){
+    function showImages(tag){
 
     }
 
@@ -19,7 +22,7 @@ function MainPage() {
             bg = "dark">
                 <Container>
                     <InputGroup>
-                        <FormControl onChange={()=>showImages()}
+                        <FormControl onLoad={()=>showImages("")} onChange={(e)=>showImages(e.target.value)}
                         placeholder="Enter image tag"
                         />
                         {user_name === '' && <Button variant="outline-secondary" onClick={() => setModalLoginShow(true)}>Log in</Button>}
@@ -49,6 +52,7 @@ function MainPage() {
                 setUserId = {setUserId}
                 setUserName = {setUserName}
             />
+            {images}
         </>
     )
 }
